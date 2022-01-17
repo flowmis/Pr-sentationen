@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>Einführung  Oxidations-zahlen</title>
+<meta name="author" content="(Markus Hoffmann)"/>
+<style type="text/css">
+.underline { text-decoration: underline; }
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js/dist/reveal.css"/>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js/dist/theme/serif.css" id="theme"/>
+
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+<section id="sec-title-slide"><h1 class="title">Einführung  Oxidations-zahlen</h1><h2 class="author">Markus Hoffmann</h2><h2 class="date">2022-01-18 Di 00:00</h2>
+</section>
+<section id="sec-table-of-contents"><div id="table-of-contents" role="doc-toc">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents" role="doc-toc">
+<ul>
+<li><a href="#/slide-org886a669">org-reveal</a></li>
+<li><a href="#/slide-org7b5db9d">Video</a></li>
+<li><a href="#/slide-orgb40bcf1">org-tree-slide</a></li>
+</ul>
+</div>
+</div>
+</section>
+
+<section>
+<section id="slide-org886a669">
+<h2 id="org886a669">org-reveal</h2>
+</section>
+</section>
+<section>
+<section id="slide-org7b5db9d">
+<h2 id="org7b5db9d">Video</h2>
+<p>
+&lt;video data-autoplay src=&ldquo;<a href="http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4">http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4</a>&rdquo;&gt;&lt;/video&gt;
+&lt;video data-autoplay src=&ldquo;<a href="https://www.youtube.com/watch?v=6Q0sMOQvJuw&amp;list=RD6Q0sMOQvJuw&amp;start_radio=1">https://www.youtube.com/watch?v=6Q0sMOQvJuw&amp;list=RD6Q0sMOQvJuw&amp;start_radio=1</a>&rdquo;&gt;&lt;/video&gt;
+</p>
+
+</section>
+<section id="slide-org8cbb80a">
+<h3 id="org8cbb80a">Installation:</h3>
+<ol>
+<li>Beste Variante ist mir einen eigenen mode dazu in meine config zu schreiben: (use-package ox-reveal)</li>
+<li>Diesen Code in init.el</li>
+
+</ol>
+<div class="org-src-container">
+
+<pre  class="src src-emacs-lisp"   ><code trim><span style="color: #51afef;">(</span><span style="color: #51afef; font-style: italic;">use-package</span> ox-reveal
+<span style="color: #c678dd;">:ensure</span> ox-reveal<span style="color: #51afef;">)</span>
+<span style="color: #51afef;">(</span><span style="color: #51afef; font-style: italic;">setq</span> <span style="color: #dcaeea;">org-reveal-root</span> <span style="color: #98be65;">"https://cdn.jsdelivr.net/npm/reveal.js"</span><span style="color: #51afef;">)</span> <span style="color: #5B6268; font-style: italic;">;</span><span style="color: #5B6268; font-style: italic;">Alternativ lokale Datei oder: (setq org-reveal-root "http://cdn.jsdelivr.net/reveal.js/3.0.0/")</span>
+<span style="color: #5B6268; font-style: italic;">;</span><span style="color: #5B6268; font-style: italic;">(setq org-reveal-mathjax t)    ;math type erm&#246;glicht - genauer einlesen</span>
+<span style="color: #51afef;">(</span><span style="color: #51afef; font-style: italic;">use-package</span> htmlize
+<span style="color: #c678dd;">:ensure</span> t<span style="color: #51afef;">)</span>                    <span style="color: #5B6268; font-style: italic;">;</span><span style="color: #5B6268; font-style: italic;">sorgt daf&#252;r dass Syntax highlighting etc in der HTML angezeigt wird</span>
+</code></pre>
+</div>
+
+<ol>
+<li>Auch möglich über: &lt;M-x package install&gt; (Achtung: package updates etc. sind manuel oft nötig und deshalb ist es mit use-pacakge besser da es vor dem Start alle syncen und selbst laden kann)</li>
+
+</ol>
+
+</section>
+<section id="slide-org34f701b">
+<h3 id="org34f701b">Einrichtung (1/3)</h3>
+<ol>
+<li class="fragment appear">Attribute an Beginn des zu exportierenden Dokuments (vll muss es unterhalb Punkt dass es mit exportiert wird 2?)</li>
+
+<li class="fragment appear">Properties als Header in Dokument das zu einer Präsentation exportiert werden soll</li>
+
+</ol>
+</section>
+<section id="slide-org1da09a4">
+<h3 id="org1da09a4">Einrichtung (2/3)</h3>
+<p>
+Anmerkung:
+</p>
+<ul>
+<li>RVEAL<sub>PROPERTIES</sub> ausklappen um Inhalt zu sehen</li>
+<li>Man kann statt Hompage auch lokale javascript files verwenden</li>
+<li>timestamp:nil weglassen oder auf t setzen um den Zeitpunkt an dem Präsi generiert wurde nicht auf Sldie anzuzeigen</li>
+<li>toc: 1 setzt die Tiefe an UNterpunkten die bei der Gliederung angezeigt werden - je nachdem wie große und wie viele Unterpunkte man hat hier auswählen</li>
+<li>num:nil entfernt die Nummerierung der Header(nur der Mainslides?), sodass es cleaner aussieht</li>
+
+</ul>
+
+</section>
+<section id="slide-orga1d57d1">
+<h3 id="orga1d57d1">Einrichtung(3/3):</h3>
+<ol>
+<li class="fragment appear">Properties/Attributes nur für bestimmte Slides
+<ul>
+<li>Will man beispielsweise Unterpunkte nacheinander einblenden kann man unter 1.Header folgendes hinzufügen (hier lohnt sich Blick auf Hompage da viel möglich ist)</li>
+<li>Will man ein Bild hinzufügen dann folgendes über den lokalen/Internetlink zum Bild</li>
+
+</ul></li>
+
+</ol>
+
+<div id="org5d27846" class="figure">
+<p><img src="file:///home/flowmi/Git/Sonstiges/test.jpg" alt="test.jpg" width="45%" align="center        &lt;- Größe und Positionierung des Bilds einstellen" />
+</p>
+</div>
+</section>
+<section id="slide-orgf49510c">
+<h3 id="orgf49510c">SpeakerNotes kann man einer Präsentation (Slide) über folgenden Block hinzufügen (mit s aus der Präsentation heraus öffnen)</h3>
+<aside class="notes">
+<p>
+hier kann man Notizen reinmachen, die Zeit die man einstellt läuft herunter, die echte Zeit wird angezeigt und die nächste Folie die kommt wenn man Space drückt&#x2026;
+</p>
+<ul>
+<li>dhsdlkj</li>
+
+</ul>
+
+</aside>
+
+</section>
+<section id="slide-org53d75c1">
+<h3 id="org53d75c1">Exportieren</h3>
+<ol>
+<li>&lt;M-x org-export-dispatch&gt; oder &lt;M-SPC me&gt;</li>
+<li>Export to reveal.js HTML Presentation auswählen</li>
+
+</ol>
+</section>
+<section id="slide-orgfc72b74">
+<h3 id="orgfc72b74">Navigation in der Präsentation</h3>
+<ul>
+<li>o für Overview</li>
+<li>Header 1 werden zu Mainslide -&gt; Navigation mit Pfeiltasten</li>
+<li>Header 2 werden zu Subslides -&gt; Navigation mit Pfeiltasten oder Space um nach unten in Subslide zu sliden</li>
+<li>s für anzeigen der SpeakerNotes</li>
+
+</ul>
+
+</section>
+<section id="slide-orgf6a45e8">
+<h4 id="orgf6a45e8">Options um weiter Funktionen hinzuzufügen</h4>
+<ul>
+<li>Themes, Fragments, Layouts, Animationen, Kommentare/SpeakerView, Bilder, Videos,&#x2026; siehe: <a href="https://revealjs.com/">https://revealjs.com/</a></li>
+
+</ul>
+
+</section>
+<section id="slide-orgbeea32b">
+<h4 id="orgbeea32b">Sonstiges (2/2)</h4>
+<ol>
+<li>wichtige Links:
+<a href="https://revealjs.com/">https://revealjs.com/</a>
+<a href="https://github.com/yjwen/org-reveal/">https://github.com/yjwen/org-reveal/</a></li>
+
+<li>Wenn einem etwas nicht gefällt kann man auch einfach einen funktionierenden html Block in die Datei einfügen und dieser wird dann unverändert und funktionsfähig mit exportiert :)</li>
+
+<li>Mit org-capture arbeiten und wichtige Codeschnipsel machen sodass ich meine Unterrichtspräsentationen easy erstellen und bearbeiten kann</li>
+
+<li>rawgit und pages.github.com kann files im Browser wiedergeben und vll anfallende Probleme lösen</li>
+
+</ol>
+</section>
+<section id="slide-orga34ec18">
+<h4 id="orga34ec18">Sonstiges (2/2)</h4>
+<ol>
+<li>Es macht Sinn meine Präsentationen in öffentliches Github Repo zu stellen dann kann ich wenn ich die URL auswendig drauf hab überall meine Präsentationen abrufen indem ich einfach den Link eingebe :) - scheinbar muss man github pages in der Repo aktivieren -&gt; In Repo gehen und auf Settings und unter GitHub Pages die Source auf Main/Master branch stellen und (gegebenenfalls direkt dort Theme einstellen?) in die html Datei muss nun die reveal source (#+REVEAL<sub>ROOT</sub>: siehe GithubPage zu Reveal für aktuellen Link) direkt rein (hilft also hier jetzt nicht wenn man im OrgMode es nur als Modul reingeschrieben hat und es im Header dann weglässt)</li>
+
+</ol>
+
+</section>
+</section>
+<section>
+<section id="slide-orgb40bcf1">
+<h2 id="orgb40bcf1">org-tree-slide</h2>
+<div class="outline-text-2" id="text-orgb40bcf1">
+</div>
+</section>
+<section id="slide-orgbf96a85">
+<h3 id="orgbf96a85">Installation und Einrichtung (<a href="https://github.com/takaxp/org-tree-slide">https://github.com/takaxp/org-tree-slide</a>)</h3>
+<div class="org-src-container">
+
+<pre  class="src src-emacs-lisp"   ><code trim><span style="color: #51afef;">(</span><span style="color: #51afef; font-style: italic;">use-package</span> org-tree-slide                <span style="color: #5B6268; font-style: italic;">;</span><span style="color: #5B6268; font-style: italic;">falls es nicht zum evaluieren geht dann &lt;M-x install-package org-tree-slide&gt;</span>
+<span style="color: #c678dd;">:custom</span>
+<span style="color: #c678dd;">(</span><span style="color: #dcaeea;">org-image-actual-width</span> nil<span style="color: #c678dd;">)</span><span style="color: #51afef;">)</span>            <span style="color: #5B6268; font-style: italic;">;</span><span style="color: #5B6268; font-style: italic;">l&#228;sst uns die Bildgr&#246;&#223;e selbst bestimmen</span>
+</code></pre>
+</div>
+
+<ul>
+<li>&lt;M-x org-toggle-inline-images&gt; vor dem öffnen des Präsentationsmodus &lt;M-x org-tree-slide-mode&gt; ausführen um sicher zu sein dass alle Bilder angezeigt werden</li>
+<li>Bilderlink darf nicht mit Namen versehen werden, da er sonst nicht funktioniert und mit #+ATTR<sub>HTML</sub>: :width 500 kann man Bildgröße wählen und auch Höhe :height 300 oder in Prozent angeben</li>
+<li>&lt;M-x org-tree-slide-mode-play-with-timer&gt; kann man einen timer setzen falls man Überblick haben möchte über Restzeit die man noch hat</li>
+<li>&lt;M-x org-tree-slide-simple-profile&gt; macht Header bei präsi weg und sorgt für minimalistischeren look und ansonsten einfach bissl ausprobieren - teils selbsterklärend</li>
+
+</ul>
+
+</section>
+<section id="slide-org6c9ead6">
+<h3 id="org6c9ead6">Customisation of this mode</h3>
+<div class="org-src-container">
+
+<pre  class="src src-emacs-lisp"   ><code trim><span style="color: #51afef;">(</span><span style="color: #51afef; font-style: italic;">use-package</span> hide-mode-line<span style="color: #51afef;">)</span>
+<span style="color: #51afef;">(</span><span style="color: #51afef; font-style: italic;">defun</span> <span style="color: #c678dd;">efs/presentation-setup</span> <span style="color: #c678dd;">()</span>
+  <span style="color: #c678dd;">(</span><span style="color: #dcaeea;">hide-mode-line-mode</span> <span style="color: #da8548; font-weight: bold;">1</span><span style="color: #c678dd;">)</span>
+  <span style="color: #c678dd;">(</span><span style="color: #c678dd;">org-display-inline-images</span><span style="color: #c678dd;">)</span>        <span style="color: #5B6268; font-style: italic;">;</span><span style="color: #5B6268; font-style: italic;">alternativ org-startup-with-inline-images</span>
+  <span style="color: #c678dd;">(</span><span style="color: #51afef; font-style: italic;">setq</span> <span style="color: #dcaeea;">text-scale-mode-amount</span> <span style="color: #da8548; font-weight: bold;">3</span><span style="color: #c678dd;">)</span>
+  <span style="color: #c678dd;">(</span><span style="color: #dcaeea;">text-scale-mode</span> <span style="color: #da8548; font-weight: bold;">1</span><span style="color: #c678dd;">)</span><span style="color: #51afef;">)</span>
+<span style="color: #51afef;">(</span><span style="color: #51afef; font-style: italic;">defun</span> <span style="color: #c678dd;">efs/presentation-end</span> <span style="color: #c678dd;">()</span>
+  <span style="color: #c678dd;">(</span><span style="color: #dcaeea;">hide-mode-line-mode</span> <span style="color: #da8548; font-weight: bold;">0</span><span style="color: #c678dd;">)</span>
+  <span style="color: #c678dd;">(</span><span style="color: #dcaeea;">text-scale-mode</span> <span style="color: #da8548; font-weight: bold;">0</span><span style="color: #c678dd;">)</span><span style="color: #51afef;">)</span>
+<span style="color: #51afef;">(</span><span style="color: #51afef; font-style: italic;">use-package</span> org-tree-slide-mode
+  <span style="color: #c678dd;">:hook</span> <span style="color: #c678dd;">(</span><span style="color: #98be65;">(</span>org-tree-slide-play . efs/presentation-setup<span style="color: #98be65;">)</span>
+         <span style="color: #98be65;">(</span>org-tree-slide-stop . efs/presentation-end<span style="color: #98be65;">)</span><span style="color: #c678dd;">)</span>
+  <span style="color: #c678dd;">:custom</span>                                                           <span style="color: #5B6268; font-style: italic;">;</span><span style="color: #5B6268; font-style: italic;">hier gerne weitere anpassungen machen</span>
+  <span style="color: #c678dd;">(</span>org-tree-slide-slide-in-effect t<span style="color: #c678dd;">)</span>
+  <span style="color: #c678dd;">(</span>org-tree-slide-activate-message <span style="color: #98be65;">"Pr&#228;sentation gestartet!"</span><span style="color: #c678dd;">)</span>
+  <span style="color: #c678dd;">(</span>org-tree-slide-deactivate-message <span style="color: #98be65;">"Pr&#228;sentation beendet!"</span><span style="color: #c678dd;">)</span>
+  <span style="color: #c678dd;">(</span>org-tree-slide-header t<span style="color: #c678dd;">)</span>
+  <span style="color: #c678dd;">(</span>org-tree-slide-breadcrumbs <span style="color: #98be65;">" &gt; "</span><span style="color: #c678dd;">)</span>
+  <span style="color: #c678dd;">(</span><span style="color: #dcaeea;">org-image-actual-width</span> nil<span style="color: #c678dd;">)</span><span style="color: #51afef;">)</span>
+<span style="color: #5B6268; font-style: italic;">;</span><span style="color: #5B6268; font-style: italic;">funktioniert schon gut - ich will noch Zeilennummern ausblenden und Text in Mitte vom Screen und vll auch Videos und Tabellen besser anzeigen und bissl grafisch noch was verbessern</span>
+</code></pre>
+</div>
+
+<ul>
+<li>Mit org-beamer kann man Präsentationen (braucht eventuell Installation von Latex Packeten im Betriebssystem) als pdf exportieren -&gt; siehe nach diesem Modul auf github</li>
+
+</ul>
+</section>
+</section>
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js/dist/reveal.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js/plugin/markdown/markdown.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js/plugin/zoom/zoom.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js/plugin/notes/notes.js"></script>
+
+
+<script>
+// Full list of configuration options available here:
+// https://github.com/hakimel/reveal.js#configuration
+Reveal.initialize({
+plugins: [RevealMarkdown, RevealZoom, RevealNotes]
+});
+
+</script>
+</body>
+</html>

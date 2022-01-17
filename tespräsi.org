@@ -1,0 +1,129 @@
+
+#+TITLE: Einführung  Oxidations-zahlen
+#+AUTHOR: Markus Hoffmann
+#+DATE:  <2022-01-18 Mo>
+
+:REVEAL_PROPERTIES:
+#+REVEAL_ROOT: https://cdn.jsdelivr.net/npm/reveal.js
+#+REVEAL_REVEAL_JS_VERSION: 4
+#+REVEAL_THEME: serif
+#+OPTIONS: timestamp:nil toc:1 num:nil
+:END:
+
+* org-reveal
+* Video
+<video data-autoplay src="http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4"></video>
+<video data-autoplay src="https://www.youtube.com/watch?v=6Q0sMOQvJuw&list=RD6Q0sMOQvJuw&start_radio=1"></video>
+
+** Installation:
+1. Beste Variante ist mir einen eigenen mode dazu in meine config zu schreiben: (use-package ox-reveal)
+- Diesen Code in init.el
+#+begin_src emacs-lisp
+(use-package ox-reveal
+:ensure ox-reveal)
+(setq org-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js") ;Alternativ lokale Datei oder: (setq org-reveal-root "http://cdn.jsdelivr.net/reveal.js/3.0.0/")
+;(setq org-reveal-mathjax t)    ;math type ermöglicht - genauer einlesen
+(use-package htmlize
+:ensure t)                    ;sorgt dafür dass Syntax highlighting etc in der HTML angezeigt wird
+#+end_src
+
+2. Auch möglich über: <M-x package install> (Achtung: package updates etc. sind manuel oft nötig und deshalb ist es mit use-pacakge besser da es vor dem Start alle syncen und selbst laden kann)
+
+** Einrichtung (1/3)
+#+ATTR_REVEAL: :frag (appear)
+1. Attribute an Beginn des zu exportierenden Dokuments (vll muss es unterhalb Punkt dass es mit exportiert wird 2?)
+
+2. Properties als Header in Dokument das zu einer Präsentation exportiert werden soll
+** Einrichtung (2/3)
+#+ATTR_REVEAL: :frag (appear)
+
+
+
+
+Anmerkung:
+- RVEAL_PROPERTIES ausklappen um Inhalt zu sehen
+- Man kann statt Hompage auch lokale javascript files verwenden
+- timestamp:nil weglassen oder auf t setzen um den Zeitpunkt an dem Präsi generiert wurde nicht auf Sldie anzuzeigen
+- toc: 1 setzt die Tiefe an UNterpunkten die bei der Gliederung angezeigt werden - je nachdem wie große und wie viele Unterpunkte man hat hier auswählen
+- num:nil entfernt die Nummerierung der Header(nur der Mainslides?), sodass es cleaner aussieht
+
+** Einrichtung(3/3):
+#+ATTR_REVEAL: :frag (appear)
+1. Properties/Attributes nur für bestimmte Slides
+   - Will man beispielsweise Unterpunkte nacheinander einblenden kann man unter 1.Header folgendes hinzufügen (hier lohnt sich Blick auf Hompage da viel möglich ist)
+   - Will man ein Bild hinzufügen dann folgendes über den lokalen/Internetlink zum Bild
+#+ATTR_HTML: :width 45% :align center        <- Größe und Positionierung des Bilds einstellen
+[[~/Git/Sonstiges/test.jpg]]
+** SpeakerNotes kann man einer Präsentation (Slide) über folgenden Block hinzufügen (mit s aus der Präsentation heraus öffnen)
+
+#+BEGIN_NOTES
+hier kann man Notizen reinmachen, die Zeit die man einstellt läuft herunter, die echte Zeit wird angezeigt und die nächste Folie die kommt wenn man Space drückt...
+- dhsdlkj
+#+END_NOTES
+
+** Exportieren
+1. <M-x org-export-dispatch> oder <M-SPC me>
+2. Export to reveal.js HTML Presentation auswählen
+** Navigation in der Präsentation
+
+- o für Overview
+- Header 1 werden zu Mainslide -> Navigation mit Pfeiltasten
+- Header 2 werden zu Subslides -> Navigation mit Pfeiltasten oder Space um nach unten in Subslide zu sliden
+- s für anzeigen der SpeakerNotes
+
+*** Options um weiter Funktionen hinzuzufügen
+- Themes, Fragments, Layouts, Animationen, Kommentare/SpeakerView, Bilder, Videos,... siehe: https://revealjs.com/
+
+*** Sonstiges (2/2)
+1. wichtige Links:
+  https://revealjs.com/
+  https://github.com/yjwen/org-reveal/
+
+2. Wenn einem etwas nicht gefällt kann man auch einfach einen funktionierenden html Block in die Datei einfügen und dieser wird dann unverändert und funktionsfähig mit exportiert :)
+
+3. Mit org-capture arbeiten und wichtige Codeschnipsel machen sodass ich meine Unterrichtspräsentationen easy erstellen und bearbeiten kann
+
+4. rawgit und pages.github.com kann files im Browser wiedergeben und vll anfallende Probleme lösen
+*** Sonstiges (2/2)
+5. Es macht Sinn meine Präsentationen in öffentliches Github Repo zu stellen dann kann ich wenn ich die URL auswendig drauf hab überall meine Präsentationen abrufen indem ich einfach den Link eingebe :) - scheinbar muss man github pages in der Repo aktivieren -> In Repo gehen und auf Settings und unter GitHub Pages die Source auf Main/Master branch stellen und (gegebenenfalls direkt dort Theme einstellen?) in die html Datei muss nun die reveal source (#+REVEAL_ROOT: siehe GithubPage zu Reveal für aktuellen Link) direkt rein (hilft also hier jetzt nicht wenn man im OrgMode es nur als Modul reingeschrieben hat und es im Header dann weglässt)
+
+* org-tree-slide
+
+** Installation und Einrichtung (https://github.com/takaxp/org-tree-slide)
+#+begin_src emacs-lisp
+(use-package org-tree-slide                ;falls es nicht zum evaluieren geht dann <M-x install-package org-tree-slide>
+:custom
+(org-image-actual-width nil))            ;lässt uns die Bildgröße selbst bestimmen
+#+end_src
+
++ <M-x org-toggle-inline-images> vor dem öffnen des Präsentationsmodus <M-x org-tree-slide-mode> ausführen um sicher zu sein dass alle Bilder angezeigt werden
++ Bilderlink darf nicht mit Namen versehen werden, da er sonst nicht funktioniert und mit #+ATTR_HTML: :width 500 kann man Bildgröße wählen und auch Höhe :height 300 oder in Prozent angeben
++ <M-x org-tree-slide-mode-play-with-timer> kann man einen timer setzen falls man Überblick haben möchte über Restzeit die man noch hat
++ <M-x org-tree-slide-simple-profile> macht Header bei präsi weg und sorgt für minimalistischeren look und ansonsten einfach bissl ausprobieren - teils selbsterklärend
+
+** Customisation of this mode
+
+#+begin_src emacs-lisp
+(use-package hide-mode-line)
+(defun efs/presentation-setup ()
+  (hide-mode-line-mode 1)
+  (org-display-inline-images)        ;alternativ org-startup-with-inline-images
+  (setq text-scale-mode-amount 3)
+  (text-scale-mode 1))
+(defun efs/presentation-end ()
+  (hide-mode-line-mode 0)
+  (text-scale-mode 0))
+(use-package org-tree-slide-mode
+  :hook ((org-tree-slide-play . efs/presentation-setup)
+         (org-tree-slide-stop . efs/presentation-end))
+  :custom                                                           ;hier gerne weitere anpassungen machen
+  (org-tree-slide-slide-in-effect t)
+  (org-tree-slide-activate-message "Präsentation gestartet!")
+  (org-tree-slide-deactivate-message "Präsentation beendet!")
+  (org-tree-slide-header t)
+  (org-tree-slide-breadcrumbs " > ")
+  (org-image-actual-width nil))
+;funktioniert schon gut - ich will noch Zeilennummern ausblenden und Text in Mitte vom Screen und vll auch Videos und Tabellen besser anzeigen und bissl grafisch noch was verbessern
+    #+end_src
+
++ Mit org-beamer kann man Präsentationen (braucht eventuell Installation von Latex Packeten im Betriebssystem) als pdf exportieren -> siehe nach diesem Modul auf github
