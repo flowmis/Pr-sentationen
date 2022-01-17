@@ -1,0 +1,86 @@
+#+TITLE: Readme
+
+* org revel
+- packages.el: Hinzufügen von (package! ox-reveal) (packages.el in doom emacs config Ordner zu finden)
+- doomsync ausführen sodass Modul installiert wird und alles up to date ist
+- config.el: Im selben Ordner wie packages.el und init.el um folgenden Code ergänzen
+  #+begin_src emacs-lisp
+  (use-package ox-reveal
+    :ensure ox-reveal)
+  (setq org-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js") ;Alternativ lokale Datei oder: (setq org-reveal-root "http://cdn.jsdelivr.net/reveal.js/3.0.0/")
+     ;(setq org-reveal-mathjax t)    ;math type ermöglicht - genauer einlesen
+     (use-package htmlize
+       :ensure t)                    ;sorgt dafür dass Syntax highlighting etc in der HTML angezeigt wird
+     #+end_src
+  - =Achtung der hier angegebene Pfad zu reveal muss vorhanden sein (git clone meiner pres repo nötig und Ordnerstruktur muss stimmen!)=
+  - Auch möglich über: <M-x package install> (Achtung: package updates etc. sind manuel oft nötig und deshalb ist es mit use-pacakge besser da es vor dem Start alle syncen und selbst laden kann)
+
+- Einrichtung:
+
+  1. Attribute an Beginn des zu exportierenden Dokuments (vll muss es unterhalb Punkt dass es mit exportiert wird 2?)
+
+     #+TITLE: Einführung Oxidationszahlen
+     #+AUTHOR: Markus Hoffmann
+     #+DATE:  <2022-01-18 Mo>
+
+  2. Properties als Header in Dokument das zu einer Präsentation exportiert werden soll
+
+     :REVEAL_PROPERTIES:
+     #+REVEAL_ROOT: https://cdn.jsdeliver.net/npm/reveal.js
+     #+REVEAL_REVEAL_JS_VERSION: 4
+     #+REVEAL_THEME: serif
+     #+OPTIONS: timestamp:nil toc:1 num:nil
+     :END:
+
+     - Anmerkung:
+       - RVEAL_PROPERTIES ausklappen um Inhalt zu sehen
+       - Man kann statt Hompage auch lokale javascript files verwenden
+       - timestamp:nil weglassen oder auf t setzen um den Zeitpunkt an dem Präsi generiert wurde nicht auf Sldie anzuzeigen
+       - toc: 1 setzt die Tiefe an UNterpunkten die bei der Gliederung angezeigt werden - je nachdem wie große und wie viele Unterpunkte man hat hier auswählen
+       - num:nil entfernt die Nummerierung der Header(nur der Mainslides?), sodass es cleaner aussieht
+
+  3. Properties/Attributes nur für bestimmte Slides
+
+     - Will man beispielsweise Unterpunkte nacheinander einblenden kann man unter 1.Header folgendes hinzufügen (hier lohnt sich Blick auf Hompage da viel möglich ist)
+
+       #+ATTR_REVEAL: :frag (appear)
+
+     - Will man ein Bild hinzufügen dann folgendes über den lokalen/Internetlink zum Bild
+
+       #+ATTR_HTML: :width 45% :align center        <- Größe und Positionierung des Bilds einstellen
+
+     - SpeakerNotes kann man einer Präsentation (Slide) über folgenden Block hinzufügen (mit s aus der Präsentation heraus öffnen)
+
+       #+BEGIN_NOTES
+       hier kann man Notizen reinmachen, die Zeit die man einstellt läuft herunter, die echte Zeit wird angezeigt und die nächste Folie die kommt wenn man Space drückt...
+       - dhsdlkj
+       #+END_NOTES
+
+- Exportieren
+
+  1. <M-x org-export-dispatch> oder <M-SPC me>
+
+  2. Export to reveal.js HTML Presentation auswählen
+
+- Navigation in der Präsentation
+  - o für Overview
+  - Header 1 werden zu Mainslide -> Navigation mit Pfeiltasten
+  - Header 2 werden zu Subslides -> Navigation mit Pfeiltasten oder Space um nach unten in Subslide zu sliden
+  - s für anzeigen der SpeakerNotes
+
+- Options um weiter Funktionen hinzuzufügen
+  - Themes, Fragments, Layouts, Animationen, Kommentare/SpeakerView, Bilder, Videos,... siehe: https://revealjs.com/
+
+- Sonstiges
+
+  1. wichtige Links:
+     https://revealjs.com/
+     https://github.com/yjwen/org-reveal/
+
+  2. Wenn einem etwas nicht gefällt kann man auch einfach einen funktionierenden html Block in die Datei einfügen und dieser wird dann unverändert und funktionsfähig mit exportiert :)
+
+  3. Mit org-capture arbeiten und wichtige Codeschnipsel machen sodass ich meine Unterrichtspräsentationen easy erstellen und bearbeiten kann
+
+  4. rawgit und pages.github.com kann files im Browser wiedergeben und vll anfallende Probleme lösen
+
+  5. Es macht Sinn meine Präsentationen in öffentliches Github Repo zu stellen dann kann ich wenn ich die URL auswendig drauf hab überall meine Präsentationen abrufen indem ich einfach den Link eingebe :) - scheinbar muss man github pages in der Repo aktivieren -> In Repo gehen und auf Settings und unter GitHub Pages die Source auf Main/Master branch stellen und (gegebenenfalls direkt dort Theme einstellen?) in die html Datei muss nun die reveal source (#+REVEAL_ROOT: siehe GithubPage zu Reveal für aktuellen Link) direkt rein (hilft also hier jetzt nicht wenn man im OrgMode es nur als Modul reingeschrieben hat und es im Header dann weglässt)

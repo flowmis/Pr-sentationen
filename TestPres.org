@@ -4,24 +4,25 @@
 #+DATE:  <2022-01-18 Mo>
 
 :REVEAL_PROPERTIES:
-#+REVEAL_ROOT: https://cdn.jsdelivr.net/npm/reveal.js
+#+REVEAL_ROOT: file:///home/flowmi/Git/pres/reveal
 #+REVEAL_REVEAL_JS_VERSION: 4
 #+REVEAL_THEME: serif
 #+OPTIONS: timestamp:nil toc:1 num:nil
 :END:
-
 * org-reveal
+https://revealjs.com/demo/#/30
+
 * Video
 <video data-autoplay src="http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4"></video>
-<video data-autoplay src="https://www.youtube.com/watch?v=6Q0sMOQvJuw&list=RD6Q0sMOQvJuw&start_radio=1"></video>
 
+Autoplay funktioniert noch nicht und ist auch nicht eingebettet das Video - abchecken wie es besser geht
 ** Installation:
 1. Beste Variante ist mir einen eigenen mode dazu in meine config zu schreiben: (use-package ox-reveal)
-- Diesen Code in init.el
+2. init.el + packages.el einstellen und diesen Code evaluieren wenn es nicht von alleine geht (hook erstellen)
 #+begin_src emacs-lisp
 (use-package ox-reveal
 :ensure ox-reveal)
-(setq org-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js") ;Alternativ lokale Datei oder: (setq org-reveal-root "http://cdn.jsdelivr.net/reveal.js/3.0.0/")
+(setq org-reveal-root "file:///home/flowmi/Git/pres/reveal") ;"https://cdn.jsdelivr.net/npm/reveal.js" -> Alternativ lokale Datei oder: (setq org-reveal-root "http://cdn.jsdelivr.net/reveal.js/3.0.0/")
 ;(setq org-reveal-mathjax t)    ;math type ermöglicht - genauer einlesen
 (use-package htmlize
 :ensure t)                    ;sorgt dafür dass Syntax highlighting etc in der HTML angezeigt wird
@@ -32,6 +33,7 @@
 ** Einrichtung (1/3)
 #+ATTR_REVEAL: :frag (appear)
 1. Attribute an Beginn des zu exportierenden Dokuments (vll muss es unterhalb Punkt dass es mit exportiert wird 2?)
+
 
 2. Properties als Header in Dokument das zu einer Präsentation exportiert werden soll
 ** Einrichtung (2/3)
