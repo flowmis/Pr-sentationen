@@ -1,7 +1,7 @@
 #+TITLE: Readme
 
 * org revel einrichten
-
+- Was ist hiermit möglich?: siehe Demo Präsentation: https://revealjs.com/demo/
 - packages.el: Hinzufügen von (package! ox-reveal) (packages.el in doom emacs config Ordner zu finden)
 - doomsync ausführen sodass Modul installiert wird und alles up to date ist
 - config.el: Im selben Ordner wie packages.el und init.el um folgenden Code ergänzen
