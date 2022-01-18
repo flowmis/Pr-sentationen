@@ -11,7 +11,7 @@
 :END:
 * org-reveal
 https://revealjs.com/demo/#/30
-
+ - clone meine pres Repo und öffne README.org
 * Video
 <video data-autoplay src="http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4"></video>
 

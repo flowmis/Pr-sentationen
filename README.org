@@ -13,7 +13,7 @@
 (setq org-reveal-root "file:///home/flowmi/Git/pres/reveal") ;"https://cdn.jsdelivr.net/npm/reveal.js" -> ist online Pfad falls offline nicht geht oder Pfadangabe auf anderen Betriebssystemen Probleme machen
 ;(setq org-reveal-mathjax t)    ;math type ermöglicht - genauer einlesen
 (use-package htmlize
-:ensure t)                    ;sorgt dafür dass Syntax highlighting etc in der HTML angezeigt wird
+:ensure t)                    ;sorgt dafür dass Syntax highlighting etc in der HTML angezeigt wird ----beim evaluieren kommt aber irgendwie dass es ignoriert wird also kein Plan?
 #+end_src
 
 - Auch möglich aber schlechter Weg(da keine Updates und nicht übertragen auf andere EMACS installationen): <M-x package install>
