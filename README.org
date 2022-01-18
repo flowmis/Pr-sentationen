@@ -18,7 +18,8 @@
 
 - Auch möglich aber schlechter Weg(da keine Updates und nicht übertragen auf andere EMACS installationen): <M-x package install>
 
-- Globale Einstellung an Start des Dokuments:
+- =Globale Einstellung= an Start des Dokuments:
+
 #+TITLE: Einführung Oxidationszahlen
 #+AUTHOR: Markus Hoffmann
 #+DATE:  <2022-01-18 Mo>
@@ -29,38 +30,40 @@
 #+OPTIONS: timestamp:nil toc:1 num:nil
 :END:
 
-- Anmerkung:
-  - REVEAL_PROPERTIES ausklappen um Inhalt zu sehen
-  - timestamp:nil weglassen oder auf t setzen um den Zeitpunkt an dem Präsi generiert wurde nicht auf Slide anzuzeigen
-  - toc:1 setzt die Tiefe an Unterpunkten die bei der Gliederung angezeigt werden - je nachdem wie große und wie viele Unterpunkte man hat hier auswählen was man in toc haben will
-  - num:nil entfernt die Nummerierung der Header und macht so ein cleaneren look
-  - Properties/Attributes kann man auch nur für bestimmte Slides setzen (direkt unter Slideheader)
+- *Anmerkung:*
+  - =REVEAL_PROPERTIES= ausklappen um Inhalt zu sehen
+  - =timestamp:nil= weglassen oder auf t setzen um den Zeitpunkt an dem Präsi generiert wurde nicht auf Slide anzuzeigen
+  - =toc:1= setzt die Tiefe an Unterpunkten die bei der Gliederung angezeigt werden - je nachdem wie große und wie viele Unterpunkte man hat hier auswählen was man in toc haben will
+  - =num:nil= entfernt die Nummerierung der Header und macht so ein cleaneren look
+  - =Properties/Attributes= kann man auch nur für bestimmte Slides setzen (direkt unter Slideheader)
     #+ATTR_REVEAL: :frag (appear)
-    Macht nach und nach einblenden von Stickpunkten. Gibt hier viele coole Möglichkeiten siehe Hompage von reveal
-  - Bild hinzufügen lokal(Achtung Pfad vll nicht wie normal über //home//... sondern /file:///home//...) oder über Internetquellen (z.B. Github Seite)
+    Macht nach und nach einblenden von Stichpunkten. Gibt hier viele coole Möglichkeiten siehe Hompage von reveal
+  - =Bild= hinzufügen lokal(Achtung Pfad vll nicht wie normal über //home//... sondern /file:///home//...) oder über Internetquellen (z.B. Github Seite)
     #+ATTR_HTML: :width 45% :align center        <- Größe und Positionierung des Bilds einstellen
-  - SpeakerNotes kann man einer Präsentation (Slide) über folgenden Block hinzufügen
+  - =Video= <video data-autoplay src="http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4"></video>
+    -> Autoplay funktioniert noch nicht und ist auch nicht eingebettet das Video - abchecken wie es besser geht
+   - =SpeakerNotes= kann man einer Präsentation (Slide) über folgenden Block hinzufügen
     #+BEGIN_NOTES
     hier kann man Notizen reinmachen, die Zeit die man einstellt läuft herunter, die echte Zeit wird angezeigt und die nächste Folie die kommt wenn man Space drückt...
     - blablabla
     #+END_NOTES
-  - H1 werden zu Hauptslides
-  - H2 werden zu Subslides
-  - H3 sind ebenfalls Subsildes ...
+  - =H1= werden zu =Hauptslides=
+  - =H2= werden zu =Subslides=
+  - =H3= sind ebenfalls Subsildes ...
   - theme, frag(ment), layouts, animationen, Kommentare/SpeakerView, vids,... siehe: https://revealjs.com/
 
-- Navigation in der Präsentation
-  - Overview Slides: ESC oder o für Overview
-  - SpeakerNotes: s
-  - Zoom: Strg + Klick
-  - Navigation: Pfeiltasten
-  - Schritt für Schritt alle Folien gehen und nach und nach Stichpunkte rein: Space
+- *Navigation in der Präsentation*
+  - =Overview Slides:= ESC oder o für Overview
+  - =SpeakerNotes:= s
+  - =Zoom:= Strg + Klick
+  - =Navigation:= Pfeiltasten
+  - =Schritt für Schritt= alle Folien gehen und nach und nach Stichpunkte rein: Space
 
-- Exportieren
+- *Exportieren*
   1. <M-x org-export-dispatch> oder <SPC me>
   2. Export to reveal.js HTML Presentation auswählen
 
-- Sonstiges
+- *Sonstiges*
   1. weitere wichtige Links:
      https://revealjs.com/
      https://github.com/yjwen/org-reveal/
