@@ -6,7 +6,7 @@
 :REVEAL_PROPERTIES:
 #+REVEAL_ROOT: file:///home/flowmi/Git/pres/reveal
 #+REVEAL_REVEAL_JS_VERSION: 4
-#+REVEAL_THEME: serif
+#+REVEAL_THEME: black
 #+OPTIONS: timestamp:nil toc:1 num:nil
 :END:
 
