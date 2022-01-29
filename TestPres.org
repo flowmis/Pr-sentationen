@@ -9,7 +9,7 @@
 #+REVEAL_THEME: black
 #+OPTIONS: timestamp:nil toc:1 num:nil
 :END:
-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
+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
 flowmi4576dudu
 
 * Was ist die Oxidationszahl/Oxidationsstufe (OZ/OS)?
