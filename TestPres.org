@@ -4,13 +4,11 @@
 #+DATE:  <2022-01-18 Di>
 
 :REVEAL_PROPERTIES:
-#+REVEAL_ROOT: file:///home/flowmi/Git/pres/reveal
+#+REVEAL_ROOT: file:///home/flowmis/pres/reveal
 #+REVEAL_REVEAL_JS_VERSION: 4
 #+REVEAL_THEME: black
 #+OPTIONS: timestamp:nil toc:1 num:nil
 :END:
-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
-flowmi4576dudu
 
 * Was ist die Oxidationszahl/Oxidationsstufe (OZ/OS)?
 
