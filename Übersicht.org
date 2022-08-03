@@ -9,8 +9,10 @@
 #+OPTIONS: timestamp:nil toc:1 num:nil
 :END:
 
-* TODO
-Das hier ist die Übersichtsseite von der aus ich leicht auf alle meine Präsentationen zugreifen kann -> Muss noch machen dass alle html. files automatisch hier gelistet werden!
-* Meine Präsentationen
+* TODO [0%]
+- [ ] Das hier soll die Übersichtsseite meiner Präsentationen werden von der aus ich leicht auf alle meine vorhandenen Präsentationen zugreifen können möchte
+- [ ] alle .html Dateien müssen noch automatisch in diese hier mit link geladen werden dass ich es nicht manuell adden muss
+- [ ] Im Moment ist es selbst als Präsentation gestaltet, aber eigentlich macht es denke ich mehr Sinn anderes Web-Layout wie read-the-org darüber zu legen
+- [ ] Am Ende sollen die Links zu den Präsentationen auf erster Seite direkt und am besten automatisch zu sehen sein!
 - [[https://flowmis.github.io/pres/Lesezeichen.html][Lesezeichen]]
 - [[https://flowmis.github.io/pres/TestPres.html][TestPresentation]]
