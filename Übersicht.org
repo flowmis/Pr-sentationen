@@ -1,12 +1,12 @@
 #+TITLE: Meine Präsentationen
 #+AUTHOR: Markus Hoffmann
-#+DATE:  <2022-01-18 Di>
+#+DATE:  %d
 
 :REVEAL_PROPERTIES:
 # #+REVEAL_ROOT: file:///home/flowmis/pres/reveal
 #+REVEAL_ROOT: https://cdn.jsdelivr.net/npm/reveal.js
 #+REVEAL_THEME: serif
-#+OPTIONS: timestamp:t toc:nil num:nil
+#+OPTIONS: timestamp:t toc:nil num:nil org-reveal-title-slide:nil
 :END:
 
 * TODO [0%]
