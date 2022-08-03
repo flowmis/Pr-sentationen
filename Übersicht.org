@@ -7,8 +7,7 @@
 #+REVEAL_THEME: serif
 #+REVEAL_INIT_OPTIONS: height:900, width:1600
 # #+REVEAL_INIT_OPTIONS: minScale:0.5, maxScale:0.9, margin:0.9
-#+reveal_title_slide: nil
-# #+OPTIONS: timestamp:t toc:nil num:nil reveal_title_slide:nil
+#+OPTIONS: timestamp:t toc:nil num:nil reveal_title_slide:nil
 :END:
 
 * Präsentationen
