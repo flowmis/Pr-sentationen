@@ -1,0 +1,15 @@
+#+TITLE: Einführung  Oxidations-zahlen
+#+AUTHOR: Markus Hoffmann
+#+DATE:  <2022-01-18 Di>
+
+:REVEAL_PROPERTIES:
+# #+REVEAL_ROOT: file:///home/flowmis/pres/reveal
+#+REVEAL_ROOT: https://cdn.jsdelivr.net/npm/reveal.js
+#+REVEAL_THEME: serif
+#+OPTIONS: timestamp:nil toc:1 num:nil
+:END:
+
+Das hier ist die Übersichtsseite von der aus ich leicht auf alle meine Präsentationen zugreifen kann -> Muss noch machen dass alle html. files automatisch hier gelistet werden!
+
+[[https://flowmis.github.io/pres/Lesezeichen.html]]
+[[https://flowmis.github.io/pres/TestPres.html]]
