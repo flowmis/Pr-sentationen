@@ -5,7 +5,7 @@
 :REVEAL_PROPERTIES:
 # #+REVEAL_ROOT: file:///home/flowmis/pres/reveal
 #+REVEAL_ROOT: https://cdn.jsdelivr.net/npm/reveal.js
-#+REVEAL_THEME: black
+#+REVEAL_THEME: serif
 #+OPTIONS: timestamp:nil toc:1 num:nil
 :END:
 
