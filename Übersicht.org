@@ -5,11 +5,12 @@
 :REVEAL_PROPERTIES:
 # #+REVEAL_ROOT: file:///home/flowmis/pres/reveal
 #+REVEAL_ROOT: https://cdn.jsdelivr.net/npm/reveal.js
-#+REVEAL_THEME: serif
+#+REVEAL_THEME: black
 #+OPTIONS: timestamp:nil toc:1 num:nil
 :END:
 
+* TODO
 Das hier ist die Übersichtsseite von der aus ich leicht auf alle meine Präsentationen zugreifen kann -> Muss noch machen dass alle html. files automatisch hier gelistet werden!
-
-[[https://flowmis.github.io/pres/Lesezeichen.html]]
-[[https://flowmis.github.io/pres/TestPres.html]]
+* Übersicht meiner Präsentationen
+- [[https://flowmis.github.io/pres/Lesezeichen.html][Lesezeichen]]
+- [[https://flowmis.github.io/pres/TestPres.html][TestPresentation]]
