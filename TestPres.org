@@ -6,13 +6,12 @@
 :REVEAL_PROPERTIES:
 # #+REVEAL_ROOT: file:///home/flowmis/pres/reveal
 #+REVEAL_ROOT: https://cdn.jsdelivr.net/npm/reveal.js
-#+REVEAL_REVEAL_JS_VERSION: 4
 #+REVEAL_THEME: black
 #+OPTIONS: timestamp:nil toc:1 num:nil
 :END:
 
 * Was ist die Oxidationszahl/Oxidationsstufe (OZ/OS)?
-
+11111
 - Die Oxidationszahl auch Oxidationsstufe genannt gibt an, welche Ladung ein Atom in einem Molekül hypothetisch als Ionenladung besitzt.
 
 - Sie gibt an, wie viele Elementarladungen ein Atom innerhalb einer Verbindung formal aufgenommen bzw. abgegeben hat, wie z.B. bei einer Redoxreaktion.
