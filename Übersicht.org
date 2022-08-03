@@ -3,16 +3,18 @@
 
 :REVEAL_PROPERTIES:
 # #+REVEAL_ROOT: file:///home/flowmis/pres/reveal
-#+OPTIONS: timestamp:t toc:nil num:nil reveal_title_slide:nil reveal_width:500
 #+REVEAL_ROOT: https://cdn.jsdelivr.net/npm/reveal.js
 #+REVEAL_THEME: serif
 #+REVEAL_INIT_OPTIONS: height:900, width:1600
 # #+REVEAL_INIT_OPTIONS: minScale:0.5, maxScale:0.9, margin:0.9
+#+reveal_title_slide: nil
+# #+OPTIONS: timestamp:t toc:nil num:nil reveal_title_slide:nil
 :END:
 
 * Präsentationen
 - [[https://flowmis.github.io/pres/Lesezeichen.html][Lesezeichen]]
 - [[https://flowmis.github.io/pres/TestPres.html][Präsentation(Test)]]
+- [[https://flowmis.github.io/pres/Event.html][Event]]
 
 ** TODO [0%]
 - [ ] Das hier soll die Übersichtsseite meiner Präsentationen werden von der aus ich leicht auf alle meine vorhandenen Präsentationen zugreifen können möchte
