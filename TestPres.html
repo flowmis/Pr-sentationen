@@ -1,278 +1,103 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta charset="utf-8"/>
 <title>Einführung  Oxidations-zahlen</title>
-<meta name="author" content="Markus Hoffmann" />
-<meta name="generator" content="Org Mode" />
-<style>
-  #content { max-width: 60em; margin: auto; }
-  .title  { text-align: center;
-             margin-bottom: .2em; }
-  .subtitle { text-align: center;
-              font-size: medium;
-              font-weight: bold;
-              margin-top:0; }
-  .todo   { font-family: monospace; color: red; }
-  .done   { font-family: monospace; color: green; }
-  .priority { font-family: monospace; color: orange; }
-  .tag    { background-color: #eee; font-family: monospace;
-            padding: 2px; font-size: 80%; font-weight: normal; }
-  .timestamp { color: #bebebe; }
-  .timestamp-kwd { color: #5f9ea0; }
-  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
-  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
-  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
-  .underline { text-decoration: underline; }
-  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
-  p.verse { margin-left: 3%; }
-  pre {
-    border: 1px solid #e6e6e6;
-    border-radius: 3px;
-    background-color: #f2f2f2;
-    padding: 8pt;
-    font-family: monospace;
-    overflow: auto;
-    margin: 1.2em;
-  }
-  pre.src {
-    position: relative;
-    overflow: auto;
-  }
-  pre.src:before {
-    display: none;
-    position: absolute;
-    top: -8px;
-    right: 12px;
-    padding: 3px;
-    color: #555;
-    background-color: #f2f2f299;
-  }
-  pre.src:hover:before { display: inline; margin-top: 14px;}
-  /* Languages per Org manual */
-  pre.src-asymptote:before { content: 'Asymptote'; }
-  pre.src-awk:before { content: 'Awk'; }
-  pre.src-authinfo::before { content: 'Authinfo'; }
-  pre.src-C:before { content: 'C'; }
-  /* pre.src-C++ doesn't work in CSS */
-  pre.src-clojure:before { content: 'Clojure'; }
-  pre.src-css:before { content: 'CSS'; }
-  pre.src-D:before { content: 'D'; }
-  pre.src-ditaa:before { content: 'ditaa'; }
-  pre.src-dot:before { content: 'Graphviz'; }
-  pre.src-calc:before { content: 'Emacs Calc'; }
-  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
-  pre.src-fortran:before { content: 'Fortran'; }
-  pre.src-gnuplot:before { content: 'gnuplot'; }
-  pre.src-haskell:before { content: 'Haskell'; }
-  pre.src-hledger:before { content: 'hledger'; }
-  pre.src-java:before { content: 'Java'; }
-  pre.src-js:before { content: 'Javascript'; }
-  pre.src-latex:before { content: 'LaTeX'; }
-  pre.src-ledger:before { content: 'Ledger'; }
-  pre.src-lisp:before { content: 'Lisp'; }
-  pre.src-lilypond:before { content: 'Lilypond'; }
-  pre.src-lua:before { content: 'Lua'; }
-  pre.src-matlab:before { content: 'MATLAB'; }
-  pre.src-mscgen:before { content: 'Mscgen'; }
-  pre.src-ocaml:before { content: 'Objective Caml'; }
-  pre.src-octave:before { content: 'Octave'; }
-  pre.src-org:before { content: 'Org mode'; }
-  pre.src-oz:before { content: 'OZ'; }
-  pre.src-plantuml:before { content: 'Plantuml'; }
-  pre.src-processing:before { content: 'Processing.js'; }
-  pre.src-python:before { content: 'Python'; }
-  pre.src-R:before { content: 'R'; }
-  pre.src-ruby:before { content: 'Ruby'; }
-  pre.src-sass:before { content: 'Sass'; }
-  pre.src-scheme:before { content: 'Scheme'; }
-  pre.src-screen:before { content: 'Gnu Screen'; }
-  pre.src-sed:before { content: 'Sed'; }
-  pre.src-sh:before { content: 'shell'; }
-  pre.src-sql:before { content: 'SQL'; }
-  pre.src-sqlite:before { content: 'SQLite'; }
-  /* additional languages in org.el's org-babel-load-languages alist */
-  pre.src-forth:before { content: 'Forth'; }
-  pre.src-io:before { content: 'IO'; }
-  pre.src-J:before { content: 'J'; }
-  pre.src-makefile:before { content: 'Makefile'; }
-  pre.src-maxima:before { content: 'Maxima'; }
-  pre.src-perl:before { content: 'Perl'; }
-  pre.src-picolisp:before { content: 'Pico Lisp'; }
-  pre.src-scala:before { content: 'Scala'; }
-  pre.src-shell:before { content: 'Shell Script'; }
-  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
-  /* additional language identifiers per "defun org-babel-execute"
-       in ob-*.el */
-  pre.src-cpp:before  { content: 'C++'; }
-  pre.src-abc:before  { content: 'ABC'; }
-  pre.src-coq:before  { content: 'Coq'; }
-  pre.src-groovy:before  { content: 'Groovy'; }
-  /* additional language identifiers from org-babel-shell-names in
-     ob-shell.el: ob-shell is the only babel language using a lambda to put
-     the execution function name together. */
-  pre.src-bash:before  { content: 'bash'; }
-  pre.src-csh:before  { content: 'csh'; }
-  pre.src-ash:before  { content: 'ash'; }
-  pre.src-dash:before  { content: 'dash'; }
-  pre.src-ksh:before  { content: 'ksh'; }
-  pre.src-mksh:before  { content: 'mksh'; }
-  pre.src-posh:before  { content: 'posh'; }
-  /* Additional Emacs modes also supported by the LaTeX listings package */
-  pre.src-ada:before { content: 'Ada'; }
-  pre.src-asm:before { content: 'Assembler'; }
-  pre.src-caml:before { content: 'Caml'; }
-  pre.src-delphi:before { content: 'Delphi'; }
-  pre.src-html:before { content: 'HTML'; }
-  pre.src-idl:before { content: 'IDL'; }
-  pre.src-mercury:before { content: 'Mercury'; }
-  pre.src-metapost:before { content: 'MetaPost'; }
-  pre.src-modula-2:before { content: 'Modula-2'; }
-  pre.src-pascal:before { content: 'Pascal'; }
-  pre.src-ps:before { content: 'PostScript'; }
-  pre.src-prolog:before { content: 'Prolog'; }
-  pre.src-simula:before { content: 'Simula'; }
-  pre.src-tcl:before { content: 'tcl'; }
-  pre.src-tex:before { content: 'TeX'; }
-  pre.src-plain-tex:before { content: 'Plain TeX'; }
-  pre.src-verilog:before { content: 'Verilog'; }
-  pre.src-vhdl:before { content: 'VHDL'; }
-  pre.src-xml:before { content: 'XML'; }
-  pre.src-nxml:before { content: 'XML'; }
-  /* add a generic configuration mode; LaTeX export needs an additional
-     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
-  pre.src-conf:before { content: 'Configuration File'; }
-
-  table { border-collapse:collapse; }
-  caption.t-above { caption-side: top; }
-  caption.t-bottom { caption-side: bottom; }
-  td, th { vertical-align:top;  }
-  th.org-right  { text-align: center;  }
-  th.org-left   { text-align: center;   }
-  th.org-center { text-align: center; }
-  td.org-right  { text-align: right;  }
-  td.org-left   { text-align: left;   }
-  td.org-center { text-align: center; }
-  dt { font-weight: bold; }
-  .footpara { display: inline; }
-  .footdef  { margin-bottom: 1em; }
-  .figure { padding: 1em; }
-  .figure p { text-align: center; }
-  .equation-container {
-    display: table;
-    text-align: center;
-    width: 100%;
-  }
-  .equation {
-    vertical-align: middle;
-  }
-  .equation-label {
-    display: table-cell;
-    text-align: right;
-    vertical-align: middle;
-  }
-  .inlinetask {
-    padding: 10px;
-    border: 2px solid gray;
-    margin: 10px;
-    background: #ffffcc;
-  }
-  #org-div-home-and-up
-   { text-align: right; font-size: 70%; white-space: nowrap; }
-  textarea { overflow-x: auto; }
-  .linenr { font-size: smaller }
-  .code-highlighted { background-color: #ffff00; }
-  .org-info-js_info-navigation { border-style: none; }
-  #org-info-js_console-label
-    { font-size: 10px; font-weight: bold; white-space: nowrap; }
-  .org-info-js_search-highlight
-    { background-color: #ffff00; color: #000000; font-weight: bold; }
-  .org-svg { }
+<meta name="author" content="Markus Hoffmann"/>
+<meta name="description" content=""/>
+<meta name="keywords" content=""/>
+<style type="text/css">
+.underline { text-decoration: underline; }
 </style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js/dist/reveal.css"/>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js/dist/theme/black.css" id="theme"/>
+
 </head>
 <body>
-<div id="content" class="content">
-<h1 class="title">Einführung  Oxidations-zahlen</h1>
-<div id="table-of-contents" role="doc-toc">
+<div class="reveal">
+<div class="slides">
+<section id="sec-title-slide"><h1 class="title">Einführung  Oxidations-zahlen</h1><p class="subtitle"></p>
+<h2 class="author">Markus Hoffmann</h2><h2 class="date">2022-01-18 Di 00:00</h2>
+</section>
+<section id="sec-table-of-contents"><div id="table-of-contents" role="doc-toc">
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#org6653850">Was ist die Oxidationszahl/Oxidationsstufe (OZ/OS)?</a></li>
-<li><a href="#org71c7a96">Welche Werte kann die Oxidationszahl annehmen?</a></li>
-<li><a href="#org98eb9ba">Wie bestimme ich die Oxidationszahl?</a></li>
-<li><a href="#org57c1ba7">Zusammenfassung</a></li>
-<li><a href="#org2782783">Quelle</a></li>
+<li><a href="#/slide-orgad4373c">Was ist die Oxidationszahl/Oxidationsstufe (OZ/OS)?</a></li>
+<li><a href="#/slide-orgedacfb2">Welche Werte kann die Oxidationszahl annehmen?</a></li>
+<li><a href="#/slide-org974f132">Wie bestimme ich die Oxidationszahl?</a></li>
+<li><a href="#/slide-org61284a4">Zusammenfassung</a></li>
+<li><a href="#/slide-orgb9125b0">Quelle</a></li>
 </ul>
 </div>
 </div>
+</section>
 
-<div id="outline-container-org6653850" class="outline-2">
-<h2 id="org6653850">Was ist die Oxidationszahl/Oxidationsstufe (OZ/OS)?</h2>
-<div class="outline-text-2" id="text-org6653850">
-<ul class="org-ul">
+<section>
+<section id="slide-orgad4373c">
+<h2 id="orgad4373c">Was ist die Oxidationszahl/Oxidationsstufe (OZ/OS)?</h2>
+<ul>
 <li>Die Oxidationszahl auch Oxidationsstufe genannt gibt an, welche Ladung ein Atom in einem Molekül hypothetisch als Ionenladung besitzt.</li>
 
 <li>Sie gibt an, wie viele Elementarladungen ein Atom innerhalb einer Verbindung formal aufgenommen bzw. abgegeben hat, wie z.B. bei einer Redoxreaktion.</li>
 
 <li>Die Oxidationszahl eines Atoms ist also in einer chemischen Verbindung formal ein Maß zur Angabe der Verhältnisse der Elektronendichte um dieses Atom.</li>
-</ul>
-</div>
-</div>
 
-<div id="outline-container-org71c7a96" class="outline-2">
-<h2 id="org71c7a96">Welche Werte kann die Oxidationszahl annehmen?</h2>
-<div class="outline-text-2" id="text-org71c7a96">
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-orgedacfb2">
+<h2 id="orgedacfb2">Welche Werte kann die Oxidationszahl annehmen?</h2>
+<div class="outline-text-2" id="text-orgedacfb2">
 </div>
-<div id="outline-container-orgfde54ae" class="outline-3">
-<h3 id="orgfde54ae">positive Oxidationszahl</h3>
-<div class="outline-text-3" id="text-orgfde54ae">
+</section>
+<section id="slide-org4636980">
+<h3 id="org4636980">positive Oxidationszahl</h3>
 <p>
 zeigt an, dass die Elektronendichte gegenüber seinem Normalzustand verringert ist
 </p>
-</div>
-</div>
 
-<div id="outline-container-org74fc201" class="outline-3">
-<h3 id="org74fc201">negative Oxidationszahl</h3>
-<div class="outline-text-3" id="text-org74fc201">
+</section>
+<section id="slide-orgbaa6da3">
+<h3 id="orgbaa6da3">negative Oxidationszahl</h3>
 <p>
 zeigt an, dass die Elektronendichte um das Atom erhöht ist.
 </p>
-</div>
-</div>
-</div>
 
 
-<div id="outline-container-org98eb9ba" class="outline-2">
-<h2 id="org98eb9ba">Wie bestimme ich die Oxidationszahl?</h2>
-<div class="outline-text-2" id="text-org98eb9ba">
+</section>
+</section>
+<section>
+<section id="slide-org974f132">
+<h2 id="org974f132">Wie bestimme ich die Oxidationszahl?</h2>
 <p>
 Mithilfe der Lewis-Formel:
 </p>
 
-<ul class="org-ul">
+<ul>
 <li>Bestimme die Summe der freien Elektronenpaare und der Elektronen, die aus dem Anziehen der gemeinsamen Elektronenpaaren gewonnen werden. Der höhere Elektronegativitätswert gewinnt den &ldquo;Kampf&rdquo; um die Elektronen</li>
 
 <li>Diese Summe ziehst du von der Zahl der Valenzelektronen ab.</li>
+
 </ul>
 
 <p>
 Fertig!?
 </p>
-</div>
 
-<div id="outline-container-org5bc5dd7" class="outline-3">
-<h3 id="org5bc5dd7">Welche Regeln helfen mir und auf was muss ich achten?</h3>
-<div class="outline-text-3" id="text-org5bc5dd7">
+</section>
+<section id="slide-orgfcbc054">
+<h3 id="orgfcbc054">Welche Regeln helfen mir und auf was muss ich achten?</h3>
+<div class="outline-text-3" id="text-orgfcbc054">
 </div>
-<div id="outline-container-org832bf14" class="outline-4">
-<h4 id="org832bf14">bindende Elektronenpaare zwischen den Atomen des gleichen Elements werden gleichermaßen geteilt.</h4>
-<div class="outline-text-4" id="text-org832bf14">
+</section>
+<section id="slide-org86986c3">
+<h4 id="org86986c3">bindende Elektronenpaare zwischen den Atomen des gleichen Elements werden gleichermaßen geteilt.</h4>
 
-<div id="org1caac24" class="figure">
+<div id="org3556370" class="figure">
 <p><img src="file:///home/flowmis/Git/Sonstiges/test.jpg" alt="test.jpg" width="45%" align="center        &lt;- Größe und Positionierung des Bilds einstellen" />
 </p>
 </div>
@@ -280,7 +105,7 @@ Fertig!?
 <p>
 Beispiel für Oxidationszahlen anhand Ethanol und Essigsäure:
 </p>
-<div class="NOTES" id="org6223252">
+<aside class="notes">
 <p>
 Auf dem obigen Bild sehen wir die a) Lewis Schreibweise und b) die Molekülformel.
 Wie du siehst, verdeutlicht die Lewis Schreibweise viel besser, woher die Oxidationszahlen kommen.
@@ -288,98 +113,88 @@ R ist eine Abkürzung für jede Gruppe, die an dem Rest der Moleküle durch eine
 Wie du siehst bleibt die Oxidationszahl des Zentralatoms durch den Tausch der -Gruppe mit E unverändert.
 </p>
 
-</div>
-</div>
-</div>
+</aside>
 
-<div id="outline-container-org2f0e3be" class="outline-4">
-<h4 id="org2f0e3be">Elemente und einatomige Ionen</h4>
-<div class="outline-text-4" id="text-org2f0e3be">
-<ul class="org-ul">
+</section>
+<section id="slide-org607d614">
+<h4 id="org607d614">Elemente und einatomige Ionen</h4>
+<ul>
 <li>Atome im elementaren Zustand haben immer die Oxidationszahl 0.</li>
 
 <li>Bei einatomigen Ionen entspricht die Oxidationszahl der Ionenladung</li>
-</ul>
-</div>
-</div>
 
-<div id="outline-container-org844406e" class="outline-4">
-<h4 id="org844406e">OZ von Fluor</h4>
-<div class="outline-text-4" id="text-org844406e">
-<ul class="org-ul">
+</ul>
+
+</section>
+<section id="slide-orgdfe7b55">
+<h4 id="orgdfe7b55">OZ von Fluor</h4>
+<ul>
 <li>Fluor als das elektronegativste Element, hat in allen Verbindungen die Oxidationszahl -1</li>
-</ul>
-</div>
-</div>
 
-<div id="outline-container-org0e74d1e" class="outline-4">
-<h4 id="org0e74d1e">OZ von Alkalimetallen (1. Hauptgruppe)</h4>
-<div class="outline-text-4" id="text-org0e74d1e">
-<ul class="org-ul">
+</ul>
+
+</section>
+<section id="slide-org340e4a0">
+<h4 id="org340e4a0">OZ von Alkalimetallen (1. Hauptgruppe)</h4>
+<ul>
 <li>Haben eine so niedrige Elektronegativität dass wir ihnen immer eine +1 als OS geben.</li>
-</ul>
-</div>
-</div>
 
-<div id="outline-container-org477b468" class="outline-4">
-<h4 id="org477b468">OZ von Erdalkalimetallen (2. Hauptgruppe)</h4>
-<div class="outline-text-4" id="text-org477b468">
-<ul class="org-ul">
+</ul>
+
+</section>
+<section id="slide-org51fbb5a">
+<h4 id="org51fbb5a">OZ von Erdalkalimetallen (2. Hauptgruppe)</h4>
+<ul>
 <li>Haben aus dem selben Grund wie Alkalimetalle stets +2 als Oxidationszahl.</li>
 
 <li>Weil sie zwei Valenzelektronen haben statt wie bei den Alkalimetallen nur ein Valenzelektron.</li>
-</ul>
-</div>
-</div>
 
-<div id="outline-container-org9611bed" class="outline-4">
-<h4 id="org9611bed">OZ von Sauerstoff</h4>
-<div class="outline-text-4" id="text-org9611bed">
-<ul class="org-ul">
+</ul>
+
+</section>
+<section id="slide-orge3cb73f">
+<h4 id="orge3cb73f">OZ von Sauerstoff</h4>
+<ul>
 <li>Ist nach Fluor das für uns hier im Schulunterricht zweit höchste Element auf der Elektronegativitätsskala nach Pauling. Demnach erhält es die Oxidationszahl -2.</li>
 
 <li>Für Interessierte: Ausnahmen sind in Peroxide (-1) und Verbindung mit Fluor (+2),&#x2026;</li>
-</ul>
-</div>
-</div>
 
-<div id="outline-container-org54d4422" class="outline-4">
-<h4 id="org54d4422">OZ von Wasserstoff</h4>
-<div class="outline-text-4" id="text-org54d4422">
-<ul class="org-ul">
+</ul>
+
+</section>
+<section id="slide-org987481b">
+<h4 id="org987481b">OZ von Wasserstoff</h4>
+<ul>
 <li>In Verbindungen mit Nichtmetallen hat Wasserstoff die Oxidationszahl +1.</li>
 
 <li>In Verbindungen mit Metallen wie Metallhydriden (LiH) hat Wasserstoff die Oxidationszahl -1.</li>
-</ul>
-</div>
-</div>
 
-<div id="outline-container-org94a6989" class="outline-4">
-<h4 id="org94a6989">OZ einer neutrale (ungeladene) Verbindung</h4>
-<div class="outline-text-4" id="text-org94a6989">
-<ul class="org-ul">
+</ul>
+
+</section>
+<section id="slide-orgcf9c091">
+<h4 id="orgcf9c091">OZ einer neutrale (ungeladene) Verbindung</h4>
+<ul>
 <li>Die Summe der Oxidationszahlen aller Atome einer mehratomigen neutralen, also ungeladenen Verbindung ist gleich 0.</li>
-</ul>
-</div>
-</div>
 
-<div id="outline-container-orge15bc01" class="outline-4">
-<h4 id="orge15bc01">OZ eines mehratomigen Ions</h4>
-<div class="outline-text-4" id="text-orge15bc01">
-<ul class="org-ul">
+</ul>
+
+</section>
+<section id="slide-org77a7e9f">
+<h4 id="org77a7e9f">OZ eines mehratomigen Ions</h4>
+<ul>
 <li>Die Summe der Oxidationszahlen aller Atome eines mehratomigen Ions ist gleich der Gesamtladung dieses Ions.</li>
-</ul>
-</div>
-</div>
-</div>
 
-<div id="outline-container-orgcf4766b" class="outline-3">
-<h3 id="orgcf4766b">Regeln zur Bestimmung der Oxidationszahlen für organische Verbindungen</h3>
-<div class="outline-text-3" id="text-orgcf4766b">
+</ul>
+
+</section>
+<section id="slide-orgaf76472">
+<h3 id="orgaf76472">Regeln zur Bestimmung der Oxidationszahlen für organische Verbindungen</h3>
+<div class="outline-text-3" id="text-orgaf76472">
 </div>
-<div id="outline-container-org94b7791" class="outline-4">
-<h4 id="org94b7791">Ein C-Atom in organischen Verbindungen erhält seine Oxidationszahl durch Addition der folgenden Werte</h4>
-<div class="outline-text-4" id="text-org94b7791">
+</section>
+<section id="slide-orga9e5303">
+<h4 id="orga9e5303">Ein C-Atom in organischen Verbindungen erhält seine Oxidationszahl durch Addition der folgenden Werte</h4>
 <p>
 +1 für jede Bindung zu einem Heteroatom wie F, O, N, S, Br, Cl
 </p>
@@ -391,12 +206,10 @@ Wie du siehst bleibt die Oxidationszahl des Zentralatoms durch den Tausch der -G
 <p>
 0 für jedes anhängende C-Atom
 </p>
-</div>
-</div>
 
-<div id="outline-container-org3bf6e7d" class="outline-4">
-<h4 id="org3bf6e7d">Beispiele:</h4>
-<div class="outline-text-4" id="text-org3bf6e7d">
+</section>
+<section id="slide-org15ee882">
+<h4 id="org15ee882">Beispiele:</h4>
 <p>
 Propen:
 Laurinsäure:
@@ -405,12 +218,10 @@ Diisopropylether:
 Dibenzylsulfid:
 Cystein:
 </p>
-</div>
-</div>
 
-<div id="outline-container-orgd5b914b" class="outline-4">
-<h4 id="orgd5b914b">welche Oxidationszahlen sind möglich (1/2)?</h4>
-<div class="outline-text-4" id="text-orgd5b914b">
+</section>
+<section id="slide-org7c6bdfb">
+<h4 id="org7c6bdfb">welche Oxidationszahlen sind möglich (1/2)?</h4>
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -508,12 +319,10 @@ Cystein:
 </tr>
 </tbody>
 </table>
-</div>
-</div>
 
-<div id="outline-container-orgdab1bd2" class="outline-4">
-<h4 id="orgdab1bd2">Lösung (1/2)</h4>
-<div class="outline-text-4" id="text-orgdab1bd2">
+</section>
+<section id="slide-org43b83b4">
+<h4 id="org43b83b4">Lösung (1/2)</h4>
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -611,12 +420,10 @@ Cystein:
 </tr>
 </tbody>
 </table>
-</div>
-</div>
 
-<div id="outline-container-org8362a78" class="outline-4">
-<h4 id="org8362a78">welche Oxidationszahlen sind möglich (2/2)?</h4>
-<div class="outline-text-4" id="text-org8362a78">
+</section>
+<section id="slide-org46ee6d6">
+<h4 id="org46ee6d6">welche Oxidationszahlen sind möglich (2/2)?</h4>
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -739,12 +546,10 @@ Cystein:
 </tr>
 </tbody>
 </table>
-</div>
-</div>
 
-<div id="outline-container-org0744bc2" class="outline-4">
-<h4 id="org0744bc2">Lösungen (2/2)?</h4>
-<div class="outline-text-4" id="text-org0744bc2">
+</section>
+<section id="slide-org735c38b">
+<h4 id="org735c38b">Lösungen (2/2)?</h4>
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -861,31 +666,30 @@ Cystein:
 </tr>
 </tbody>
 </table>
-</div>
-</div>
-</div>
-</div>
 
 
-<div id="outline-container-org57c1ba7" class="outline-2">
-<h2 id="org57c1ba7">Zusammenfassung</h2>
-<div class="outline-text-2" id="text-org57c1ba7">
-<ul class="org-ul">
+</section>
+</section>
+<section>
+<section id="slide-org61284a4">
+<h2 id="org61284a4">Zusammenfassung</h2>
+<ul>
 <li>Die Oxidationszahl gibt die Ladung eines Atoms nach ionischer Annäherung an.</li>
 
 <li>Es gibt wichtige Regeln die einem bei der Bestimmung der OZ helfen (üben üben üben :))</li>
 
 <li>Grundlagen um  Regeln ist:
-<ul class="org-ul">
+<ul>
 <li>Elektronegativität (Trend im PSE von lu -&gt; ro)</li>
 <li>Lewisschreibweise</li>
-</ul></li>
-</ul>
-</div>
 
-<div id="outline-container-org855cc61" class="outline-3">
-<h3 id="org855cc61">Abschlussfrage 1</h3>
-<div class="outline-text-3" id="text-org855cc61">
+</ul></li>
+
+</ul>
+
+</section>
+<section id="slide-org73a81a6">
+<h3 id="org73a81a6">Abschlussfrage 1</h3>
 <p>
 Ergänze folgenden Satz mit dem richtigen Begriff:
 </p>
@@ -893,40 +697,46 @@ Ergänze folgenden Satz mit dem richtigen Begriff:
 <p>
 Die Summe der Oxidationszahlen muss der Ladung des <span class="underline"><span class="underline"><span class="underline"><span class="underline">__</span></span></span></span> entsprechen.
 </p>
-</div>
-</div>
 
-<div id="outline-container-org224f087" class="outline-3">
-<h3 id="org224f087">Abschlussfrage 2</h3>
-<div class="outline-text-3" id="text-org224f087">
+</section>
+<section id="slide-org056c05c">
+<h3 id="org056c05c">Abschlussfrage 2</h3>
 <p>
 Was gibt die Oxidationszahl an?
 </p>
-</div>
-</div>
 
-<div id="outline-container-org2b1eb7d" class="outline-3">
-<h3 id="org2b1eb7d">Abschlussfrage 3</h3>
-<div class="outline-text-3" id="text-org2b1eb7d">
+</section>
+<section id="slide-org179e731">
+<h3 id="org179e731">Abschlussfrage 3</h3>
 <p>
 Nenne 6 Regeln zur Festlegung der Oxidationszahl.
 </p>
-</div>
-</div>
-</div>
 
-<div id="outline-container-org2782783" class="outline-2">
-<h2 id="org2782783">Quelle</h2>
-<div class="outline-text-2" id="text-org2782783">
+</section>
+</section>
+<section>
+<section id="slide-orgb9125b0">
+<h2 id="orgb9125b0">Quelle</h2>
 <p>
 <a href="https://www.studysmarter.de/schule/chemie/redoxreaktion/oxidationszahlen/">https://www.studysmarter.de/schule/chemie/redoxreaktion/oxidationszahlen/</a>
 </p>
+</section>
+</section>
 </div>
 </div>
-</div>
-<div id="postamble" class="status">
-<p class="date">Date: 2022-01-18 Di 00:00</p>
-<p class="author">Author: Markus Hoffmann</p>
-</div>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js/dist/reveal.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js/plugin/markdown/markdown.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js/plugin/zoom/zoom.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js/plugin/notes/notes.js"></script>
+
+
+<script>
+// Full list of configuration options available here:
+// https://github.com/hakimel/reveal.js#configuration
+Reveal.initialize({
+plugins: [RevealMarkdown, RevealZoom, RevealNotes]
+});
+
+</script>
 </body>
 </html>
