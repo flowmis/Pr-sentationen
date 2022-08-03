@@ -6,7 +6,7 @@
 # #+REVEAL_ROOT: file:///home/flowmis/pres/reveal
 #+REVEAL_ROOT: https://cdn.jsdelivr.net/npm/reveal.js
 #+REVEAL_THEME: serif
-#+OPTIONS: timestamp:nil toc:1 num:nil
+#+OPTIONS: timestamp:t toc:nil num:nil
 :END:
 
 * TODO [0%]
