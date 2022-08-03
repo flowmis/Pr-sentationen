@@ -1,4 +1,4 @@
-#+TITLE: Einführung  Oxidations-zahlen
+#+TITLE: Meine Präsentationen
 #+AUTHOR: Markus Hoffmann
 #+DATE:  <2022-01-18 Di>
 
@@ -11,6 +11,6 @@
 
 * TODO
 Das hier ist die Übersichtsseite von der aus ich leicht auf alle meine Präsentationen zugreifen kann -> Muss noch machen dass alle html. files automatisch hier gelistet werden!
-* Übersicht meiner Präsentationen
+* Meine Präsentationen
 - [[https://flowmis.github.io/pres/Lesezeichen.html][Lesezeichen]]
 - [[https://flowmis.github.io/pres/TestPres.html][TestPresentation]]
