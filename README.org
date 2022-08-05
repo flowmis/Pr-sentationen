@@ -1,6 +1,6 @@
 #+TITLE: Readme
 
-* org revel einrichten
+* org-reveal einrichten
 
 + _Was ist hiermit möglich?_ - siehe Demo Präsentation: https://revealjs.com/demo/
 
