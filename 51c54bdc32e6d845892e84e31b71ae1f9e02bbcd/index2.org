@@ -10,17 +10,9 @@
 #+OPTIONS: timestamp:t toc:nil num:nil reveal_title_slide:nil
 :END:
 
-* Info
-- das hier soll der Passwortgesicherte Bereich sein dem ich niemand schicke (kommen nur durch Glück hier hin indem sie aus dem Link index.html zu index2.html machen)
-- index.html ist der Passwortgesicherte Bereich den ich anderen schicken kann
-- Passwortsicherung ist nur kleine Hürde, da Inhalt theoretisch durch mein öffentlichen github Account einsehbar ist, aber wenn dieser nicht bekannt ist und man nur den Link hat kann man nicht ohne Passwort oder direkt Link zugreifen - etwas Sicherheit bringt es also mit sich!
-- Wie funktioniert die Passwortsicherung:
-  - index.html in /root der repo hat eine form zum ausfüllen mit Passwörtern
-  - von dem jeweils eingegebenen Passwort wird ein hash SHA1 gebildet und gecheckt ob dieser mit dem Ordner im /root Verzeichnis übereinstimmt
-  - ist dem der Fall erfolgt die Weiterleitung zu der index.html in diesem Ordner der nach dem Hash des Passworts benannt ist
-  - zum ändern des Passworts einfach das neue Passwort in die index.html im /root Ordner eingeben (muss halt rendern - kann ich durch github pages machen oder auch anders) -> dann kommt nach der Eingabe dass das Passwort falsch war und in der Adressleiste steht der Hash des eingegebenen Passworts -> diesen hinter dem # Zeichen kopieren und den Ordner nach dem Hash umbenennen -> nun wurde das Passwort geändert und man kann mit dem neuen Passwort auf den Ordner zugreifen! -> Idee/Form kam von [[https://github.com/chrissy-dev/protected-github-pages][hier]]
 * Präsentationen
 - [[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/TestPres.html][Präsentation(Test)]]
+- [[https://revealjs.com/demo/][RevealDemo]]
 
 ** TODO [0%]
 - [ ] Das hier soll die Übersichtsseite meiner Präsentationen werden von der aus ich leicht auf alle meine vorhandenen Präsentationen zugreifen können möchte
@@ -30,3 +22,16 @@
 * Links zu sontigen Projekten etc.
 - [[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/Lesezeichen.html][Lesezeichen]]
 - [[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/Event04082022][Event04082022]]
+
+* Info
+- das hier soll der Passwortgesicherte Bereich sein dem ich niemand schicke (kommen nur durch Glück hier hin indem sie aus dem Link index.html zu index2.html machen)
+- index.html ist der Passwortgesicherte Bereich den ich anderen schicken kann
+- Passwortsicherung ist nur kleine Hürde, da Inhalt theoretisch durch mein öffentlichen github Account einsehbar ist, aber wenn dieser nicht bekannt ist und man nur den Link hat kann man nicht ohne Passwort oder direkt Link zugreifen - etwas Sicherheit bringt es also mit sich!
+- Wie funktioniert die Passwortsicherung:
+  - index.html in /root der repo hat eine form zum ausfüllen mit Passwörtern
+  - von dem jeweils eingegebenen Passwort wird ein hash SHA1 gebildet und gecheckt ob dieser mit dem Ordner im /root Verzeichnis übereinstimmt
+  - ist dem der Fall erfolgt die Weiterleitung zu der index.html in diesem Ordner der nach dem Hash des Passworts benannt ist
+  - zum ändern des Passworts einfach das neue Passwort in die index.html im /root Ordner eingeben (muss halt rendern - kann ich durch github pages machen oder auch anders) -> dann kommt nach der Eingabe dass das Passwort falsch war und in der Adressleiste steht der Hash des eingegebenen Passworts -> diesen hinter dem # Zeichen kopieren und den Ordner nach dem Hash umbenennen -> nun wurde das Passwort geändert und man kann mit dem neuen Passwort auf den Ordner zugreifen! -> Idee/Form kam von [[https://github.com/chrissy-dev/protected-github-pages][hier]]
+* TODO
+- org reveal besser konfigurieren und alles was zum rendern extern gezogen wird in dieser Repo auch lokal verfügbar machen so dass ich leicht von online zu offline switchen kann
+- readtheorg export verbessern und alles was zum rendern extern gezogen wird in diese Repo auch lokal verfügbar machen so dass ich leicht von online zu offline switchen kann
