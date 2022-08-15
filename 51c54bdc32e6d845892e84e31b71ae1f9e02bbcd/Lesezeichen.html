@@ -3,15 +3,200 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2022-08-05 Fr 16:35 -->
+<!-- 2022-08-15 Mo 17:50 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Org: Organisation Mane</title>
+<title>Home</title>
 <meta name="author" content="Mane" />
 <meta name="generator" content="Org Mode" />
+<style>
+  #content { max-width: 60em; margin: auto; }
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: auto;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    top: -8px;
+    right: 12px;
+    padding: 3px;
+    color: #555;
+    background-color: #f2f2f299;
+  }
+  pre.src:hover:before { display: inline; margin-top: 14px;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { }
+</style>
 <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script> <script> mermaid.initialize({startOnLoad:true}); </script> <style> .mermaid {  /* add custom styling */  } </style>
 <link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/css/htmlize.css"/>
-<link rel="stylesheet" type="text/css" href="/home/flowmis/Unterricht/Website/TEST/org-html-themes/src/readtheorg_theme/css/readtheorg.css"/>
+<!-- <link rel="stylesheet" type="text/css" href="/home/flowmis/Unterricht/Website/TEST/org-html-themes/src/readtheorg_theme/css/readtheorg.css"/> -->
+<link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/css/readtheorg.css"/>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/lib/js/jquery.stickytableheaders.min.js"></script>
@@ -23,68 +208,73 @@
 <style> li{max-width:800px;}</style
 <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script> <script> mermaid.initialize({startOnLoad:true}); </script> <style> .mermaid {  /* add custom styling */  } </style>
 <link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/css/htmlize.css"/>
+<!-- <link rel="stylesheet" type="text/css" href="/home/flowmis/Unterricht/Website/TEST/org-html-themes/src/readtheorg_theme/css/readtheorg.css"/> -->
 <link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/css/readtheorg.css"/>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/lib/js/jquery.stickytableheaders.min.js"></script>
 <script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/js/readtheorg.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+<script type="text/x-mathjax-config"> MathJax.Hub.Config({ displayAlign: "center", displayIndent: "0em", "HTML-CSS": { scale: 100,  linebreaks: { automatic: "false" }, webFont: "TeX" }, SVG: {scale: 100, linebreaks: { automatic: "false" }, font: "TeX"}, NativeMML: {scale: 100}, TeX: { equationNumbers: {autoNumber: "AMS"}, MultLineWidth: "85%", TagSide: "right", TagIndent: ".8em" }});</script>
 <style> #content{max-width:1800px;}</style>
 <style> p{max-width:800px;}</style>
 <style> li{max-width:800px;}</style
 <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script> <script> mermaid.initialize({startOnLoad:true}); </script> <style> .mermaid {  /* add custom styling */  } </style>
-<link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="/home/flowmis/Unterricht/Website/TEST/org-html-themes/src/readtheorg_theme/css/readtheorg.css"/>
 <link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/css/readtheorg.css"/>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/lib/js/jquery.stickytableheaders.min.js"></script>
 <script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/js/readtheorg.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+<script type="text/x-mathjax-config"> MathJax.Hub.Config({ displayAlign: "center", displayIndent: "0em", "HTML-CSS": { scale: 100,  linebreaks: { automatic: "false" }, webFont: "TeX" }, SVG: {scale: 100, linebreaks: { automatic: "false" }, font: "TeX"}, NativeMML: {scale: 100}, TeX: { equationNumbers: {autoNumber: "AMS"}, MultLineWidth: "85%", TagSide: "right", TagIndent: ".8em" }});</script>
 <style> #content{max-width:1800px;}</style>
 <style> p{max-width:800px;}</style>
 <style> li{max-width:800px;}</style
 </head>
 <body>
 <div id="content" class="content">
-<h1 class="title">Org: Organisation Mane</h1>
+<h1 class="title">Home</h1>
 <div id="table-of-contents" role="doc-toc">
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#orge292125">Lesezeichen</a>
+<li><a href="#org6305901">Lesezeichen</a>
 <ul>
-<li><a href="#org3be76fd">Google</a></li>
-<li><a href="#org259a6d7">Medien, Musik, Nachrichten, &#x2026;</a></li>
-<li><a href="#org7181647">Mail</a></li>
-<li><a href="#org0066911">Dokumentationen</a></li>
-<li><a href="#org0426367">Development</a>
+<li><a href="#org85dedad">Google</a></li>
+<li><a href="#org0d199fb">Medien, Musik, Nachrichten, &#x2026;</a></li>
+<li><a href="#org7508da3">Mail</a></li>
+<li><a href="#org80266f8">Dokumentationen</a></li>
+<li><a href="#org108a84a">Development</a>
 <ul>
-<li><a href="#org2e5de71">Docs</a></li>
-<li><a href="#orgd602248">Sonstiges</a></li>
+<li><a href="#orga604941">Docs</a></li>
+<li><a href="#orgd52f66b">Sonstiges</a></li>
 </ul>
 </li>
-<li><a href="#orgc336df7">Tools/Rechner</a></li>
-<li><a href="#orged2d165">Wissen</a></li>
-<li><a href="#org9f8bfa6">CV</a></li>
-<li><a href="#org9e1cd0f">Finanzen</a>
+<li><a href="#org21cef83">Tools/Rechner</a></li>
+<li><a href="#org9295f8c">Wissen</a></li>
+<li><a href="#orgfc1652b">CoVi</a></li>
+<li><a href="#org30c26d2">Finanzen</a>
 <ul>
-<li><a href="#orga6e3b50">Crypto</a></li>
-<li><a href="#org379053c">Makroökonomie &amp; sontiges über Wirtschaft</a></li>
-<li><a href="#org287df1b">Trading</a></li>
+<li><a href="#org4d91a93">Crypto</a></li>
+<li><a href="#org2fd5e16">Makroökonomie &amp; sontiges über Wirtschaft</a></li>
+<li><a href="#org39e1de3">Trading</a></li>
 </ul>
 </li>
-<li><a href="#org633fd50">Präsentationen</a></li>
-<li><a href="#org4baee48">Spielee</a></li>
+<li><a href="#orgee5c8b5">Präsentationen</a></li>
+<li><a href="#org4521792">Spiele</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
-<div id="outline-container-orge292125" class="outline-2">
-<h2 id="orge292125">Lesezeichen</h2>
-<div class="outline-text-2" id="text-orge292125">
+<div id="outline-container-org6305901" class="outline-2">
+<h2 id="org6305901">Lesezeichen</h2>
+<div class="outline-text-2" id="text-org6305901">
 </div>
-<div id="outline-container-org3be76fd" class="outline-3">
-<h3 id="org3be76fd">Google</h3>
-<div class="outline-text-3" id="text-org3be76fd">
+<div id="outline-container-org85dedad" class="outline-3">
+<h3 id="org85dedad">Google</h3>
+<div class="outline-text-3" id="text-org85dedad">
 <ul class="org-ul">
 <li><a href="https://www.google.de">Suche</a></li>
 <li><a href="https://calendar.google.com/calendar/u/0/r">Kalender</a></li>
@@ -95,9 +285,9 @@
 </ul>
 </div>
 </div>
-<div id="outline-container-org259a6d7" class="outline-3">
-<h3 id="org259a6d7">Medien, Musik, Nachrichten, &#x2026;</h3>
-<div class="outline-text-3" id="text-org259a6d7">
+<div id="outline-container-org0d199fb" class="outline-3">
+<h3 id="org0d199fb">Medien, Musik, Nachrichten, &#x2026;</h3>
+<div class="outline-text-3" id="text-org0d199fb">
 <ul class="org-ul">
 <li><a href="https://open.spotify.com/">Spotify</a></li>
 <li><a href="https://web.telegram.org/k/">Telegram</a></li>
@@ -109,29 +299,29 @@
 </ul>
 </div>
 </div>
-<div id="outline-container-org7181647" class="outline-3">
-<h3 id="org7181647">Mail</h3>
-<div class="outline-text-3" id="text-org7181647">
+<div id="outline-container-org7508da3" class="outline-3">
+<h3 id="org7508da3">Mail</h3>
+<div class="outline-text-3" id="text-org7508da3">
 <ul class="org-ul">
 <li><a href="https://web.de/">Web</a></li>
 </ul>
 </div>
 </div>
-<div id="outline-container-org0066911" class="outline-3">
-<h3 id="org0066911">Dokumentationen</h3>
-<div class="outline-text-3" id="text-org0066911">
+<div id="outline-container-org80266f8" class="outline-3">
+<h3 id="org80266f8">Dokumentationen</h3>
+<div class="outline-text-3" id="text-org80266f8">
 <ul class="org-ul">
 <li><a href="https://docs.doomemacs.org/latest/">DoomEmacs</a></li>
 </ul>
 </div>
 </div>
-<div id="outline-container-org0426367" class="outline-3">
-<h3 id="org0426367">Development</h3>
-<div class="outline-text-3" id="text-org0426367">
+<div id="outline-container-org108a84a" class="outline-3">
+<h3 id="org108a84a">Development</h3>
+<div class="outline-text-3" id="text-org108a84a">
 </div>
-<div id="outline-container-org2e5de71" class="outline-4">
-<h4 id="org2e5de71">Docs</h4>
-<div class="outline-text-4" id="text-org2e5de71">
+<div id="outline-container-orga604941" class="outline-4">
+<h4 id="orga604941">Docs</h4>
+<div class="outline-text-4" id="text-orga604941">
 <ul class="org-ul">
 <li><a href="http://docs.qtile.org/en/stable/">Qtile</a></li>
 <li><a href="https://emacsdocs.org/">Emacs</a></li>
@@ -141,9 +331,9 @@
 </ul>
 </div>
 </div>
-<div id="outline-container-orgd602248" class="outline-4">
-<h4 id="orgd602248">Sonstiges</h4>
-<div class="outline-text-4" id="text-orgd602248">
+<div id="outline-container-orgd52f66b" class="outline-4">
+<h4 id="orgd52f66b">Sonstiges</h4>
+<div class="outline-text-4" id="text-orgd52f66b">
 <ul class="org-ul">
 <li><a href="https://www.w3schools.com/quiztest/default.asp">W3School</a> (HTML,CSS, JAVASCRIPT, SQL, PYTHON, PHP, BOOTSTRAP) dort verwende Quizseiten als Code auslesen und für meine Seite in abgewandelter Form verwenden?</li>
 <li><a href="https://teachyourselfcs.com/">TeachYourselfCS</a></li>
@@ -162,9 +352,9 @@
 </div>
 </div>
 </div>
-<div id="outline-container-orgc336df7" class="outline-3">
-<h3 id="orgc336df7">Tools/Rechner</h3>
-<div class="outline-text-3" id="text-orgc336df7">
+<div id="outline-container-org21cef83" class="outline-3">
+<h3 id="org21cef83">Tools/Rechner</h3>
+<div class="outline-text-3" id="text-org21cef83">
 <ul class="org-ul">
 <li><a href="https://www.geogebra.org/3d?lang=de">3D<sub>Rechner</sub></a></li>
 <li><a href="https://www.desmos.com/calculator?lang=de">GraphikRechner</a></li>
@@ -178,9 +368,9 @@
 </ul>
 </div>
 </div>
-<div id="outline-container-orged2d165" class="outline-3">
-<h3 id="orged2d165">Wissen</h3>
-<div class="outline-text-3" id="text-orged2d165">
+<div id="outline-container-org9295f8c" class="outline-3">
+<h3 id="org9295f8c">Wissen</h3>
+<div class="outline-text-3" id="text-org9295f8c">
 <ul class="org-ul">
 <li><a href="https://www.researchgate.net/">Researchgate</a></li>
 <li><a href="https://pubmed.ncbi.nlm.nih.gov//">PubMed</a></li>
@@ -193,9 +383,9 @@
 </ul>
 </div>
 </div>
-<div id="outline-container-org9f8bfa6" class="outline-3">
-<h3 id="org9f8bfa6">CV</h3>
-<div class="outline-text-3" id="text-org9f8bfa6">
+<div id="outline-container-orgfc1652b" class="outline-3">
+<h3 id="orgfc1652b">CoVi</h3>
+<div class="outline-text-3" id="text-orgfc1652b">
 <ul class="org-ul">
 <li><a href="https://ourworldindata.org/explorers/coronavirus-data-explorer?zoomToSelection=true&amp;time=2020-05-28..latest&amp;facet=none&amp;pickerSort=desc&amp;pickerMetric=total_cases&amp;hideControls=true&amp;Metric=Confirmed+cases&amp;Interval=7-day+rolling+average&amp;Relative+to+Population=false&amp;Color+by+test+positivity=false&amp;country=~ISR">DailyCases</a></li>
 <li><a href="https://ourworldindata.org/explorers/coronavirus-data-explorer">DailyDeaths</a></li>
@@ -213,13 +403,13 @@
 </ul>
 </div>
 </div>
-<div id="outline-container-org9e1cd0f" class="outline-3">
-<h3 id="org9e1cd0f">Finanzen</h3>
-<div class="outline-text-3" id="text-org9e1cd0f">
+<div id="outline-container-org30c26d2" class="outline-3">
+<h3 id="org30c26d2">Finanzen</h3>
+<div class="outline-text-3" id="text-org30c26d2">
 </div>
-<div id="outline-container-orga6e3b50" class="outline-4">
-<h4 id="orga6e3b50">Crypto</h4>
-<div class="outline-text-4" id="text-orga6e3b50">
+<div id="outline-container-org4d91a93" class="outline-4">
+<h4 id="org4d91a93">Crypto</h4>
+<div class="outline-text-4" id="text-org4d91a93">
 <ul class="org-ul">
 <li><a href="https://ultrasound.money/">UltrasoundMoney</a></li>
 <li><a href="https://cointracking.info/">CoinTracking</a></li>
@@ -228,9 +418,9 @@
 </ul>
 </div>
 </div>
-<div id="outline-container-org379053c" class="outline-4">
-<h4 id="org379053c">Makroökonomie &amp; sontiges über Wirtschaft</h4>
-<div class="outline-text-4" id="text-org379053c">
+<div id="outline-container-org2fd5e16" class="outline-4">
+<h4 id="org2fd5e16">Makroökonomie &amp; sontiges über Wirtschaft</h4>
+<div class="outline-text-4" id="text-org2fd5e16">
 <ul class="org-ul">
 <li><a href="https://wtfhappenedin1971.com/">WTF1971</a></li>
 <li><a href="https://de.extraetf.com/etf-search?broker_id=1231">ETFsÜberblick</a></li>
@@ -244,9 +434,9 @@
 </ul>
 </div>
 </div>
-<div id="outline-container-org287df1b" class="outline-4">
-<h4 id="org287df1b">Trading</h4>
-<div class="outline-text-4" id="text-org287df1b">
+<div id="outline-container-org39e1de3" class="outline-4">
+<h4 id="org39e1de3">Trading</h4>
+<div class="outline-text-4" id="text-org39e1de3">
 <ul class="org-ul">
 <li><a href="http://www.priceactionninja.com/membership-muro/">PriceActionBooks(Muro)</a></li>
 <li><a href="https://tensorcharts.com/">TensorCharts</a></li>
@@ -254,23 +444,23 @@
 </div>
 </div>
 </div>
-<div id="outline-container-org633fd50" class="outline-3">
-<h3 id="org633fd50">Präsentationen</h3>
-<div class="outline-text-3" id="text-org633fd50">
+<div id="outline-container-orgee5c8b5" class="outline-3">
+<h3 id="orgee5c8b5">Präsentationen</h3>
+<div class="outline-text-3" id="text-orgee5c8b5">
 <ul class="org-ul">
 <li><a href="https://flowmis.github.io/pres/%C3%9Cbersicht.html">GithubPagesPräsentationen</a></li>
 </ul>
 </div>
 </div>
-<div id="outline-container-org4baee48" class="outline-3">
-<h3 id="org4baee48">Spielee</h3>
+<div id="outline-container-org4521792" class="outline-3">
+<h3 id="org4521792">Spiele</h3>
 </div>
 </div>
 </div>
 <div id="postamble" class="status">
 <p class="date">Date: 2022-04-15 Fr 10:57</p>
 <p class="author">Author: Mane</p>
-<p class="date">Created: 2022-08-05 Fr 16:35</p>
+<p class="date">Created: 2022-08-15 Mo 17:50</p>
 </div>
 </body>
 </html>
