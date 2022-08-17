@@ -20,9 +20,10 @@
 - [ ] Im Moment ist es selbst als Präsentation gestaltet, aber eigentlich macht es denke ich mehr Sinn anderes Web-Layout wie read-the-org darüber zu legen
 - [ ] Am Ende sollen die Links zu den Präsentationen auf erster Seite direkt und am besten automatisch zu sehen sein!
 * Links zu sontigen Projekten etc.
+- [[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/Event04082022.html][Event04082022]]
 - [[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/Lesezeichen.html][Lesezeichen]]
-- [[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/Event04082022][Event04082022]]
-
+- [[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/Abrechnung.html][Abrechnung]]
+- [[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/TestPres.html][TestPres]]
 * Info
 - das hier soll der Passwortgesicherte Bereich sein dem ich niemand schicke (kommen nur durch Glück hier hin indem sie aus dem Link index.html zu index2.html machen)
 - index.html ist der Passwortgesicherte Bereich den ich anderen schicken kann
