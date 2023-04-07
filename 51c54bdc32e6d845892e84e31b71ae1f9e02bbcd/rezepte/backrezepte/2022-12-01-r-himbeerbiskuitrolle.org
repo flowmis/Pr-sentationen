@@ -1,0 +1,75 @@
+:PROPERTIES:
+:ID:       03599653-eefc-4f85-b246-a2e6cc01855d
+:END:
+:WebExportSettings:
+#+export_file_name: ~/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/rezepte/html-dateien/himbeerbiskuitrolle.html
+#+HTML_HEAD: <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script> <script> mermaid.initialize({startOnLoad:true}); </script> <style> .mermaid {  /* add custom styling */  } </style>
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/css/htmlize.css"/>
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/css/readtheorg.css"/>
+#+HTML_HEAD: <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+#+HTML_HEAD: <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+#+HTML_HEAD: <script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/lib/js/jquery.stickytableheaders.min.js"></script>
+#+HTML_HEAD: <script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/js/readtheorg.js"></script>
+#+HTML_HEAD: <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+#+HTML_HEAD: <script type="text/x-mathjax-config"> MathJax.Hub.Config({ displayAlign: "center", displayIndent: "0em", "HTML-CSS": { scale: 100,  linebreaks: { automatic: "false" }, webFont: "TeX" }, SVG: {scale: 100, linebreaks: { automatic: "false" }, font: "TeX"}, NativeMML: {scale: 100}, TeX: { equationNumbers: {autoNumber: "AMS"}, MultLineWidth: "85%", TagSide: "right", TagIndent: ".8em" }});</script>
+#+HTML_HEAD: <style> #content{max-width:1800px;}</style>
+#+HTML_HEAD: <style> p{max-width:800px;}</style>
+#+HTML_HEAD: <style> li{max-width:800px;}</style
+#+OPTIONS: toc:t num:nil
+# Anmerkungen: :noexport:
+# - [[https://mermaid-js.github.io/mermaid/#/][Mermaid]]
+# - [[https://github.com/fniessen/org-html-themes][Style]]
+# - bigblow statt readtheorg ist zweite einfach vorhanden Möglichkeit das Aussehen zu ändern
+:END:
+
+#+title: himbeerbiskuitrolle
+*Himbeerbiskuitrolle:*
+
+[[file:bilder/himbeerbiskuitrolle.jpeg]]
+
+*_Boden:_*
+
+3 Eier
+
+5-6 EL heißes Wasser
+
+150 g Zucker
+
+1 Päckchen Vanillin-Zucker
+
+100 g Weizenmehl
+
+50 g Speisestärke
+
+1 gestrichener TL Backpulver
+
+*_Füllung:_*
+
+6 Blätter rote Gelatine
+
+250 g Magerquark
+
+75 g Zucker
+
+150g Schlagsahne
+
+250-330g Himbeeren
+
+1 Becher Sahne für außen
+
+Eier mit Wasser in 1 Minute schaumig schlagen. Zucker und Vanillezucker
+mischen, in 1 Minute einstreuen noch 2 Minuten weiter schlagen. Mehl mit
+Speisestärke und Backpulver mischen, die Hälfte auf die Eiercreme sieben
+kurz unterrühren, ebenso mit der zweiten Hälfte.
+
+Teig auf ein mit Backpapier ausgelegtes Backblech streichen und ca. 15
+Minuten bei 180 Grad Umluft (vorgeheizt) backen.
+
+Herausnehmen, in feuchtes mit Zucker bestreutes Geschirrtuch einschlagen
+und auskühlen lassen.
+
+Für die Füllung Gelatine nach Packungsanweisung zubereiten, Quark mit
+Zucker und Himbeeren verrühren und zur Gelatine geben. Sahne steif
+schlagen und unterheben. Mischung in den Kühlschrank geben und fest
+werden lassen. Dann auf den Biskuitboden streichen und aufrollen. Mit
+Sahne bestreichen.

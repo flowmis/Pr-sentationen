@@ -1,0 +1,111 @@
+:PROPERTIES:
+:ID:       a17e22d2-1593-4fe7-a777-329b8b9498a4
+:END:
+:WebExportSettings:
+#+export_file_name: ~/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/rezepte/html-dateien/rezepte.html
+#+HTML_HEAD: <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script> <script> mermaid.initialize({startOnLoad:true}); </script> <style> .mermaid {  /* add custom styling */  } </style>
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/css/htmlize.css"/>
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/css/readtheorg.css"/>
+#+HTML_HEAD: <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+#+HTML_HEAD: <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+#+HTML_HEAD: <script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/lib/js/jquery.stickytableheaders.min.js"></script>
+#+HTML_HEAD: <script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/js/readtheorg.js"></script>
+#+HTML_HEAD: <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+#+HTML_HEAD: <script type="text/x-mathjax-config"> MathJax.Hub.Config({ displayAlign: "center", displayIndent: "0em", "HTML-CSS": { scale: 100,  linebreaks: { automatic: "false" }, webFont: "TeX" }, SVG: {scale: 100, linebreaks: { automatic: "false" }, font: "TeX"}, NativeMML: {scale: 100}, TeX: { equationNumbers: {autoNumber: "AMS"}, MultLineWidth: "85%", TagSide: "right", TagIndent: ".8em" }});</script>
+#+HTML_HEAD: <style> #content{max-width:1800px;}</style>
+#+HTML_HEAD: <style> p{max-width:800px;}</style>
+#+HTML_HEAD: <style> li{max-width:800px;}</style
+#+OPTIONS: toc:t num:nil
+# Anmerkungen: :noexport:
+# - [[https://mermaid-js.github.io/mermaid/#/][Mermaid]]
+# - [[https://github.com/fniessen/org-html-themes][Style]]
+# - bigblow statt readtheorg ist zweite einfach vorhanden Möglichkeit das Aussehen zu ändern
+:END:
+#+title: rezepte
+#+filetags: :@Home:
+<2022-11-30 Mi>
+
+* Einleitung & TODO
+** IRGENDWANN Ergänzen:
+- [ ] Übersichtstabelle mit Links die von hier abgehen machen und diese Seite als Hompage exportieren um dann auf alle weiteren zugreifen zu können
+- [ ] Kochrezepte: Pasta schutta, Krautknödel, gefüllte Paprika, Lasagne
+- [ ] Backrezepte: Apfelstudel, Erdbeerlöffelbiskuittorte, Himbeersahnetorte, Prinzregenten, Schokokuchen, Minibrombeermuffins
+
+* Liste mit Backrezepten
+
+[[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/amerikaner.html][amerikaner]]
+[[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/anisplätzchen.html][anisplätzchen]]
+[[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/apfel-streuselkuchen-vom-blech.html][apfel-streuselkuchen-vom-blech]
+[[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/apfel-zimt-zupfbrot.html][apfel-zimt-zupfbrot]
+[[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/ausgezogene-krapfen.html][ausgezogene-krapfen]
+[[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/biskuitteig.html][biskuitteig]
+[[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/brownies-mit-karamellisierten-nüssen.html][brownies-mit-karamellisierten-nüssen]
+[[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/butter-plätzchen.html][butter-plätzchen]
+[[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/butter-s.html][butter-s]
+[[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/cookies.html][cookies]
+[[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/crumble.html][crumble]
+[[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/erdbeer-rhabarber-crumble.html][erdbeer-rhabarber-crumble]
+[[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/flackswickel.html][flackswickel]
+[[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/fladenbrot.html][fladenbrot]
+[[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/gebrannte-mandeln.html][gebrannte-mandeln]
+[[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/gewürzorangen.html][gewürzorangen]
+[[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/gluten-und-milchfreies-dessert.html][gluten-und-milchfreies-dessert]
+[[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/haselnuss-makronen.html][haselnuss-makronen]
+[[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/hasenohren.html][hasenohren]
+[[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/hefezopf.html][hefezopf]
+[[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/himbeerbiskuitrolle.html][himbeerbiskuitrolle]
+[[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/kokos-makronen.html][kokos-makronen]
+[[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/käsekuchen.html][käsekuchen]
+[[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/mini-apfelstrudel.html][mini-apfelstrudel]
+[[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/ombre-himbeer-torte.html][ombre-himbeer-torte]
+[[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/orangendessert.html][orangendessert]
+[[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/pannacotta.html][pannacotta]
+[[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/panna-cotta-erdbeer-torte.html][panna-cotta-erdbeer-torte]
+[[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/pflaumenmuffins-mit-zimtstreuseln.html][pflaumenmuffins-mit-zimtstreuseln]
+[[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/puddingkuchen-mit-streuseln.html][puddingkuchen-mit-streuseln]
+[[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/quarkbällchen.html][quarkbällchen]
+[[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/rotweinäpfel.html][rotweinäpfel]
+[[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/rumkugeln.html][rumkugeln]
+[[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/schoko-gewürzkuchen.html][schoko-gewürzkuchen]
+[[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/schwarz-weiß-gebäck.html][schwarz-weiß-gebäck]
+[[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/spekulatius-waffelplätzchen.html][spekulatius-waffelplätzchen]
+[[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/tiramisu.html][tiramisu]
+[[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/vanillekipferl.html][vanillekipferl]
+[[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/versunkenerapfelkuchen.html][versunkenerapfelkuchen]
+[[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/waffeln.html][waffeln]
+[[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/weisswurstbrezel.html][weisswurstbrezel]
+[[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/zimtparfait.html][zimtparfait]
+[[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/zimtschnecken.html][zimtschnecken]
+[[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/zimtsterne.html][zimtsterne]
+[[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/zitronenkuchen.html][zitronenkuchen]
+[[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/zwetschgenkuchen-mit-rührteig.html][zwetschgenkuchen-mit-rührteig]
+
+* Liste mir Kochrezepten
+[[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/pizza.html][pizza]]
+[[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/bayrisch-kraut.html][bayrisch-kraut]]
+[[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/briegelschmiere.html][briegelschmiere]
+[[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/chiliconcarne.html][chiliconcarne]
+[[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/gemüsesuppe.html][gemüsesuppe]
+[[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/grumbeerschnitzelnoggale.html][grumbeerschnitzelnoggale]
+[[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/hackbraten-mit-gekochten-eiern.html][hackbraten-mit-gekochten-eiern]
+[[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/hackkohltopf-mit-salzkartoffeln.html][hackkohltopf-mit-salzkartoffeln]
+[[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/herrenbrot.html][herrenbrot]
+[[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/kartoffelpuffer.html][kartoffelpuffer]
+[[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/kartoffelsalat.html][kartoffelsalat]
+[[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/pfannkuchenteig-und-apfelküchle.html][pfannkuchenteig-und-apfelküchle]
+[[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/pizza-und-stockbrotteig.html][pizza-und-stockbrotteig]
+[[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/putengeschnetzeltes.html][putengeschnetzeltes]
+[[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/rigatoni-gnocci-tortellini-al-forno.html][rigatoni-gnocci-tortellini-al-forno]
+[[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/rotkraut.html][rotkraut]
+[[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/schinkennudeln.html][schinkennudeln]
+[[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/selleriepüree.html][selleriepüree]
+[[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/spaghetti-carbonara.html][spaghetti-carbonara]
+[[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/spargelcremesuppe.html][spargelcremesuppe]
+[[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/spätzle.html][spätzle]
+[[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/thunadellen.html][thunadellen]
+[[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/thunfischsalat.html][thunfischsalat]
+[[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/tomatige-gemüseputenpfanne.html][tomatige-gemüseputenpfanne]
+[[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/tzatziki.html][tzatziki]
+[[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/wraps.html][wraps]
+[[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/zwiebelsuppe.html][zwiebelsuppe]
+[[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/überbackene-kartoffelkokossuppe.html][überbackene-kartoffelkokossuppe]

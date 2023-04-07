@@ -1,0 +1,67 @@
+:PROPERTIES:
+:ID:       2a9cb9c7-a77c-4ba8-a7cb-97b2a783e2c4
+:END:
+:WebExportSettings:
+#+export_file_name: ~/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/rezepte/html-dateien/schoko-gewürzkuchen.html
+#+HTML_HEAD: <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script> <script> mermaid.initialize({startOnLoad:true}); </script> <style> .mermaid {  /* add custom styling */  } </style>
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/css/htmlize.css"/>
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/css/readtheorg.css"/>
+#+HTML_HEAD: <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+#+HTML_HEAD: <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+#+HTML_HEAD: <script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/lib/js/jquery.stickytableheaders.min.js"></script>
+#+HTML_HEAD: <script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/js/readtheorg.js"></script>
+#+HTML_HEAD: <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+#+HTML_HEAD: <script type="text/x-mathjax-config"> MathJax.Hub.Config({ displayAlign: "center", displayIndent: "0em", "HTML-CSS": { scale: 100,  linebreaks: { automatic: "false" }, webFont: "TeX" }, SVG: {scale: 100, linebreaks: { automatic: "false" }, font: "TeX"}, NativeMML: {scale: 100}, TeX: { equationNumbers: {autoNumber: "AMS"}, MultLineWidth: "85%", TagSide: "right", TagIndent: ".8em" }});</script>
+#+HTML_HEAD: <style> #content{max-width:1800px;}</style>
+#+HTML_HEAD: <style> p{max-width:800px;}</style>
+#+HTML_HEAD: <style> li{max-width:800px;}</style
+#+OPTIONS: toc:t num:nil
+# Anmerkungen: :noexport:
+# - [[https://mermaid-js.github.io/mermaid/#/][Mermaid]]
+# - [[https://github.com/fniessen/org-html-themes][Style]]
+# - bigblow statt readtheorg ist zweite einfach vorhanden Möglichkeit das Aussehen zu ändern
+:END:
+
+#+title: schoko-gewürzkuchen
+*_Schoko-Gewürzkuchen:_*
+
+[[file:bilder/schoko-gewürzkuchen.jpeg]]
+
+*_Für den Teig:_*
+
+250 g Zucker
+
+250 g Margarine
+
+4 Eier
+
+250 g Mehl
+
+30 g Lebkuchengewürz
+
+5 g Backpulver
+
+5 g Instantkaffeepulver
+
+1 Päckchen Vanillezucker
+
+20 g Zitronensaft
+
+40 g Kakaopulver
+
+50 g Milch
+
+*_Für die Glasur:_*
+
+30 g Zitronensaft
+
+50 g Puderzucker
+
+Zuckerstreusel
+
+Alle Zutaten für den Teig in eine Schüssel geben und verrühren. Den Teig
+auf ein Backblech streichen und für 20-25 Minuten bei 180 Grad Umluft
+(vorgeheizt) backen.
+
+Abkühlen lassen, Puderzucker mit Zitronensaft glatt rühren, auf dem
+Kuchen verteilen und die Zuckerstreusel darauf streuen.
