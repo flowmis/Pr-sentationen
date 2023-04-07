@@ -18,12 +18,12 @@
   - *packages.el*: Hinzufügen von (package! ox-reveal) (packages.el in doom emacs config Ordner zu finden)
   - *doomsync* ausführen sodass Modul installiert wird und alles up to date ist
   - *config.el*: Im selben Ordner wie packages.el und init.el um folgenden Code ergänzen
-  - *Achtung:* Der hier angegebene Pfad zu reveal muss vorhanden sein (git clone meiner pres repo nötig und Ordnerstruktur muss stimmen!)
+  - *Achtung:* Der hier angegebene Pfad zu reveal muss vorhanden sein (git clone meiner pages repo nötig und Ordnerstruktur muss stimmen!)
 
     #+begin_src emacs-lisp
     (use-package ox-reveal
     :ensure ox-reveal)
-    (setq org-reveal-root "file:///home/flowmi/Git/pres/reveal") ;"https://cdn.jsdelivr.net/npm/reveal.js" -> ist online Pfad falls offline nicht geht oder Pfadangabe auf anderen Betriebssystemen Probleme machen
+    (setq org-reveal-root "file:///home/flowmi/Git/pages/reveal") ;"https://cdn.jsdelivr.net/npm/reveal.js" -> ist online Pfad falls offline nicht geht oder Pfadangabe auf anderen Betriebssystemen Probleme machen
     ;(setq org-reveal-mathjax t)    ;math type ermöglicht - genauer einlesen
     (use-package htmlize
     :ensure t)                    ;sorgt dafür dass Syntax highlighting etc in der HTML angezeigt wird ----beim evaluieren kommt aber irgendwie dass es ignoriert wird also kein Plan?
@@ -34,7 +34,7 @@
 
 - folgenden Block an Start des Dokuments das eine Präsentation werden soll
 :REVEAL_PROPERTIES:
-#+REVEAL_ROOT: file:///home/flowmi/Git/pres/reveal
+#+REVEAL_ROOT: file:///home/flowmi/Git/pages/reveal
 #+REVEAL_REVEAL_JS_VERSION: 4
 #+REVEAL_THEME: serif
 #+OPTIONS: timestamp:nil toc:1 num:nil
@@ -73,7 +73,7 @@
 + _Exportieren_
 
   1. <M-x org-export-dispatch> oder <SPC me>
-  2. Export to reveal.js HTML Presentation auswählen
+  2. Export to reveal.js HTML Pagesentation auswählen
 
 + _Sonstiges_
 

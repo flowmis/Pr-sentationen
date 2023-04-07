@@ -1,6 +1,6 @@
 #+TITLE: Einführung  Oxidations-zahlen
 :REVEAL_PROPERTIES:
-# #+REVEAL_ROOT: file:///home/flowmis/pres/reveal
+# #+REVEAL_ROOT: file:///home/flowmis/pages/reveal
 #+REVEAL_ROOT: https://cdn.jsdelivr.net/npm/reveal.js
 #+REVEAL_THEME: black
 #+OPTIONS: timestamp:nil toc:1 num:nil
