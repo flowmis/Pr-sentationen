@@ -1,5 +1,4 @@
 #+TITLE: übersicht
-#+AUTHOR: Markus Hoffmann
 
 :REVEAL_PROPERTIES:
 # #+REVEAL_ROOT: file:///home/flowmis/pres/reveal
