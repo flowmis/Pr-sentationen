@@ -25,7 +25,7 @@
 #+title: hasenohren
 *Hasenohren:*
 
-[[file:bilder/hasenohren.jpeg]]
+[[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/bilder/hasenohren.jpeg]]
 
 _Zubereitung nach Oma Liesel:_
 

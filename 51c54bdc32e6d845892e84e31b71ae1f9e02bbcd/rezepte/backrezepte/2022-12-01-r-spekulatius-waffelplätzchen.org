@@ -25,7 +25,7 @@
 #+title: spekulatius-waffelplätzchen
 *Spekulatius-Waffelplätzchen:*
 
-[[file:bilder/spekulatius-waffelplätzchen.jpeg]]
+[[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/bilder/spekulatius-waffelplätzchen.jpeg]]
 
 _Für die Plätzchen:_
 

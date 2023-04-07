@@ -25,7 +25,7 @@
 #+title: zwetschgenkuchen-mit-rührteig
 *Zwetschgenkuchen mit Rührteig:*
 
-[[file:bilder/zwetschgenkuchen-mit-rührteig.jpeg]]
+[[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/bilder/zwetschgenkuchen-mit-rührteig.jpeg]]
 
 *_Zubereitung für eine Springform mit ca. 26 cm. Durchmesser:_*
 

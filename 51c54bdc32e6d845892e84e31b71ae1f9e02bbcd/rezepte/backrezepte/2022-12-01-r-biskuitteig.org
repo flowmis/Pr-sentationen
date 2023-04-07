@@ -25,7 +25,7 @@
 #+title: biskuitteig
 *Biskuitteig:*
 
-[[file:bilder/biskuitteig.jpeg]]
+[[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/bilder/biskuitteig.jpeg]]
 
 _Zubereitung für einen Tortenboden:_
 

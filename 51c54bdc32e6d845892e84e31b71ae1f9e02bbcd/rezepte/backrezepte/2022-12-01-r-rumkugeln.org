@@ -25,7 +25,7 @@
 #+title: rumkugeln
 *Rumkugeln:*
 
-[[file:bilder/rumkugeln.jpeg]]
+[[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/bilder/rumkugeln.jpeg]]
 
 100 g Butter\\
 100 g Puderzucker\\

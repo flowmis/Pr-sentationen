@@ -23,7 +23,7 @@
 :END:
 
 #+title: pizza-und-stockbrotteig
-[[file:bilder/pizza-und-stockbrotteig.jpeg]]
+[[https://flowmis.github.io/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/bilder/pizza-und-stockbrotteig.jpeg]]
 
 _Zubereitung für 2 Personen:_
 
