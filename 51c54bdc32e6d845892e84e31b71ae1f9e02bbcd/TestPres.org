@@ -91,6 +91,7 @@ Wie du siehst bleibt die Oxidationszahl des Zentralatoms durch den Tausch der -G
 
 - Die Summe der Oxidationszahlen aller Atome eines mehratomigen Ions ist gleich der Gesamtladung dieses Ions.
 
+
 ** Regeln zur Bestimmung der Oxidationszahlen für organische Verbindungen
 
 *** Ein C-Atom in organischen Verbindungen erhält seine Oxidationszahl durch Addition der folgenden Werte

@@ -1,6 +1,15 @@
 #+TITLE: Readme
 
-* org-reveal einrichten
+* Info Passwortsicherung
+
+- Passwortsicherung ist nur kleine Hürde, da Inhalt theoretisch durch mein öffentlichen github Account einsehbar ist, oder durch direkteingabe des Links erreicht werden kann, aber für dullier, die nur den Link haben bringt es schon etwas Sicherheit
+- Wie funktioniert die Passwortsicherung:
+  - index.html in /root der repo hat eine form zum ausfüllen mit Passwörtern
+  - von dem jeweils eingegebenen Passwort wird ein hash SHA1 gebildet und gecheckt ob dieser mit dem Ordner im /root Verzeichnis übereinstimmt
+  - ist dem der Fall erfolgt die Weiterleitung zu der übersicht.html in diesem Ordner der nach dem Hash des Passworts benannt ist
+  - zum ändern des Passworts einfach das neue Passwort in die index.html im /root Ordner eingeben (muss halt rendern - kann ich durch github pages machen oder auch anders) -> dann kommt nach der Eingabe dass das Passwort falsch war und in der Adressleiste steht der Hash des eingegebenen Passworts -> diesen hinter dem # Zeichen kopieren und den Ordner nach dem Hash umbenennen -> nun wurde das Passwort geändert und man kann mit dem neuen Passwort auf den Ordner zugreifen! -> Idee/Form kam von [[https://github.com/chrissy-dev/protected-github-pages][hier]]
+
+* Einrichtung von org-reveal
 
 + _Was ist hiermit möglich?_ - siehe Demo Präsentation: https://revealjs.com/demo/
 
@@ -21,19 +30,15 @@
     #+end_src
   - *Alternative:* Auch möglich aber schlechter Weg (da keine Updates und nicht übertragen auf andere EMACS installationen): <M-x package install>
 
-+ _Globale Einstellung_
+* Einstellungen in der Datei
 
-    - folgenden Block an Start des Dokuments das eine Präsentation werden soll
-    #+TITLE: Einführung Oxidationszahlen
-    #+AUTHOR: Markus Hoffmann
-    #+DATE:  <2022-01-18 Mo>
-    :REVEAL_PROPERTIES:
-  #+REVEAL_ROOT: file:///home/flowmi/Git/pres/reveal
-  #+REVEAL_REVEAL_JS_VERSION: 4
-  #+REVEAL_THEME: serif
-  #+OPTIONS: timestamp:nil toc:1 num:nil
-  :END:
-    (REVEAL_PROPERTIES ausklappen um Inhalt zu sehen)
+- folgenden Block an Start des Dokuments das eine Präsentation werden soll
+:REVEAL_PROPERTIES:
+#+REVEAL_ROOT: file:///home/flowmi/Git/pres/reveal
+#+REVEAL_REVEAL_JS_VERSION: 4
+#+REVEAL_THEME: serif
+#+OPTIONS: timestamp:nil toc:1 num:nil
+:END:
 
 + _Allgemeines_
 
