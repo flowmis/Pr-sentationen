@@ -23,7 +23,7 @@
 :END:
 
 #+title: amerikaner
-[[file:bilder/amerikaner.jpeg]]
+file:~/pres/51c54bdc32e6d845892e84e31b71ae1f9e02bbcd/bilder/amerikaner.jpeg
 
 _Zubereitung für ca. 16 Stück:_
 
