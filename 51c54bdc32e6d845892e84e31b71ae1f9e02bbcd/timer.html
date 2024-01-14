@@ -46,11 +46,11 @@
         }
 
         .start {
-            background-color: #28a745;
+            background-color: #3E6F8D;
         }
 
         .reset {
-            background-color: #dc3545;
+            background-color: #730000;
         }
     </style>
 </head>
@@ -125,13 +125,13 @@
                     }
 
                     // Stop the initial sound 10 seconds before the timer ends
-                    if (minutesRemaining === 0 && secondsRemaining === 10) {
+                    if (minutesRemaining === 0 && secondsRemaining === 13) {
                         document.getElementById("finalMinuteSound").pause();
                         document.getElementById("finalMinuteSound").currentTime = 0;
                     }
 
                     // Play the final sound 5 seconds before the timer ends and ensure it's only played once
-                    if (minutesRemaining === 0 && secondsRemaining === 11 && !finalSoundPlayed) {
+                    if (minutesRemaining === 0 && secondsRemaining === 7 && !finalSoundPlayed) {
                         document.getElementById("finalSound").play();
                         finalSoundPlayed = true;
                     }
