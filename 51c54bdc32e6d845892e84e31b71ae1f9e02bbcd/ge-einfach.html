@@ -1,0 +1,126 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gruppeneinteilung</title>
+<style>
+  body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f7f7f7;
+    margin: 0;
+    padding: 20px;
+    color: #333;
+  }
+  h2 {
+    color: #5D5C61;
+  }
+  #groupForm {
+    background-color: #FFFFFF;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+  }
+  #groupForm label {
+    margin: 10px 0;
+    display: inline-block;
+    color: #333;
+  }
+  #groupForm input {
+    margin: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 8px;
+    width: calc(100% - 22px);
+  }
+  #groupForm input[type="submit"] {
+    background-color: #3E6F8D;
+    color: white;
+    border: none;
+    cursor: pointer;
+    padding: 10px 20px;
+    font-size: 16px;
+  }
+  #groupForm input[type="submit"]:hover {
+    background-color: #730000;
+  }
+  #groupsOutput {
+    margin-top: 20px;
+  }
+  .group {
+    background-color: #E8E8E8;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+  }
+</style>
+</head>
+<body>
+  <h2>Gruppeneinteilung</h2>
+  <form id="groupForm">
+    <label for="studentNumbers">Personenzahl:</label>
+    <input type="number" id="studentNumbers" name="studentNumbers" min="1" required>
+    <br>
+    <label for="absentStudents">Abwesend/Passiv (Nr.):</label>
+    <input type="text" id="absentStudents" name="absentStudents" placeholder="1,2,...">
+    <br>
+    <label for="groupSize">Gruppengröße:</label>
+    <input type="number" id="groupSize" name="groupSize" min="1">
+    <br>
+    <label for="numberOfGroups">Anzahl der Gruppen (alternativ zur Gruppengröße):</label>
+    <input type="number" id="numberOfGroups" name="numberOfGroups" min="1">
+    <br>
+    <input type="submit" value="Gruppen erstellen">
+  </form>
+  <div id="groupsOutput">
+    <!-- Hier werden die Gruppen angezeigt -->
+  </div>
+  <script>
+    document.getElementById('groupForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const groupSizeInput = document.getElementById('groupSize');
+      const numberOfGroupsInput = document.getElementById('numberOfGroups');
+      const studentNumbers = parseInt(document.getElementById('studentNumbers').value, 10);
+      const absentStudents = document.getElementById('absentStudents').value.split(',').map(Number);
+      const groupsOutput = document.getElementById('groupsOutput');
+
+      let students = [];
+      for (let i = 1; i <= studentNumbers; i++) {
+        if (!absentStudents.includes(i)) {
+          students.push(i);
+        }
+      }
+
+      students = shuffleArray(students);
+
+      let groups = [];
+      if (groupSizeInput.value) {
+        const groupSize = parseInt(groupSizeInput.value, 10);
+        while (students.length > 0) {
+          groups.push(students.splice(0, groupSize));
+        }
+      } else if (numberOfGroupsInput.value) {
+        const numberOfGroups = parseInt(numberOfGroupsInput.value, 10);
+        const groupSize = Math.ceil(students.length / numberOfGroups);
+        for (let i = 0; i < numberOfGroups; i++) {
+          groups.push(students.splice(0, groupSize));
+        }
+      }
+
+      groupsOutput.innerHTML = groups.map((group, index) => 
+        `<div class="group">Gr ${index + 1}: ${group.join(', ')}</div>`).join('');
+
+    });
+
+    function shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+  </script>
+</body>
+</html>

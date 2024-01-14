@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stylischer Timer mit Ton</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f7f7f7;
+        }
+
+        #timer {
+            font-size: 48px;
+            text-align: center;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        input[type=number] {
+            padding: 10px;
+            margin: 5px;
+            width: 80px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            opacity: 0.8;
+        }
+
+        .start {
+            background-color: #28a745;
+        }
+
+        .reset {
+            background-color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <h1>Timer</h1>
+        <div id="timer">
+            <span id="minutes">00</span>:<span id="seconds">00</span>
+        </div>
+        <div>
+            <label for="minutesInput">Minuten:</label>
+            <input type="number" id="minutesInput" value="0">
+            <label for="secondsInput">Sekunden:</label>
+            <input type="number" id="secondsInput" value="0">
+        </div>
+        <button class="start" onclick="startStopTimer()">Start/Stop</button>
+        <button class="reset" onclick="resetTimer()">Reset</button>
+    </div>
+
+    <!-- Audio Element for the Sounds -->
+    <audio id="finalMinuteSound" src="https://cloud.pyroma.net/s/5fKS9R96QkeHE7q/download/letzte-min-4.mp3"></audio>
+    <audio id="finalSound" src="https://cloud.pyroma.net/s/gM75ddi7JKmL4cT/download/auf-den-platz.mp3"></audio>
+
+    <script>
+        let interval;
+        let initialMinutes = 0;
+        let initialSeconds = 0;
+        let minutesRemaining = 0;
+        let secondsRemaining = 0;
+        let isRunning = false;
+        let beepPlayed = false;
+        let finalSoundPlayed = false;
+
+        function updateTimerDisplay() {
+            document.getElementById("minutes").textContent = String(minutesRemaining).padStart(2, '0');
+            document.getElementById("seconds").textContent = String(secondsRemaining).padStart(2, '0');
+        }
+
+        function startStopTimer() {
+            if (isRunning) {
+                clearInterval(interval);
+            } else {
+                if (minutesRemaining === 0 && secondsRemaining === 0) {
+                    minutesRemaining = initialMinutes;
+                    secondsRemaining = initialSeconds;
+                }
+
+                updateTimerDisplay();
+
+                interval = setInterval(function () {
+                    if (secondsRemaining === 0) {
+                        if (minutesRemaining === 0) {
+                            clearInterval(interval);
+                            document.getElementById("finalMinuteSound").pause();
+                            document.getElementById("finalMinuteSound").currentTime = 0;
+                            document.getElementById("finalSound").pause();
+                            document.getElementById("finalSound").currentTime = 0;
+                            alert("Timer abgelaufen!");
+                        } else {
+                            minutesRemaining--;
+                            secondsRemaining = 59;
+                        }
+                    } else {
+                        secondsRemaining--;
+                    }
+                    updateTimerDisplay();
+
+                    // Play the initial sound when it's the final minute and there are more than 10 seconds left
+                    if (minutesRemaining === 1 && secondsRemaining === 05 && !beepPlayed) {
+                        document.getElementById("finalMinuteSound").play();
+                        beepPlayed = true;
+                    }
+
+                    // Stop the initial sound 10 seconds before the timer ends
+                    if (minutesRemaining === 0 && secondsRemaining === 10) {
+                        document.getElementById("finalMinuteSound").pause();
+                        document.getElementById("finalMinuteSound").currentTime = 0;
+                    }
+
+                    // Play the final sound 5 seconds before the timer ends and ensure it's only played once
+                    if (minutesRemaining === 0 && secondsRemaining === 11 && !finalSoundPlayed) {
+                        document.getElementById("finalSound").play();
+                        finalSoundPlayed = true;
+                    }
+
+                }, 1000);
+            }
+            isRunning = !isRunning;
+        }
+
+        function resetTimer() {
+            clearInterval(interval);
+            minutesRemaining = initialMinutes;
+            secondsRemaining = initialSeconds;
+            updateTimerDisplay();
+            isRunning = false;
+            beepPlayed = false;
+            finalSoundPlayed = false;
+            document.getElementById("finalMinuteSound").pause();
+            document.getElementById("finalMinuteSound").currentTime = 0;
+            document.getElementById("finalSound").pause();
+            document.getElementById("finalSound").currentTime = 0;
+        }
+
+        document.getElementById("minutesInput").addEventListener("change", function () {
+            initialMinutes = parseInt(this.value);
+        });
+
+        document.getElementById("secondsInput").addEventListener("change", function () {
+            initialSeconds = parseInt(this.value);
+        });
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Gruppeneinteilung</title>
+<script>
+function validateAndCreateGroups() {
+  var anzahlSchueler = parseInt(document.forms["groupForm"]["anzahlSchueler"].value);
+  var gruppenGroesse = parseInt(document.forms["groupForm"]["gruppenGroesse"].value) || null;
+  var anzahlGruppen = parseInt(document.forms["groupForm"]["anzahlGruppen"].value) || null;
+  var gemeinsamInput = document.forms["groupForm"]["gemeinsam"].value.split(',').map(n => parseInt(n.trim())).filter(n => !isNaN(n));
+  var getrenntInput = document.forms["groupForm"]["getrennt"].value.split(',').map(n => parseInt(n.trim())).filter(n => !isNaN(n));
+  var fehlendePersonenInput = document.forms["groupForm"]["fehlendePersonen"].value.split(',').map(n => parseInt(n.trim())).filter(n => !isNaN(n));
+  var alleSchueler = [];
+
+  if (!anzahlSchueler) {
+    alert("Bitte geben Sie die Anzahl der Schüler ein.");
+    return false;
+  }
+  if ((!gruppenGroesse && !anzahlGruppen) || (gruppenGroesse && anzahlGruppen)) {
+    alert("Bitte füllen Sie genau eines der Felder für die Gruppengröße oder die Anzahl der Gruppen aus.");
+    return false;
+  }
+
+  if(gruppenGroesse) {
+    anzahlGruppen = Math.ceil(anzahlSchueler / gruppenGroesse);
+  } else {
+    gruppenGroesse = Math.ceil(anzahlSchueler / anzahlGruppen);
+  }
+
+  // Alle Schüler in eine Liste einordnen
+  for (var i = 1; i <= anzahlSchueler; i++) {
+    if (!fehlendePersonenInput.includes(i)) {  // Füge nur Schüler hinzu, die nicht fehlen
+      alleSchueler.push(i);
+    }
+  }
+
+  // Gruppen initialisieren
+  var gruppen = Array.from({length: anzahlGruppen}, () => []);
+  var gruppenIndices = Array.from(Array(anzahlGruppen).keys());
+
+  // Berechnung der Gruppenanzahl oder Gruppengröße anpassen
+  if(gruppenGroesse) {
+      anzahlGruppen = Math.ceil((anzahlSchueler - fehlendePersonenInput.length) / gruppenGroesse);
+  } else {
+      gruppenGroesse = Math.ceil((anzahlSchueler - fehlendePersonenInput.length) / anzahlGruppen);
+  }
+
+  // "Gemeinsame" Schüler zufällig mischen und in eine zufällige Gruppe verteilen
+  var startGruppeIndexGemeinsam = Math.floor(Math.random() * anzahlGruppen);
+  gemeinsamInput.sort(() => Math.random() - 0.5).forEach(schueler => {
+    while (gruppen[startGruppeIndexGemeinsam].length >= gruppenGroesse) {
+      startGruppeIndexGemeinsam = (startGruppeIndexGemeinsam + 1) % anzahlGruppen; // zur nächsten Gruppe übergehen
+    }
+    gruppen[startGruppeIndexGemeinsam].push(schueler);
+    alleSchueler.splice(alleSchueler.indexOf(schueler), 1); // Entfernen aus der allgemeinen Liste
+  });
+
+  // "Getrennte" Schüler mischen und verteilen
+  getrenntInput.sort(() => Math.random() - 0.5).forEach(schueler => {
+    let gruppeIndex = gruppenIndices.splice(Math.floor(Math.random() * gruppenIndices.length), 1)[0];
+    gruppen[gruppeIndex].push(schueler);
+    alleSchueler.splice(alleSchueler.indexOf(schueler), 1); // Entfernen aus der allgemeinen Liste
+    if (gruppenIndices.length === 0) gruppenIndices = Array.from(Array(anzahlGruppen).keys()); // Reset, wenn alle Gruppen verwendet wurden
+  });
+// Restliche Schüler mischen und verteilen, dabei sicherstellen, dass die Gruppen möglichst voll sind
+alleSchueler.sort(() => Math.random() - 0.5).forEach(schueler => {
+    let zielGruppeIndex = gruppen.findIndex(gruppe => gruppe.length < gruppenGroesse);
+    if (zielGruppeIndex !== -1) {
+        gruppen[zielGruppeIndex].push(schueler);
+    } else {
+        gruppen[Math.floor(Math.random() * anzahlGruppen)].push(schueler);
+    }
+});
+
+// Gruppen neu verteilen, um die Fülle zu maximieren
+let verteilungOptimiert = false;
+while (!verteilungOptimiert) {
+    let minGruppeIndex = gruppen.findIndex(gruppe => gruppe.length === Math.min(...gruppen.map(g => g.length)));
+    let maxGruppeIndex = gruppen.findIndex(gruppe => gruppe.length === Math.max(...gruppen.map(g => g.length)));
+
+    if (gruppen[maxGruppeIndex].length - gruppen[minGruppeIndex].length > 1) {
+        let schueler = gruppen[maxGruppeIndex].pop();
+        gruppen[minGruppeIndex].push(schueler);
+    } else {
+        verteilungOptimiert = true; // Keine weitere Optimierung möglich
+    }
+}
+
+// Entferne leere Gruppen
+gruppen = gruppen.filter(gruppe => gruppe.length > 0);
+
+  // Ergebnis anzeigen
+var resultText = "";
+  gruppen.forEach((gruppe, index) => {
+    resultText += "Gruppe " + (index+1) + ": " + gruppe.join(", ") + "<br>";
+  });
+
+  document.getElementById("groupResults").innerHTML = resultText;
+  return false; // Um zu verhindern, dass das Formular tatsächlich abgesendet wird
+}
+</script>
+</head>
+<body>
+
+<h1>Gruppeneinteilung</h1>
+
+<form name="groupForm" onsubmit="return validateAndCreateGroups()" method="post">
+  Personenzahl: <input type="number" name="anzahlSchueler" required><br><br>
+  Gruppengröße: <input type="number" name="gruppenGroesse"><br><br>
+  Anzahl der Gruppen (alternativ zur Gruppengröße): <input type="number" name="anzahlGruppen"><br><br>
+  Gemeinsam: <input type="text" name="gemeinsam" placeholder="z.B. 1,4,5"><br><br>
+  Getrennt: <input type="text" name="getrennt" placeholder="z.B. 2,3,6"><br><br>
+  Abwesend/Passiv (Nr.): <input type="text" name="fehlendePersonen" placeholder="z.B. 7,8,9"><br><br>
+  <input type="submit" value="Gruppen erstellen">
+</form>
+
+<div id="groupResults"></div>
+
+</body>
+</html>
