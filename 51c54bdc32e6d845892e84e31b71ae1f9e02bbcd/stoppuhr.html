@@ -38,18 +38,19 @@
     outline: none;
   }
   .startStop {
-    background-color: #4CAF50;
+    background-color: #3E6F8D;
     color: white;
   }
   .reset {
-    background-color: #f44336;
+    background-color: #730000;
     color: white;
   }
 </style>
 </head>
 <body>
 <div class="stopwatch">
-  <div class="time" id="display">00:00:00</div>
+  <h1>Stoppuhr</h1>
+  <div class="time" id="display">00:00:00:00</div>
   <button class="startStop" id="startStop">Start</button>
   <button class="reset" id="reset">Reset</button>
 </div>
@@ -90,22 +91,24 @@
     document.getElementById('startStop').textContent = 'Start';
   }
 
-  function getShowTime(){
-    updatedTime = new Date().getTime();
-    if(running){
-      difference = updatedTime - startTime;
-    } else {
-      difference = pausedTime;
-    }
-    let hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    let minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
-    let seconds = Math.floor((difference % (1000 * 60)) / 1000);
-
-    hours = (hours < 10) ? "0" + hours : hours;
-    minutes = (minutes < 10) ? "0" + minutes : minutes;
-    seconds = (seconds < 10) ? "0" + seconds : seconds;
-    document.getElementById('display').textContent = hours + ':' + minutes + ':' + seconds;
+function getShowTime(){
+  updatedTime = new Date().getTime();
+  if(running){
+    difference = updatedTime - startTime;
+  } else {
+    difference = pausedTime;
   }
+  let hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  let minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+  let seconds = Math.floor((difference % (1000 * 60)) / 1000);
+  let milliseconds = Math.floor((difference % 1000) / 10); // Berechnung der hundertstel Sekunden
+
+  hours = (hours < 10) ? "0" + hours : hours;
+  minutes = (minutes < 10) ? "0" + minutes : minutes;
+  seconds = (seconds < 10) ? "0" + seconds : seconds;
+  milliseconds = (milliseconds < 10) ? "0" + milliseconds : milliseconds; // Formatierung der hundertstel Sekunden
+  document.getElementById('display').textContent = hours + ':' + minutes + ':' + seconds + ':' + milliseconds;
+}
 
   document.getElementById('startStop').addEventListener('click', startTimer);
   document.getElementById('reset').addEventListener('click', resetTimer);
