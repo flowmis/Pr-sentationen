@@ -92,20 +92,11 @@
           border-radius: 50%;
           margin-right: 10px;
       }
-      button {
-          padding: 5px;
-          cursor: pointer;
-      }
       #participants {
 	  display: flex;
 	  flex-direction: column; /* Vertikale Anordnung */
 	  gap: 10px; /* Abstand zwischen den Teilnehmern */
       }
-      /* @media (max-width: 600px) { */
-	  /* .person { */
-              /* flex-direction: column; /\* Bei kleinen Bildschirmen vertikal anordnen *\/ */
-	  /* } */
-      /* } */
     </style>
   </head>
   <body>
@@ -125,6 +116,9 @@
       <button style="background-color: red; color: white;" onclick="addParticipant('red')">+</button>
       <button style="background-color: yellow; color: black;" onclick="addParticipant('yellow')">+</button>
       <button style="background-color: green; color: white;" onclick="addParticipant('green')">+</button>
+      <a href="https://cloud.pyroma.net/s/3E3FqNoEtBqnKxx/preview" target="_blank">
+        <button style="background-color: #999999; color: white; border: none; border-radius: 1px; padding: 2px; font-size: 36px; cursor: pointer; transition: background-color 0.3s, transform 0.2s; margin-left: 10px;"> Strecke </button> 
+      </a>
     </div>
 
     <div id="participants"></div>
