@@ -103,11 +103,6 @@
 	  flex-direction: column; /* Vertikale Anordnung */
 	  gap: 10px; /* Abstand zwischen den Teilnehmern */
       }
-      @media (max-width: 600px) {
-      .person {
-      flex-direction: column;
-      }
-      }
     </style>
   </head>
   <body>
@@ -317,10 +312,6 @@
         <div id="gender_${personId}" class="gender-symbol" style="cursor: pointer;" onclick="switchGender(${personId})">${genderSymbol}</div>
         <input type="text" id="name_${personId}" placeholder="Name" value="${namePlaceholder}" />
         <input type="number" value="0" step="0.5" id="rounds_${personId}" readonly />
-        <span class="distance" id="distance_${personId}">Distanz</span>
-        <span class="grade" id="grade_${personId}">Note</span>
-        <span class="grade-points" id="gradePoints_${personId}">Punkte</span>
-        <span class="times" id="times_${personId}" data-all-times="">Zeit</span>
         <button onclick="adjustRounds(${personId}, -1)">-1</button>
         <button onclick="adjustRounds(${personId}, -0.5)">-½</button>
         <button onclick="adjustRounds(${personId}, 0.5)">+½</button>
