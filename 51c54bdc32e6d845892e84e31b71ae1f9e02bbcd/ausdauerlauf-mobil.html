@@ -399,7 +399,7 @@
               const gender = personDiv.querySelector('div[id^="gender_"]').textContent === '♂' ? 'männlich' : 'weiblich';
               const rounds = personDiv.querySelector('input[type="number"]').value;
               const distance = personDiv.querySelector('.distance').textContent;
-              const grade = personDiv.querySelector('.grade').textContent.split(' ')[1];
+              const grade = personDiv.querySelector('.grade').textContent;
               const points = personDiv.querySelector('.grade-points').textContent;
               const times = personDiv.querySelector('.times').dataset.allTimes || ''; // Use all times for CSV export
               rows.push([name, gender, rounds, distance, grade, points, times]);
