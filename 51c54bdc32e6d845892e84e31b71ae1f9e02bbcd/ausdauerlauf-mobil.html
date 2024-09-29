@@ -3,419 +3,386 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <title>Lauf-Rundenzähler</title>
+    <title>Rundenzähler</title>
     <style>
-      body {
-	  font-family: 'Roboto', sans-serif; /* Beispiel Schriftart */
-	  background-color: #f0f0f0; /* Sanfte Hintergrundfarbe */
+      :root {
+	  --re: #ff3400; 
+	  --reb: #ff340050;
+	  --ye: #ffff00; 
+	  --yeb: #ffff0050; 
+	  --gr: #11ff11;      
+	  --grb: #11ff1150;      
+	  --bl: #000000;      
+	  --wh: #ffffff;      
+	  --button: #99dddd;
+	  --mann: #007BFF;
+	  --frau: #ff7BFF;
+	  --hover-color: #0056b3;
+	  --hintergrund: #f0f0f0;
+	  --font-size-small: 25px;
+	  --font-size-medium: 35px;
+	  --font-size-large: 50px;
       }
-
-      h1 {
-	  font-size: 24px;
-	  margin-bottom: 20px;
+      
+      body {
+	  background-color: var(--hintergrund);
       }
 
       .person {
-          display: flex;
-          align-items: center;
-          border-bottom: 1px solid #ccc;
-          padding: 10px 0;
-      }
-      button {
-	  background-color: #007BFF; /* Primärfarbe */
-	  color: white;
-	  border: none;
-	  border-radius: 5px;
-	  padding: 20px;
-	  font-size: 46px;
-          margin: 5px;
-	  cursor: pointer;
-	  transition: background-color 0.3s, transform 0.2s; /* Animationen */
+	  display: flex;
+	  align-items: center;
+	  justify-content: space-between;
+	  border-bottom: 1px solid var(--bl);
+	  padding: 5px;
       }
       
-      .timer-container {
-          display: flex;
-          flex-direction: column;
-          align-items: center; 
-          margin-bottom: 20px; 
-      }
-      #timeInput {
-         border: 2px solid #007BFF; /* Rahmenfarbe */
-         border-radius: 5px; /* Abgerundete Ecken */
-         padding: 5px; /* Innenabstand */
-         font-size: 21px; /* Schriftgröße */
-         width: 60px; /* Breite des Eingabefeldes */
-      }
-      .buttons {
-         display: flex;
-         gap: 10px; /* Abstand zwischen den Buttons */
-      }
-      button:hover {
-	  background-color: #0056b3; /* Dunklere Farbe bei Hover */
-	  transform: translateY(-2px); /* Leichte Bewegung */
+      .re-participant {
+	  background-color: var(--reb);
       }
       
-      .countdown {
-	  font-size: 44px; /* Größere Schriftgröße für den Countdown */
+      .ye-participant {
+	  background-color: var(--yeb);
       }
       
-      .person input[type="number"] {
-	  width: 29px; /* Feste Breite für das Number-Feld */
-	  text-align: center; /* Zentriert den Text */
-	  margin-right: 10px; /* Abstand zum nächsten Element */
+      .gr-participant {
+	  background-color: var(--grb);
       }
 
-      .person input[type="text"] {
-	  flex-grow: 1;
-	  max-width: 180px;
-	  min-width: 30px; 
-	  font-size: 33px; 
+      .delete-button {
+	  background-color: var(--mann);
+	  color: var(--wh);
+	  border-radius: 50%; 
+	  padding: 5px; 
+	  font-size: var(--font-size-medium);
+	  cursor: pointer;
+	  align-items: center;
+	  justify-content: center;
       }
       
       .gender-symbol {
-          font-size: 34px;
+	  font-size: var(--font-size-large);
+	  cursor: pointer;
       }
 
-      .name, .gender, .rounds, .distance, .grade, .grade-points, .times {
-          flex: 1;
-          text-align: center;
+      .nameInput {
+	  flex-grow: 1;
+	  padding: 5px;
+	  font-size: var(--font-size-medium);
       }
-      .delete {
-          flex: 0 0 30px;
-          text-align: center;
-          cursor: pointer;
+
+      .roundsInput {
+	  width: 90px;
+	  padding: 5px; 
+	  font-size: var(--font-size-medium);
       }
-      .color-dot {
-          width: 20px;
-          height: 20px;
-          border-radius: 50%;
-          margin-right: 10px;
+
+      .button-male {
+	  background-color: var(--mann);
       }
-      #participants {
-	  display: flex;
-	  flex-direction: column; /* Vertikale Anordnung */
-	  gap: 10px; /* Abstand zwischen den Teilnehmern */
+
+      .button-female {
+	  background-color: var(--frau);
+      }
+
+      .button-small {
+	  padding: 5px;
+	  font-size: var(--font-size-small);
+      }
+
+      .button-big {
+	  padding: 10px;
+	  font-size: var(--font-size-large);
+      }
+
+      button {
+	  background-color: var(--button);
+	  font-size: var(--font-size-medium);
+	  border-radius: 10px;
+	  padding: 5px;
+	  margin: 5px;
+	  cursor: pointer;
+	  transition: background-color 0.3s, transform 0.2s;
+      }
+
+      button:hover {
+	  background-color: var(--hover-color);
+	  transform: translateY(-2px);
+      }
+
+      .timer-container {
+	  text-align: center;
+      }
+
+      .countdown {
+	  font-size: var(--font-size-large);
+	  margin: 20px;
+      }
+
+      svg {
+	  width: 50px;
+	  height: 50px;
+      }
+
+      #InputT {
+	  width: 100px;
+	  font-size: var(--font-size-large);
+      }
+
+      #InputS {
+	  width: 100px;
+	  font-size: var(--font-size-large);
       }
     </style>
   </head>
   <body>
-    <h1>Rundenzähler</h1>
 
-<div class="timer-container">
-    <label for="timeInput">Laufzeit (in Minuten):</label>
-    <input type="number" id="timeInput" value="30" min="1" style="width: 60px; text-align: center; margin-top: 10px;">
-    <div style="display: flex; gap: 10px; margin-top: 10px;">
-        <button onclick="toggleTimer()" id="toggleButton">Start</button>
-        <button onclick="resetTimer()">Reset</button>
+    <div class="timer-container">
+      <div class="countdown" id="countdownDisplay" style="font-size: 100px;">30:00</div>
+      <div>
+        <button id="startButton" onclick="startTimer()">
+          <svg id="startIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M8 5v14l11-7z"/>
+          </svg>
+        </button>
+        <button id="reset-button" onclick="resetTimer()">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M12 5V1L7 6l5 5V7c3.3 0 6 2.7 6 6s-2.7 6-6 6-6-2.7-6-6H4c0 4.4 3.6 8 8 8s8-3.6 8-8-3.6-8-8-8z"/>
+          </svg>
+        </button>
+      </div>
+
     </div>
-    <div class="countdown" id="countdownDisplay" style="margin-top: 10px;">00:00</div>
-</div>
+    <div style="font-size: var(--font-size-medium)"> Zeit:
+      <input type="number" id="InputT" value="30" min="1"> 
+      <span>min</span>
+    </div>
+    <div style="font-size: var(--font-size-medium)"> Strecke:
+      <input type="number" id="InputS" value="450"> 
+      <span>m   (Streckenbild: <a href="https://cloud.pyroma.net/s/3E3FqNoEtBqnKxx/preview" target="_blank">450m</a>, <a href="https://cloud.pyroma.net/s/3E3FqNoEtBqnKxx/preview" target="_blank">500m</a> ) </span>
+    </div>
 
-    <div class="table-header">
-      <button style="background-color: red; color: white;" onclick="addParticipant('red')">+</button>
-      <button style="background-color: yellow; color: black;" onclick="addParticipant('yellow')">+</button>
-      <button style="background-color: green; color: white;" onclick="addParticipant('green')">+</button>
-      <a href="https://cloud.pyroma.net/s/3E3FqNoEtBqnKxx/preview" target="_blank">
-        <button style="background-color: #999999; color: white; border: none; border-radius: 1px; padding: 2px; font-size: 36px; cursor: pointer; transition: background-color 0.3s, transform 0.2s; margin-left: 10px;"> Strecke </button> 
-      </a>
+    <div>
+      <button style="background-color: var(--re);" onclick="addParticipant('red')">+</button>
+      <button style="background-color: var(--ye);" onclick="addParticipant('yellow')">+</button>
+      <button style="background-color: var(--gr);" onclick="addParticipant('green')">+</button>
     </div>
 
     <div id="participants"></div>
 
-    <button onclick="downloadResults()">Ergebnisse herunterladen</button>
+    <button onclick="downloadCSV()">Download</button>
 
     <script>
-      let redParticipantCount = 0;
-      let yellowParticipantCount = 0;
-      let greenParticipantCount = 0;
+      let participantCounts = { red: 0, yellow: 0, green: 0 };
       let timer;
       let timeLeft;
       let timerRunning = false;
+      let roundTimes = [];
 
-      const performanceTable = {
-          male: [
-              { rounds: 15, distance: 6750, grade: "1+", points: 15 },
-              { rounds: 14, distance: 6300, grade: "1+", points: 14 },
-              { rounds: 13.5, distance: 6075, grade: "1", points: 13 },
-              { rounds: 13, distance: 5850, grade: "1-", points: 12 },
-              { rounds: 12.5, distance: 5625, grade: "2+", points: 11 },
-              { rounds: 12, distance: 5400, grade: "2", points: 10 },
-              { rounds: 11.5, distance: 5175, grade: "2-", points: 9 },
-              { rounds: 11, distance: 4950, grade: "3+", points: 8 },
-              { rounds: 10.5, distance: 4725, grade: "3", points: 7 },
-              { rounds: 10, distance: 4500, grade: "3-", points: 6 },
-              { rounds: 9.5, distance: 4275, grade: "4+", points: 5 },
-              { rounds: 9, distance: 4050, grade: "4", points: 4 },
-              { rounds: 8.5, distance: 3825, grade: "4-", points: 3 },
-              { rounds: 8, distance: 3600, grade: "5+", points: 2 },
-              { rounds: 7.5, distance: 3375, grade: "5", points: 1 },
-              { rounds: 7, distance: 3150, grade: "5", points: 0 },
-              { rounds: 6.5, distance: 2925, grade: "5-", points: 0 },
-              { rounds: 6, distance: 2700, grade: "6", points: 0 }
-          ],
-          female: [
-              { rounds: 14, distance: 6300, grade: "1+", points: 15 },
-              { rounds: 13, distance: 5850, grade: "1+", points: 14 },
-              { rounds: 12.5, distance: 5625, grade: "1", points: 13 },
-              { rounds: 12, distance: 5400, grade: "1-", points: 12 },
-              { rounds: 11.5, distance: 5175, grade: "2+", points: 11 },
-              { rounds: 11, distance: 4950, grade: "2", points: 10 },
-              { rounds: 10.5, distance: 4725, grade: "2-", points: 9 },
-              { rounds: 10, distance: 4500, grade: "3+", points: 8 },
-              { rounds: 9.5, distance: 4275, grade: "3", points: 7 },
-              { rounds: 9, distance: 4050, grade: "3-", points: 6 },
-              { rounds: 8.5, distance: 3825, grade: "4+", points: 5 },
-              { rounds: 8, distance: 3600, grade: "4", points: 4 },
-              { rounds: 7.5, distance: 3375, grade: "4-", points: 3 },
-              { rounds: 7, distance: 3150, grade: "5+", points: 2 },
-              { rounds: 6.5, distance: 2925, grade: "5", points: 1 },
-              { rounds: 6, distance: 2700, grade: "5", points: 1 },
-              { rounds: 5.5, distance: 2475, grade: "5-", points: 0 }, 
-              { rounds: 5, distance: 2250, grade: "6", points: 0 }
-          ]
-      };
-
-
-      function updateTimer() {
-          if (timeLeft <= 0) {
-              clearInterval(timer);
-              document.getElementById('countdownDisplay').textContent = 'Zeit abgelaufen!';
-              timerRunning = false;
-          } else {
-              const minutes = Math.floor(timeLeft / 60);
-              const seconds = timeLeft % 60;
-              document.getElementById('countdownDisplay').textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-              timeLeft--;
-          }
-      }
-      function toggleTimer() {
-	  if (!timerRunning) {
-              // Wenn der Timer nicht läuft, starte ihn
-              if (timeLeft === undefined) {
-		  const timeInput = document.getElementById('timeInput').value;
-		  timeLeft = timeInput * 60; // Setze die Zeit nur, wenn sie nicht definiert ist
+      function getGradeAndPoints(distance, gender) {
+	  const maleGrades = [
+              { distance: 6750, grade: "1+", points: 15 },
+              { distance: 6300, grade: "1+", points: 14 },
+              { distance: 6075, grade: "1", points: 13 },
+              { distance: 5850, grade: "1-", points: 12 },
+              { distance: 5625, grade: "2+", points: 11 },
+              { distance: 5400, grade: "2", points: 10 },
+              { distance: 5175, grade: "2-", points: 9 },
+              { distance: 4950, grade: "3+", points: 8 },
+              { distance: 4725, grade: "3", points: 7 },
+              { distance: 4500, grade: "3-", points: 6 },
+              { distance: 4275, grade: "4+", points: 5 },
+              { distance: 4050, grade: "4", points: 4 },
+              { distance: 3825, grade: "4-", points: 3 },
+              { distance: 3600, grade: "5+", points: 2 },
+              { distance: 3375, grade: "5", points: 1 },
+              { distance: 3150, grade: "5", points: 0 },
+              { distance: 2925, grade: "5-", points: 0 },
+              { distance: 2700, grade: "6", points: 0 }
+	  ];
+	  
+	  const femaleGrades = [
+              { distance: 6300, grade: "1+", points: 15 },
+              { distance: 5850, grade: "1+", points: 14 },
+              { distance: 5625, grade: "1", points: 13 },
+              { distance: 5400, grade: "1-", points: 12 },
+              { distance: 5175, grade: "2+", points: 11 },
+              { distance: 4950, grade: "2", points: 10 },
+              { distance: 4725, grade: "2-", points: 9 },
+              { distance: 4500, grade: "3+", points: 8 },
+              { distance: 4275, grade: "3", points: 7 },
+              { distance: 4050, grade: "3-", points: 6 },
+              { distance: 3825, grade: "4+", points: 5 },
+              { distance: 3600, grade: "4", points: 4 },
+              { distance: 3375, grade: "4-", points: 3 },
+              { distance: 3150, grade: "5+", points: 2 },
+              { distance: 2925, grade: "5", points: 1 },
+              { distance: 2700, grade: "5", points: 1 },
+              { distance: 2475, grade: "5-", points: 0 },
+              { distance: 2250, grade: "6", points: 0 }
+	  ];
+	  
+	  const grades = gender === '♂' ? maleGrades : femaleGrades;
+	  
+	  for (const entry of grades) {
+              if (distance >= entry.distance) {
+		  return { grade: entry.grade, points: entry.points };
               }
-              timer = setInterval(updateTimer, 1000);
-              timerRunning = true;
-              document.getElementById('toggleButton').textContent = "Pause";
-	  } else {
-              // Wenn der Timer läuft, pausiere ihn
-              clearInterval(timer);
-              timerRunning = false;
-              document.getElementById('toggleButton').textContent = "Fortsetzen";
 	  }
+	  return { grade: "N/A", points: 0 }; // Falls die Distanz unter den minimalen Werten liegt
       }
 
-      function updateTimer() {
-	  if (timeLeft <= 0) {
-              clearInterval(timer);
-              document.getElementById('countdownDisplay').textContent = 'Zeit abgelaufen!';
-              timerRunning = false;
-              document.getElementById('toggleButton').textContent = "Start";
-	  } else {
-              const minutes = Math.floor(timeLeft / 60);
-              const seconds = timeLeft % 60;
-              document.getElementById('countdownDisplay').textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-              timeLeft--;
+      function setDefaultTime() {
+	  timeLeft = 30 * 60; // Setze die verbleibende Zeit auf 30 Minuten (1800 Sekunden)
+	  document.getElementById('InputT').value = 30; // Aktualisiere das Eingabefeld auf 30 Minuten
+	  updateTimerDisplay(); // Aktualisiere die Timer-Anzeige
+      }
+      function updateTimerDisplay() {
+	  const minutes = Math.floor(timeLeft / 60); // Berechne die Minuten aus der verbleibenden Zeit
+	  const seconds = timeLeft % 60; // Berechne die Sekunden aus der verbleibenden Zeit
+	  document.getElementById('countdownDisplay').textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`; // Aktualisiere die Anzeige mit Minuten und Sekunden
+      }
+      function startTimer() {
+	  if (!timerRunning) { // Überprüfe, ob der Timer nicht bereits läuft
+              if (timeLeft === undefined) { timeLeft = document.getElementById('InputT').value * 60; } // Setze die verbleibende Zeit aus dem Eingabefeld (in Sekunden)
+              updateTimerDisplay(); // Aktualisiere die Anzeige des Timers
+	      timer = setInterval(() => { // Starte ein Intervall, um den Timer jede Sekunde zu aktualisieren
+		  if (timeLeft > 0) { // Überprüfe, ob noch Zeit übrig ist
+		      timeLeft--; // Verringere die verbleibende Zeit um 1 Sekunde
+		      updateTimerDisplay(); // Aktualisiere die Anzeige des Timers
+		  } else { // Wenn die Zeit abgelaufen ist
+		      clearInterval(timer); // Stoppe das Intervall
+		      timerRunning = false; // Setze den Status des Timers auf nicht laufend
+		      document.getElementById('startIcon').setAttribute("d", "M8 5v14l11-7z"); // Ändere das Symbol zurück zum Startsymbol
+		      document.getElementById('startButton').onclick = startTimer; // Setze die Schaltfläche wieder auf die Startfunktion
+		  }
+              }, 1000); // Intervall von 1000 Millisekunden (1 Sekunde)
+              timerRunning = true; // Setze den Status des Timers auf laufend
+              document.getElementById('startIcon').setAttribute("d", "M6 19h4V5H6zm8-14v14h4V5z"); // Ändere das Symbol zu einem Pausesymbol
+              document.getElementById('startButton').onclick = pauseTimer; // Setze die Schaltfläche auf die Pausefunktion
 	  }
       }
-
+      function pauseTimer() {
+	  clearInterval(timer); // Stoppe das Intervall des Timers
+	  timerRunning = false; // Setze den Status des Timers auf nicht laufend
+	  document.getElementById('startIcon').setAttribute("d", "M8 5v14l11-7z"); // Ändere das Symbol zurück zum Startsymbol
+	  document.getElementById('startButton').onclick = startTimer; // Setze die Schaltfläche wieder auf die Startfunktion
+      }
       function resetTimer() {
-	  clearInterval(timer);
-	  document.getElementById('countdownDisplay').textContent = '30:00';
-	  timerRunning = false;
-	  document.getElementById('toggleButton').textContent = "Start";
+	  clearInterval(timer); // Stoppe das Intervall des Timers
+	  timerRunning = false; // Setze den Status des Timers auf nicht laufend
+	  timeLeft = document.getElementById('InputT').value * 60; // Setze die verbleibende Zeit aus dem Eingabefeld (in Sekunden)
+	  updateTimerDisplay(); // Aktualisiere die Anzeige des Timers
+	  document.getElementById('startIcon').setAttribute("d", "M8 5v14l11-7z"); // Ändere das Symbol zurück zum Startsymbol
+	  document.getElementById('startButton').onclick = startTimer; // Setze die Schaltfläche wieder auf die Startfunktion
       }
-
-      const predefinedParticipants = [
-	  { color: 'red', gender: 'male', name: '1r' },
-	  { color: 'red', gender: 'male', name: '2r' },
-	  { color: 'red', gender: 'male', name: '3r' },
-	  { color: 'red', gender: 'female', name: '3r' },
-	  { color: 'red', gender: 'male', name: '4r' },
-	  { color: 'red', gender: 'female', name: '4r' },
-	  { color: 'red', gender: 'male', name: '5r' },
-	  { color: 'red', gender: 'female', name: '5r' },
-	  { color: 'red', gender: 'male', name: '6r' },
-	  { color: 'red', gender: 'female', name: '6r' },
-	  { color: 'red', gender: 'male', name: '7r' },
-	  { color: 'red', gender: 'male', name: '7r??' },
-	  { color: 'red', gender: 'female', name: '7r' },
-	  { color: 'red', gender: 'male', name: '8r' },
-	  { color: 'red', gender: 'female', name: '8r' },
-	  { color: 'red', gender: 'male', name: '9r' },
-	  { color: 'red', gender: 'female', name: '9r' },
-	  { color: 'red', gender: 'male', name: '10r' },
-	  { color: 'yellow', gender: 'male', name: '1y' },
-	  { color: 'yellow', gender: 'male', name: '2y' },
-	  { color: 'yellow', gender: 'female', name: '2y' },
-	  { color: 'yellow', gender: 'male', name: '3y' },
-	  { color: 'yellow', gender: 'female', name: '3y' },
-	  { color: 'yellow', gender: 'male', name: '4y' },
-	  { color: 'yellow', gender: 'female', name: '4y' },
-	  { color: 'yellow', gender: 'male', name: '5y' },
-	  { color: 'yellow', gender: 'female', name: '5y' },
-	  { color: 'yellow', gender: 'male', name: '6y' },
-	  { color: 'yellow', gender: 'female', name: '6y' },
-	  { color: 'yellow', gender: 'male', name: '7y' },
-	  { color: 'yellow', gender: 'male', name: '8y' },
-	  { color: 'yellow', gender: 'female', name: '8y' },
-	  { color: 'yellow', gender: 'male', name: '10y' },
-	  { color: 'green', gender: 'male', name: '1g' },
-	  { color: 'green', gender: 'female', name: '1g' },
-	  { color: 'green', gender: 'male', name: '2g' },
-	  { color: 'green', gender: 'male', name: '3g' },
-	  { color: 'green', gender: 'male', name: '4g' },
-	  { color: 'green', gender: 'male', name: '5g' },
-	  { color: 'green', gender: 'male', name: '6g' },
-	  { color: 'green', gender: 'male', name: '7g' },
-	  { color: 'green', gender: 'female', name: '7g' },
-	  { color: 'green', gender: 'male', name: '8g' },
-      ];
+      window.onload = setDefaultTime; // Setze die Standardzeit, wenn das Fenster geladen wird
       
-      function addPredefinedParticipants() {
-	  predefinedParticipants.forEach(participant => {
-              addParticipant(participant.color, participant.gender, participant.name);
-          });
-      }
+      function generateUUID() {
+	  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+              const r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
+              return v.toString(16);
+	  });}
 
-      function addParticipant(color, gender, name) {
-	  const participantsDiv = document.getElementById('participants');
-	  const personId = participantsDiv.children.length + 1;
-
-	  const personDiv = document.createElement('div');
-	  personDiv.classList.add('person');
-	  personDiv.id = `person_${personId}`;
-
-	  let namePlaceholder;
-	  if (name) {
-              namePlaceholder = name; // Nutze den vordefinierten Namen
-	  } else {
-              if (color === 'red') {
-		  namePlaceholder = `rot ${++redParticipantCount}`;
-              } else if (color === 'yellow') {
-		  namePlaceholder = `gelb ${++yellowParticipantCount}`;
-              } else {
-		  namePlaceholder = `grün ${++greenParticipantCount}`;
-              }
+      function addParticipant(color) {
+	  const participantsDiv = document.getElementById('participants'); // Hole das Teilnehmer-Div
+	  const uuid = generateUUID(); // Generiere eine neue UUID
+	  const participantName = `${color.charAt(0).toUpperCase()}${participantCounts[color] + 1}`; // Erstelle den Namen des Teilnehmers basierend auf der Farbe
+	  participantCounts[color]++; // Erhöhe die Anzahl der Teilnehmer für diese Farbe
+	  const personDiv = document.createElement('div'); // Erstelle ein neues Div für den Teilnehmer
+	  personDiv.classList.add('person', color); // Füge Klassen für Styling hinzu
+	  if (color === 'red') {
+              personDiv.classList.add('re-participant');
+	  } else if (color === 'yellow') {
+              personDiv.classList.add('ye-participant');
+	  } else if (color === 'green') {
+              personDiv.classList.add('gr-participant');
 	  }
-
-	  const genderSymbol = gender === 'male' ? '♂' : '♀';
-
+	  personDiv.setAttribute('data-uuid', uuid); // Setze die UUID als Datenattribut
 	  personDiv.innerHTML = `
-        <span class="delete" onclick="deletePerson(${personId})">x</span>
-        <div class="color-dot" style="background-color: ${color};" onclick="changeColor(${personId})"></div>
-        <div id="gender_${personId}" class="gender-symbol" style="cursor: pointer;" onclick="switchGender(${personId})">${genderSymbol}</div>
-        <input type="text" id="name_${personId}" placeholder="Name" value="${namePlaceholder}" />
-        <input type="number" value="0" step="0.5" id="rounds_${personId}" readonly />
-        <span class="distance" id="distance_${personId}">Distanz</span>
-        <span class="grade" id="grade_${personId}">Note</span>
-        <span class="grade-points" id="gradePoints_${personId}">Punkte</span>
-        <span class="times" id="times_${personId}" data-all-times="">Zeit</span>
-        <button onclick="adjustRounds(${personId}, -1)">-1</button>
-        <button onclick="adjustRounds(${personId}, -0.5)">-½</button>
-        <button onclick="adjustRounds(${personId}, 0.5)">+½</button>
-        <button onclick="adjustRounds(${personId}, 1)">+1</button>
+        <button class="delete-button" onclick="deletePerson('${uuid}')">x</button> 
+        <span class="gender-symbol" onclick="switchGender('${uuid}')">♂</span>
+        <input type="text" class="nameInput" placeholder="Name" value="${participantName}" />
+        <input type="number" class="roundsInput" value="0" step="0.5" readonly />
+        <button class="button-small button-male" onclick="adjustRounds('${uuid}', -1)">-1</button>
+        <button class="button-small button-male" onclick="adjustRounds('${uuid}', -0.5)">-½</button>
+        <button class="button-small button-male" onclick="adjustRounds('${uuid}', 0.5)">+½</button>
+        <button class="button-big button-male" onclick="adjustRounds('${uuid}', 1)">+1</button>
 	`;
-
-	  participantsDiv.appendChild(personDiv);
+	  participantsDiv.appendChild(personDiv); // Füge das neue Teilnehmer-Div zum Haupt-Div hinzu
       }
-
-      addPredefinedParticipants();
-
-      function switchGender(personId) {
-          const genderDiv = document.getElementById(`gender_${personId}`);
-          genderDiv.textContent = genderDiv.textContent === '♂' ? '♀' : '♂';
-          updateDistanceAndGrade(personId);
+      function deletePerson(uuid) {
+	  const participantsDiv = document.getElementById('participants'); // Hole das Teilnehmer-Div
+	  const participants = participantsDiv.getElementsByClassName('person'); // Hole alle Teilnehmer-Elemente
+	  // Suche nach dem Teilnehmer mit der angegebenen UUID
+	  for (let i = 0; i < participants.length; i++) {
+	      if (participants[i].getAttribute('data-uuid') === uuid) {
+		  participantsDiv.removeChild(participants[i]); // Entferne den Teilnehmer
+		  break; // Beende die Schleife, da der Teilnehmer gefunden wurde
+	      }	    }
       }
+function adjustRounds(uuid, adjustment) {
+    const participantDiv = document.querySelector(`#participants > div[data-uuid="${uuid}"]`);
+    const roundsInput = participantDiv.querySelector('.roundsInput');
+    let currentRounds = parseFloat(roundsInput.value);
+    currentRounds += adjustment; // Passe die Rundenzahl an
+    roundsInput.value = currentRounds.toFixed(1); // Setze die neue Rundenzahl
 
-      function changeColor(personId) {
-          const colors = ['red', 'yellow', 'green'];
-          const colorDot = document.querySelector(`#person_${personId} .color-dot`);
-          const currentColor = colorDot.style.backgroundColor;
-          const nextColor = colors[(colors.indexOf(currentColor) + 1) % colors.length];
-          colorDot.style.backgroundColor = nextColor;
-      }
+    const nameInput = participantDiv.querySelector('.nameInput').value; // Hole den Namen des Teilnehmers
+    const genderDiv = participantDiv.querySelector('.gender-symbol').textContent; // Hole das Geschlecht
+    const currentTime = document.getElementById('countdownDisplay').textContent; // Hole die aktuelle Zeit des Timers
+    
+    const distancePerRound = parseFloat(document.getElementById('InputS').value); // Hole den Wert für die Distanz pro Runde
+    const distance = currentRounds * distancePerRound; // Berechne die Gesamtstrecke
 
-      function adjustRounds(personId, value) {
-          const roundsInput = document.getElementById(`rounds_${personId}`);
-          const newRounds = parseFloat(roundsInput.value) + value;
-          roundsInput.value = newRounds >= 0 ? newRounds : 0;
-          updateDistanceAndGrade(personId);
-          
-          // Add current time to times log for this participant
-          const timesDisplay = document.getElementById(`times_${personId}`);
-          const time = document.getElementById('countdownDisplay').textContent;
+    // Hole Note und Punkte
+    const { grade, points } = getGradeAndPoints(distance, genderDiv);
 
-          if (value > 0) {
-              const allTimes = timesDisplay.dataset.allTimes.split(', ').filter(t => t);
-              // Add new time to all times and keep only the last two for display
-              allTimes.push(`${newRounds}R: ${time}`);
-              const displayedTimes = allTimes.slice(-1).map(t => `<div>${t}</div>`).join('');
-                  <!-- const displayedTimes = allTimes.slice(-2).map(t => `<div>${t}</div>`).join(''); -->
-                  timesDisplay.innerHTML = displayedTimes;
+    // Speichern der Rundenänderung mit Name, Zeit, Geschlecht, Distanz, Note und Punkten
+    roundTimes.push({
+        name: nameInput,
+        rounds: currentRounds,
+        time: currentTime,
+        gender: genderDiv,
+        distance: distance,
+        grade: grade, // Füge die Note hinzu
+        points: points // Füge die Punkte hinzu
+    });
+}
 
-              // Update the hidden times for CSV export
-              timesDisplay.dataset.allTimes = allTimes.join(', ');
-          } else {
-              // For negative adjustments, log "Error"
-              const allTimes = timesDisplay.dataset.allTimes.split(', ').filter(t => t);
-              allTimes.push(`Error bei ${newRounds + value} Runde`);
-              timesDisplay.dataset.allTimes = allTimes.join(', ');
-          }
-      }
+function switchGender(uuid) {
+    const genderDiv = document.querySelector(`#participants > div[data-uuid="${uuid}"] .gender-symbol`);
+    const roundButtons = document.querySelectorAll(`#participants > div[data-uuid="${uuid}"] button`); // Hole die Runden-Anpassungs-Buttons des Teilnehmers
+    if (genderDiv.textContent === '♂') {
+        genderDiv.textContent = '♀';
+        roundButtons.forEach(button => {
+            button.classList.remove('button-male');
+            button.classList.add('button-female');
+        });
+    } else {
+        genderDiv.textContent = '♂';
+        roundButtons.forEach(button => {
+            button.classList.remove('button-female');
+            button.classList.add('button-male');
+        });
+    }
+}
+function downloadCSV() {
+    let csvContent = "data:text/csv;charset=utf-8,Name,Runden,Zeit,Geschlecht,Distanz,Note,Notenpunkte\n";
+    roundTimes.forEach(row => {
+        const rowContent = `${row.name},${row.rounds},${row.time},${row.gender},${row.distance},${row.grade},${row.points}`;
+        csvContent += rowContent + "\n";
+    });
+    const currentDate = new Date(); // Erstelle ein neues Datum
+    const formattedDate = currentDate.toISOString().split('T')[0]; // Formatiere das Datum (YYYY-MM-DD)
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", `auswertung-lauf-${formattedDate}.csv`);
+    document.body.appendChild(link); // Benötigt, um Firefox zu unterstützen
+    link.click(); // Auslösen des Downloads
+    document.body.removeChild(link); // Entfernen des Links
+}
 
-      function updateDistanceAndGrade(personId) {
-          const roundsInput = document.getElementById(`rounds_${personId}`);
-          const distanceDisplay = document.getElementById(`distance_${personId}`);
-          const gradeDisplay = document.getElementById(`grade_${personId}`);
-          const gradePointsDisplay = document.getElementById(`gradePoints_${personId}`);
-          const gender = document.getElementById(`gender_${personId}`).textContent === '♂' ? 'male' : 'female';
-          const rounds = parseFloat(roundsInput.value);
-
-          const distance = rounds * 450;
-          distanceDisplay.textContent = `${distance} m`;
-
-          const performance = performanceTable[gender].find(p => p.rounds <= rounds);
-          if (performance) {
-              gradeDisplay.textContent = `${performance.grade}`;
-              gradePointsDisplay.textContent = performance.points;
-          } else {
-              gradeDisplay.textContent = "6";
-              gradePointsDisplay.textContent = "0";
-          }
-      }
-
-      function deletePerson(personId) {
-          document.getElementById(`person_${personId}`).remove();
-      }
-
-      function downloadResults() {
-          const participantsDiv = document.getElementById('participants');
-          const rows = [['Name', 'Geschlecht', 'Runden', 'Distanz', 'Note', 'Notenpunkte', 'Zeiten']];
-          for (const personDiv of participantsDiv.children) {
-              const name = personDiv.querySelector('input[type="text"]').value;
-              const gender = personDiv.querySelector('div[id^="gender_"]').textContent === '♂' ? 'männlich' : 'weiblich';
-              const rounds = personDiv.querySelector('input[type="number"]').value;
-              const distance = personDiv.querySelector('.distance').textContent;
-              const grade = personDiv.querySelector('.grade').textContent;
-              const points = personDiv.querySelector('.grade-points').textContent;
-              const times = personDiv.querySelector('.times').dataset.allTimes || ''; // Use all times for CSV export
-              rows.push([name, gender, rounds, distance, grade, points, times]);
-          }
-          
-          const csvContent = rows.map(e => e.join(",")).join("\n");
-          const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-          const url = URL.createObjectURL(blob);
-          const link = document.createElement("a");
-          link.setAttribute("href", url);
-          link.setAttribute("download", "lauf_ergebnisse.csv");
-          link.style.display = "none";
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-      }
     </script>
   </body>
 </html>
