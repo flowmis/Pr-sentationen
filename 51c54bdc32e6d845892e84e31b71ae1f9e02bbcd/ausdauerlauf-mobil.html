@@ -171,6 +171,18 @@
       let timerRunning = false;
       let roundTimes = [];
 
+      function addPredefinedParticipants() {
+	  const predefinedParticipants = [
+              { name: "Max", color: "red", gender: "♂" },
+              { name: "Anna", color: "yellow", gender: "♀" },
+              { name: "Tom", color: "green", gender: "♂" },
+              { name: "Lisa", color: "red", gender: "♀" }
+	  ];
+	  predefinedParticipants.forEach(participant => {
+              addParticipant(participant.color, participant.name, participant.gender);
+	  });
+      }
+
       function getGradeAndPoints(distance, gender) {
 	  const maleGrades = [
               { distance: 6750, grade: "1+", points: 15 },
@@ -192,7 +204,6 @@
               { distance: 2925, grade: "5-", points: 0 },
               { distance: 2700, grade: "6", points: 0 }
 	  ];
-	  
 	  const femaleGrades = [
               { distance: 6300, grade: "1+", points: 15 },
               { distance: 5850, grade: "1+", points: 14 },
@@ -213,9 +224,7 @@
               { distance: 2475, grade: "5-", points: 0 },
               { distance: 2250, grade: "6", points: 0 }
 	  ];
-	  
 	  const grades = gender === '♂' ? maleGrades : femaleGrades;
-	  
 	  for (const entry of grades) {
               if (distance >= entry.distance) {
 		  return { grade: entry.grade, points: entry.points };
@@ -275,14 +284,16 @@
               const r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
               return v.toString(16);
 	  });}
-
-      function addParticipant(color) {
+      
+      function addParticipant(color, name = null, gender = '♂') {
 	  const participantsDiv = document.getElementById('participants'); // Hole das Teilnehmer-Div
 	  const uuid = generateUUID(); // Generiere eine neue UUID
-	  const participantName = `${color.charAt(0).toUpperCase()}${participantCounts[color] + 1}`; // Erstelle den Namen des Teilnehmers basierend auf der Farbe
+	  const participantName = name || `${color.charAt(0).toUpperCase()}${participantCounts[color] + 1}`; // Nutze den vordefinierten Namen, wenn vorhanden
 	  participantCounts[color]++; // Erhöhe die Anzahl der Teilnehmer für diese Farbe
 	  const personDiv = document.createElement('div'); // Erstelle ein neues Div für den Teilnehmer
 	  personDiv.classList.add('person', color); // Füge Klassen für Styling hinzu
+	  
+	  // Klassen für die Hintergrundfarbe
 	  if (color === 'red') {
               personDiv.classList.add('re-participant');
 	  } else if (color === 'yellow') {
@@ -290,19 +301,21 @@
 	  } else if (color === 'green') {
               personDiv.classList.add('gr-participant');
 	  }
+	  
 	  personDiv.setAttribute('data-uuid', uuid); // Setze die UUID als Datenattribut
 	  personDiv.innerHTML = `
-        <button class="button-big button-male" onclick="deletePerson('${uuid}')">x</button> 
-        <input type="text" class="nameInput" placeholder="Name" value="${participantName}" />
-        <button class="gender-button button-big button-male" onclick="switchGender('${uuid}')">♂</button>
-        <input type="number" class="roundsInput" value="0" step="0.5" readonly />
-        <button class="button-small button-male" onclick="adjustRounds('${uuid}', -1)">-1</button>
-        <button class="button-small button-male" onclick="adjustRounds('${uuid}', -0.5)">-½</button>
-        <button class="button-small button-male" onclick="adjustRounds('${uuid}', 0.5)">+½</button>
-        <button class="button-big button-male" style="margin-right: 30px;" onclick="adjustRounds('${uuid}', 1)">+1</button>
-	`;
+          <button class="button-big button-male" onclick="deletePerson('${uuid}')">x</button> 
+          <input type="text" class="nameInput" placeholder="Name" value="${participantName}" />
+          <button class="gender-button button-big ${gender === '♂' ? 'button-male' : 'button-female'}" onclick="switchGender('${uuid}')">${gender}</button>
+          <input type="number" class="roundsInput" value="0" step="0.5" readonly />
+          <button class="button-small button-male" onclick="adjustRounds('${uuid}', -1)">-1</button>
+          <button class="button-small button-male" onclick="adjustRounds('${uuid}', -0.5)">-½</button>
+          <button class="button-small button-male" onclick="adjustRounds('${uuid}', 0.5)">+½</button>
+          <button class="button-big button-male" style="margin-right: 30px;" onclick="adjustRounds('${uuid}', 1)">+1</button>
+        `;
 	  participantsDiv.appendChild(personDiv); // Füge das neue Teilnehmer-Div zum Haupt-Div hinzu
       }
+
       function deletePerson(uuid) {
 	  const participantsDiv = document.getElementById('participants'); // Hole das Teilnehmer-Div
 	  const participants = participantsDiv.getElementsByClassName('person'); // Hole alle Teilnehmer-Elemente
@@ -311,71 +324,73 @@
 	      if (participants[i].getAttribute('data-uuid') === uuid) {
 		  participantsDiv.removeChild(participants[i]); // Entferne den Teilnehmer
 		  break; // Beende die Schleife, da der Teilnehmer gefunden wurde
-	      }	    }
+	      }}}
+      
+      function adjustRounds(uuid, adjustment) {
+	  const participantDiv = document.querySelector(`#participants > div[data-uuid="${uuid}"]`);
+	  const roundsInput = participantDiv.querySelector('.roundsInput');
+	  let currentRounds = parseFloat(roundsInput.value);
+	  currentRounds += adjustment; // Passe die Rundenzahl an
+	  roundsInput.value = currentRounds.toFixed(1); // Setze die neue Rundenzahl
+	  const nameInput = participantDiv.querySelector('.nameInput').value; // Hole den Namen des Teilnehmers
+	  const genderDiv = participantDiv.querySelector('.gender-button').textContent; // Hole das Geschlecht
+	  const currentTime = document.getElementById('countdownDisplay').textContent; // Hole die aktuelle Zeit des Timers
+	  const distancePerRound = parseFloat(document.getElementById('InputS').value); // Hole den Wert für die Distanz pro Runde
+	  const distance = currentRounds * distancePerRound; // Berechne die Gesamtstrecke
+	  // Hole Note und Punkte
+	  const { grade, points } = getGradeAndPoints(distance, genderDiv);
+	  // Speichern der Rundenänderung mit Name, Zeit, Geschlecht, Distanz, Note und Punkten
+	  roundTimes.push({
+              name: nameInput,
+              rounds: currentRounds,
+              time: currentTime,
+              gender: genderDiv,
+              distance: distance,
+              grade: grade, // Füge die Note hinzu
+              points: points // Füge die Punkte hinzu
+	  });
       }
-function adjustRounds(uuid, adjustment) {
-    const participantDiv = document.querySelector(`#participants > div[data-uuid="${uuid}"]`);
-    const roundsInput = participantDiv.querySelector('.roundsInput');
-    let currentRounds = parseFloat(roundsInput.value);
-    currentRounds += adjustment; // Passe die Rundenzahl an
-    roundsInput.value = currentRounds.toFixed(1); // Setze die neue Rundenzahl
 
-    const nameInput = participantDiv.querySelector('.nameInput').value; // Hole den Namen des Teilnehmers
-    const genderDiv = participantDiv.querySelector('.gender-button').textContent; // Hole das Geschlecht
-    const currentTime = document.getElementById('countdownDisplay').textContent; // Hole die aktuelle Zeit des Timers
-    
-    const distancePerRound = parseFloat(document.getElementById('InputS').value); // Hole den Wert für die Distanz pro Runde
-    const distance = currentRounds * distancePerRound; // Berechne die Gesamtstrecke
-
-    // Hole Note und Punkte
-    const { grade, points } = getGradeAndPoints(distance, genderDiv);
-
-    // Speichern der Rundenänderung mit Name, Zeit, Geschlecht, Distanz, Note und Punkten
-    roundTimes.push({
-        name: nameInput,
-        rounds: currentRounds,
-        time: currentTime,
-        gender: genderDiv,
-        distance: distance,
-        grade: grade, // Füge die Note hinzu
-        points: points // Füge die Punkte hinzu
-    });
-}
-
-function switchGender(uuid) {
-    const genderDiv = document.querySelector(`#participants > div[data-uuid="${uuid}"] .gender-button`);
-    const roundButtons = document.querySelectorAll(`#participants > div[data-uuid="${uuid}"] button`); // Hole die Runden-Anpassungs-Buttons des Teilnehmers
-    if (genderDiv.textContent === '♂') {
-        genderDiv.textContent = '♀';
-        roundButtons.forEach(button => {
-            button.classList.remove('button-male');
-            button.classList.add('button-female');
-        });
-    } else {
-        genderDiv.textContent = '♂';
-        roundButtons.forEach(button => {
-            button.classList.remove('button-female');
-            button.classList.add('button-male');
-        });
-    }
-}
-function downloadCSV() {
-    let csvContent = "data:text/csv;charset=utf-8,Name,Runden,Zeit,Geschlecht,Distanz,Note,Notenpunkte\n";
-    roundTimes.forEach(row => {
-        const rowContent = `${row.name},${row.rounds},${row.time},${row.gender},${row.distance},${row.grade},${row.points}`;
-        csvContent += rowContent + "\n";
-    });
-    const currentDate = new Date(); // Erstelle ein neues Datum
-    const formattedDate = currentDate.toISOString().split('T')[0]; // Formatiere das Datum (YYYY-MM-DD)
-    const encodedUri = encodeURI(csvContent);
-    const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
-    link.setAttribute("download", `auswertung-lauf-${formattedDate}.csv`);
-    document.body.appendChild(link); // Benötigt, um Firefox zu unterstützen
-    link.click(); // Auslösen des Downloads
-    document.body.removeChild(link); // Entfernen des Links
-}
-
+      function switchGender(uuid) {
+	  const genderDiv = document.querySelector(`#participants > div[data-uuid="${uuid}"] .gender-button`);
+	  const roundButtons = document.querySelectorAll(`#participants > div[data-uuid="${uuid}"] button`); // Hole die Runden-Anpassungs-Buttons des Teilnehmers
+	  if (genderDiv.textContent === '♂') {
+              genderDiv.textContent = '♀';
+              roundButtons.forEach(button => {
+		  button.classList.remove('button-male');
+		  button.classList.add('button-female');
+              });
+	  } else {
+              genderDiv.textContent = '♂';
+              roundButtons.forEach(button => {
+		  button.classList.remove('button-female');
+		  button.classList.add('button-male');
+              });
+	  }
+      }
+      
+      window.onload = function() {
+	  setDefaultTime();
+	  addPredefinedParticipants(); // Vordefinierte Teilnehmer hinzufügen
+      };
+      
+      function downloadCSV() {
+	  let csvContent = "data:text/csv;charset=utf-8,Name,Runden,Zeit,Geschlecht,Distanz,Note,Notenpunkte\n";
+	  roundTimes.forEach(row => {
+              const rowContent = `${row.name},${row.rounds},${row.time},${row.gender},${row.distance},${row.grade},${row.points}`;
+              csvContent += rowContent + "\n";
+	  });
+	  const currentDate = new Date(); // Erstelle ein neues Datum
+	  const formattedDate = currentDate.toISOString().split('T')[0]; // Formatiere das Datum (YYYY-MM-DD)
+	  const encodedUri = encodeURI(csvContent);
+	  const link = document.createElement("a");
+	  link.setAttribute("href", encodedUri);
+	  link.setAttribute("download", `auswertung-lauf-${formattedDate}.csv`);
+	  document.body.appendChild(link); // Benötigt, um Firefox zu unterstützen
+	  link.click(); // Auslösen des Downloads
+	  document.body.removeChild(link); // Entfernen des Links
+      }
+      
     </script>
   </body>
 </html>
