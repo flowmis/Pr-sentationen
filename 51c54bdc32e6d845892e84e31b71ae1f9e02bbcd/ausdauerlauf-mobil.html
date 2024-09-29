@@ -28,10 +28,17 @@
 	  background-color: var(--hintergrund);
       }
 
+      #participants {
+	  display: flex;
+	  flex-direction: column; /* Teilnehmer in einer Spalte anordnen */
+	  gap: 10px; /* Abstand zwischen Teilnehmer-Divs */
+      }
+
       .person {
 	  display: flex;
 	  align-items: center;
 	  justify-content: space-between;
+	  border: 1px solid var(--hover-color); 
       }
       
       .re-participant {
