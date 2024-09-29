@@ -30,13 +30,14 @@
 
       #participants {
 	  display: flex;
-	  flex-direction: column; /* Teilnehmer in einer Spalte anordnen */
-	  gap: 10px; /* Abstand zwischen Teilnehmer-Divs */
+	  flex-direction: column; /* Jeder Teilnehmer wird in einer neuen Zeile angezeigt */
+	  width: 100%; /* Nimmt die gesamte Breite ein */
       }
 
       .person {
 	  display: flex;
 	  align-items: center;
+	  width: 100%; /* Nimmt die gesamte Breite ein */
 	  justify-content: space-between;
 	  border: 1px solid var(--hover-color); 
       }
