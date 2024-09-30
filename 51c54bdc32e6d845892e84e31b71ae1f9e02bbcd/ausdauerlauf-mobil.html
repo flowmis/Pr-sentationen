@@ -296,7 +296,7 @@
           <button class="button-small ${gender === '♂' ? 'button-male' : 'button-female'}" onclick="adjustRounds('${uuid}', -1)">-1</button>
           <button class="button-small ${gender === '♂' ? 'button-male' : 'button-female'}" onclick="adjustRounds('${uuid}', -0.5)">-½</button>
           <button class="button-small ${gender === '♂' ? 'button-male' : 'button-female'}" onclick="adjustRounds('${uuid}', 0.5)">+½</button>
-          <button class="button-small ${gender === '♂' ? 'button-male' : 'button-female'}" onclick="adjustRounds('${uuid}', 1)">+1</button>
+          <button class="button-big ${gender === '♂' ? 'button-male' : 'button-female'}" onclick="adjustRounds('${uuid}', 1)">+1</button>
         `;
 	  participantsDiv.appendChild(personDiv); // Füge das neue Teilnehmer-Div zum Haupt-Div hinzu
       }
