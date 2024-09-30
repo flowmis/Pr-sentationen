@@ -171,18 +171,6 @@
       let timerRunning = false;
       let roundTimes = [];
 
-      function addPredefinedParticipants() {
-	  const predefinedParticipants = [
-              { name: "Max", color: "red", gender: "♂" },
-              { name: "Anna", color: "yellow", gender: "♀" },
-              { name: "Tom", color: "green", gender: "♂" },
-              { name: "Lisa", color: "red", gender: "♀" }
-	  ];
-	  predefinedParticipants.forEach(participant => {
-              addParticipant(participant.color, participant.name, participant.gender);
-	  });
-      }
-
       function getGradeAndPoints(distance, gender) {
 	  const maleGrades = [
               { distance: 6750, grade: "1+", points: 15 },
@@ -288,12 +276,10 @@
       function addParticipant(color, name = null, gender = '♂') {
 	  const participantsDiv = document.getElementById('participants'); // Hole das Teilnehmer-Div
 	  const uuid = generateUUID(); // Generiere eine neue UUID
-	  const participantName = name || `${color.charAt(0).toUpperCase()}${participantCounts[color] + 1}`; // Nutze den vordefinierten Namen, wenn vorhanden
+	  const participantName = name || `${participantCounts[color] + 1} -${color.charAt(0)}`; // z.B. "1 R" oder "1 G"
 	  participantCounts[color]++; // Erhöhe die Anzahl der Teilnehmer für diese Farbe
 	  const personDiv = document.createElement('div'); // Erstelle ein neues Div für den Teilnehmer
 	  personDiv.classList.add('person', color); // Füge Klassen für Styling hinzu
-	  
-	  // Klassen für die Hintergrundfarbe
 	  if (color === 'red') {
               personDiv.classList.add('re-participant');
 	  } else if (color === 'yellow') {
@@ -301,17 +287,16 @@
 	  } else if (color === 'green') {
               personDiv.classList.add('gr-participant');
 	  }
-	  
 	  personDiv.setAttribute('data-uuid', uuid); // Setze die UUID als Datenattribut
 	  personDiv.innerHTML = `
-          <button class="button-big button-male" onclick="deletePerson('${uuid}')">x</button> 
+          <button class="button-big button-male" style="background-color: red; color: white;" onclick="deletePerson('${uuid}')">x</button>
           <input type="text" class="nameInput" placeholder="Name" value="${participantName}" />
           <button class="gender-button button-big ${gender === '♂' ? 'button-male' : 'button-female'}" onclick="switchGender('${uuid}')">${gender}</button>
           <input type="number" class="roundsInput" value="0" step="0.5" readonly />
-          <button class="button-small button-male" onclick="adjustRounds('${uuid}', -1)">-1</button>
-          <button class="button-small button-male" onclick="adjustRounds('${uuid}', -0.5)">-½</button>
-          <button class="button-small button-male" onclick="adjustRounds('${uuid}', 0.5)">+½</button>
-          <button class="button-big button-male" style="margin-right: 30px;" onclick="adjustRounds('${uuid}', 1)">+1</button>
+          <button class="button-small ${gender === '♂' ? 'button-male' : 'button-female'}" onclick="adjustRounds('${uuid}', -1)">-1</button>
+          <button class="button-small ${gender === '♂' ? 'button-male' : 'button-female'}" onclick="adjustRounds('${uuid}', -0.5)">-½</button>
+          <button class="button-small ${gender === '♂' ? 'button-male' : 'button-female'}" onclick="adjustRounds('${uuid}', 0.5)">+½</button>
+          <button class="button-small ${gender === '♂' ? 'button-male' : 'button-female'}" onclick="adjustRounds('${uuid}', 1)">+1</button>
         `;
 	  participantsDiv.appendChild(personDiv); // Füge das neue Teilnehmer-Div zum Haupt-Div hinzu
       }
@@ -368,6 +353,17 @@
               });
 	  }
       }
+      
+      function addPredefinedParticipants() {
+	  const predefinedParticipants = [
+              { name: "Max", color: "red", gender: "♂" },
+              { name: "Lisa", color: "green", gender: "♀" }
+	  ];
+	  predefinedParticipants.forEach(participant => {
+              addParticipant(participant.color, participant.name, participant.gender);
+	  });
+      }
+
       
       window.onload = function() {
 	  setDefaultTime();
