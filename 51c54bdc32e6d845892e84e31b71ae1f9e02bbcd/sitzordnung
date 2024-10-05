@@ -1,0 +1,261 @@
+<!-- Ich will eine .html zur Auslosung der Sitzordnung. Oben auf der Seite soll eine Tafel abgebildet sein und dann sollen 4 Reihen folgen. Jede Reihe soll aus 4 Tischen bestehen. In jeder Reihe gibt es zwischen den beiden Tischen einen Mittelgang zum durchlaufen als Lehrer. Nun soll es mehrere Eingabefelder geben. Ein Eingabefeld zu Eingabe einer Zahl - die Zahl gibt die Anzahl der Schüler die da sind an, wobei jedem Schüler vorab eine Nummer zugeordnet wurde. Ein Eingabefeld für alle Schüler die am heutigen Tag fehlen und somit nicht in die Sitzordnung mit einsortiert werden - auch hier wird nur die Nummer der fehlenden Schüler eingetragen und über ein Komma getrennt. Nun brauche ich noch ein Eingabefeld das angibt wie viele Schüler an einen Tisch zugeordnet werden sollen. Standard hier soll 2 Schüler pro Tisch sein, - aber es soll auch möglich sein mehr als 2 Schüler pro Tisch zuzuordnen. Die Reihenfolge in der die Tische mit den zufälligen Schülernummern zugeordnet werden sollen muss so sein dass die Schüler möglichst weit vorne und in Nähe zur Lehrkraft vor der Tafel sind. Heißt es soll in Reihe 1 bei Tisch 2 in der Reihe begonnen werden. Zudem soll immer erst ein Tisch komplett aufgefüllt werden bevor der nächste Tisch eröffnet wird. Per Drag and Drop möchte ich nach dem auslösen noch manuell Änderungen vornehmen können. Hier will ich beim ziehen von einer Nummer auf die andere deren Sitzplätze tauschen. Die Seite soll bitte auch schön aussehen.
+
+Create an HTML page for generating a seating arrangement for students. The layout should include:
+Blackboard: At the top of the page, include a visual representation of a blackboard.
+Seating Layout:
+The layout should consist of 4 rows, each containing 4 tables.
+There should be an aisle between the tables to allow the teacher to walk through easily.
+Input Fields: Below the seating layout, provide the following input fields:
+1. Number of Students Present: An input field to specify the total number of students present, each assigned a unique number.
+2. Absent Students: An input field for entering the numbers of students who are absent on that day, with numbers separated by commas.
+3. Students per Table: An input field to specify how many students should be assigned to each table. The default value should be 2, but it should allow for a higher number if needed.
+Seating Assignment Logic: the seating arrangement should fill tables starting from the front row (Row 1), Table 2 in that row. Than Table 3 and than Table 4 & 5. The Students should be as close as possible to the Teacher. Ensure that each table is fully occupied before moving to the next table.
+Drag-and-Drop Functionality: Allow for manual adjustments of seating after the initial assignment. When a student number is dragged from one seat to another, their positions should be swapped.
+Visual Appeal: The overall design of the page should be attractive and user-friendly.
+ -->
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sitzplan</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f8;
+            color: #333;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .teacher-desk {
+            width: 300px;
+            height: 60px;
+            border: 2px solid #333;
+            border-radius: 10px;
+            background-color: #ccc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 60px;
+        }
+        .blackboard {
+            width: 350px;
+            height: 80px;
+            background-color: #333;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 30px;
+            font-size: 18px;
+        }
+	.row {
+	    display: flex;
+	    justify-content: center; /* Zentriert die Tische in der Reihe */
+	    margin-bottom: 20px; /* Abstand zwischen den Reihen */
+	}
+	
+	.table {
+	    width: 260px; /* Breite der Tische */
+	    height: 140px; /* Höhe der Tische */
+	    border: 2px solid #333; /* Rahmen für die Tische */
+	    background-color: #eaeaea; /* Hintergrundfarbe der Tische */
+	    margin: 0 10px; /* Abstand zwischen den Tischen */
+	    display: flex;
+	    justify-content: center;
+	    align-items: center;
+	}
+	
+	.table-section {
+	    flex: 1; /* Basisflex für alle Sektionen */
+	    border: 1px solid #666; /* Rahmen für jede Sektion */
+	    margin: 5px; /* Abstand zwischen den Sektionen */
+	    padding: 5px; /* Innenabstand für besseren Text */
+	    display: flex;
+	    justify-content: center;
+	    align-items: center;
+	    background-color: #fff; /* Hintergrundfarbe der Sektionen */
+	}
+	
+	.table-section:nth-child(2),	
+	.table-section:nth-child(3) {
+	    flex: 2; /* Verdoppelt die Größe der inneren Sektionen */
+	    position: relative; /* Stelle sicher, dass das Element relativ positioniert ist */
+	    bottom: -10px; /* Passe diesen Wert an, um die Position nach unten zu verschieben */
+	    height: 80px; /* Ändere die Höhe nach Bedarf */
+	    clip-path: circle(50%); /* Macht die Sektion rund */
+	}
+	
+	.hidden {
+	    display: none; /* Versteckt das Element */
+	}
+
+        form {
+            margin-bottom: 30px;
+        }
+
+        input[type=number], input[type=text], input[type=submit] {
+            margin: 10px;
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        input[type=submit] {
+            background-color: #3E6F8D;
+            color: white;
+            cursor: pointer;
+        }
+    </style>
+    <script>
+      
+      function assignSeats() {
+	  const numStudents = parseInt(document.getElementById('numStudents').value);
+	  const numTables = parseInt(document.getElementById('numTables').value);
+	  const numRows = parseInt(document.getElementById('numRows').value);
+	  const assignOneNumber = document.getElementById('assignOneNumber').checked;
+	  const fillSmallSections = document.getElementById('fillSmallSections').checked;
+	  const tableContainer = document.getElementById('tableContainer');
+	  tableContainer.innerHTML = ''; // Leeren Sie den Container vor dem Zeichnen neuer Tische
+	  
+	  // Generiere eine zufällige Reihenfolge der Schülerzahlen
+	  const studentNumbers = Array.from({ length: numStudents }, (_, i) => i + 1);
+	  const shuffledNumbers = studentNumbers.sort(() => 0.5 - Math.random());
+	  
+	  let currentIndex = 0; // Zeigt auf die aktuelle Schülernummer in shuffledNumbers
+	  
+	  for (let i = 0; i < numRows; i++) {
+              const rowDiv = document.createElement('div');
+              rowDiv.classList.add('row');
+	      
+              for (let j = 0; j < numTables; j++) {
+		  const tableDiv = document.createElement('div');
+		  tableDiv.classList.add('table');
+		  
+		  // Erstelle 4 Bereiche für den Tisch
+		  for (let k = 0; k < 4; k++) {
+                      const sectionDiv = document.createElement('div');
+                      sectionDiv.classList.add('table-section');
+                      sectionDiv.contentEditable = true; // Ermöglicht die Bearbeitung des Texts
+                      sectionDiv.placeholder = `Bereich ${k + 1}`; // Platzhaltertext für jeden Bereich
+		      
+                      // Zuweisung der Schülernummern basierend auf dem Switch
+                      if (!assignOneNumber && (currentIndex < shuffledNumbers.length - 1)) {
+			  // Weisen Sie zwei Nummern zu den großen Feldern des Tisches zu
+			  if (k === 1 || k === 2) { // Nur für die großen Felder
+                              sectionDiv.textContent = shuffledNumbers[currentIndex];
+                              currentIndex++;
+			  } else if (fillSmallSections && (currentIndex < shuffledNumbers.length)) {
+                              // Fülle die kleinen Felder mit Nummern, wenn die Checkbox aktiviert ist
+                              sectionDiv.textContent = shuffledNumbers[currentIndex];
+                              currentIndex++;
+			  } else {
+                              sectionDiv.textContent = ''; // Leeres Feld für die kleinen Felder
+			  }
+                      } else {
+			  // Weisen Sie eine Nummer zu einem großen Feld zu
+			  if (k === 1) { // Nur für ein großes Feld
+                              sectionDiv.textContent = shuffledNumbers[currentIndex];
+                              currentIndex++;
+			  } else if (fillSmallSections && (currentIndex < shuffledNumbers.length)) {
+                              // Fülle die kleinen Felder mit Nummern, wenn die Checkbox aktiviert ist
+                              sectionDiv.textContent = shuffledNumbers[currentIndex];
+                              currentIndex++;
+			  } else {
+                              sectionDiv.textContent = ''; // Leeres Feld für die anderen Felder
+			  }
+                      }
+		      
+                      // Verstecke die kleinen Felder, wenn die Checkbox nicht aktiviert ist
+                      if (!fillSmallSections && (k === 0 || k === 3)) {
+			  sectionDiv.classList.add('hidden');
+                      } else {
+			  sectionDiv.classList.remove('hidden');
+                      }
+		      
+                      // Füge Drag-and-Drop-Ereignisse hinzu
+                      sectionDiv.setAttribute('draggable', true);
+                      sectionDiv.addEventListener('dragstart', dragStart);
+                      sectionDiv.addEventListener('dragover', dragOver);
+                      sectionDiv.addEventListener('drop', drop);
+		      
+                      tableDiv.appendChild(sectionDiv);
+		  }
+
+		  rowDiv.appendChild(tableDiv);
+              }
+              tableContainer.appendChild(rowDiv);
+	  }
+      }
+      
+      let draggedSection = null;
+      
+      // Drag-and-Drop-Funktionen
+      function dragStart(e) {
+	  draggedSection = e.target; // Speichern Sie das gezogene Element
+	  e.dataTransfer.effectAllowed = 'move'; // Erlaubt die Bewegung
+      }
+      
+      function dragOver(e) {
+	  e.preventDefault(); // Erlaubt das Droppen
+      }
+      
+      function drop(e) {
+	  e.preventDefault();
+	  if (draggedSection && draggedSection !== e.target) {
+              // Tauschen Sie den Inhalt der beiden Abschnitte
+              const temp = e.target.textContent;
+              e.target.textContent = draggedSection.textContent;
+              draggedSection.textContent = temp;
+	  }
+      }
+
+    </script>
+</head>
+<body>
+<div class="blackboard">Tafel</div>
+<div class="teacher-desk">Lehrerpult</div>
+<div id="tableContainer"></div>
+<form onsubmit="assignSeats(); return false;">
+    <div>
+        <label for="numStudents">Schüleranzahl:</label>
+        <input type="number" id="numStudents" placeholder="21" required>
+    </div>
+    <div>
+        <label for="missingStudents">Fehlende Schüler:</label>
+        <input type="text" id="missingStudents" placeholder="2,5,...">
+    </div>
+    <div>
+        <label for="numTables">Tische/Reihe:</label>
+        <input type="number" id="numTables" placeholder="Tische" value="4" required>
+    </div>
+    <div>
+        <label for="numRows">Anzahl der Sitzreihen:</label>
+        <input type="number" id="numRows" placeholder="Reihen" value="4" required>
+    </div>
+    <div>
+      <label for="togetherStudents">Schüler zusammen:</label>
+      <input type="text" id="togetherStudents" placeholder="Schüler, die zusammen sitzen sollen">
+    </div>
+    <div>
+      <label for="separateStudents">Schüler getrennt:</label>
+      <input type="text" id="separateStudents" placeholder="Schüler, die getrennt sitzen sollen">
+    </div>
+    <div>
+      <label for="assignOneNumber">
+        <input type="checkbox" id="assignOneNumber"> Einzeltische
+      </label>
+    </div>
+    <div>
+      <label for="fillSmallSections">
+        <input type="checkbox" id="fillSmallSections"> Mehr als 2 pro Tisch
+      </label>
+    </div>
+
+    <input type="submit" value="Sitze zuweisen">
+</form>
+
+</body>
+</html>
