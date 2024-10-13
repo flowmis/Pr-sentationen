@@ -55,6 +55,7 @@ Erstelle eine vollständige HTML-Seite mit einem Rundenzähler, die die folgende
 Bitte stelle sicher, dass der gesamte Code korrekt und funktionsfähig ist.
 -->
 
+
 <!DOCTYPE html>
 <html lang="de">
   <head>
@@ -369,30 +370,47 @@ Bitte stelle sicher, dass der gesamte Code korrekt und funktionsfähig ist.
 		  break; // Beende die Schleife, da der Teilnehmer gefunden wurde
 	      }}}
       
-      function adjustRounds(uuid, adjustment) {
-	  const participantDiv = document.querySelector(`#participants > div[data-uuid="${uuid}"]`);
-	  const roundsInput = participantDiv.querySelector('.roundsInput');
-	  let currentRounds = parseFloat(roundsInput.value);
-	  currentRounds = Math.max(0, currentRounds + adjustment); // Passe die Rundenzahl an
-	  roundsInput.value = currentRounds.toFixed(1); // Setze die neue Rundenzahl
-	  const nameInput = participantDiv.querySelector('.nameInput').value; // Hole den Namen des Teilnehmers
-	  const genderDiv = participantDiv.querySelector('.gender-button').textContent; // Hole das Geschlecht
-	  const currentTime = document.getElementById('countdownDisplay').textContent; // Hole die aktuelle Zeit des Timers
-	  const distancePerRound = parseFloat(document.getElementById('InputS').value); // Hole den Wert für die Distanz pro Runde
-	  const distance = currentRounds * distancePerRound; // Berechne die Gesamtstrecke
-	  // Hole Note und Punkte
-	  const { grade, points } = getGradeAndPoints(distance, genderDiv);
-	  // Speichern der Rundenänderung mit Name, Zeit, Geschlecht, Distanz, Note und Punkten
-	  roundTimes.push({
-              name: nameInput,
-              rounds: currentRounds,
-              time: currentTime,
-              gender: genderDiv,
-              distance: distance,
-              grade: grade, // Füge die Note hinzu
-              points: points // Füge die Punkte hinzu
-	  });
-      }
+function adjustRounds(uuid, adjustment) {
+    const participantDiv = document.querySelector(`#participants > div[data-uuid="${uuid}"]`);
+    const roundsInput = participantDiv.querySelector('.roundsInput');
+    let currentRounds = parseFloat(roundsInput.value);
+    
+    // Aktuelle Runden anpassen und dabei negative Werte verhindern
+    currentRounds = Math.max(0, currentRounds + adjustment);
+    roundsInput.value = currentRounds.toFixed(1); // Setze die neue Rundenzahl
+    const nameInput = participantDiv.querySelector('.nameInput').value; // Hole den Namen des Teilnehmers
+    const genderDiv = participantDiv.querySelector('.gender-button').textContent; // Hole das Geschlecht
+    const currentTime = document.getElementById('countdownDisplay').textContent; // Hole die aktuelle Zeit des Timers
+    const distancePerRound = parseFloat(document.getElementById('InputS').value); // Hole den Wert für die Distanz pro Runde
+    const distance = currentRounds * distancePerRound; // Berechne die Gesamtstrecke
+    
+    // Hole Note und Punkte
+    const { grade, points } = getGradeAndPoints(distance, genderDiv);
+    
+    // Wenn der Teilnehmer bereits in roundTimes ist, aktualisiere den Eintrag
+    if (roundTimes[uuid]) {
+        roundTimes[uuid] = {
+            name: nameInput,
+            rounds: currentRounds,
+            time: currentTime,
+            gender: genderDiv,
+            distance: distance,
+            grade: grade,
+            points: points
+        };
+    } else {
+        // Wenn nicht vorhanden, füge neuen Eintrag hinzu
+        roundTimes[uuid] = {
+            name: nameInput,
+            rounds: currentRounds,
+            time: currentTime,
+            gender: genderDiv,
+            distance: distance,
+            grade: grade,
+            points: points
+        };
+    }
+}
 
       function switchGender(uuid) {
 	  const genderDiv = document.querySelector(`#participants > div[data-uuid="${uuid}"] .gender-button`);
@@ -428,23 +446,23 @@ Bitte stelle sicher, dass der gesamte Code korrekt und funktionsfähig ist.
 	  addPredefinedParticipants(); // Vordefinierte Teilnehmer hinzufügen
       };
       
-      function downloadCSV() {
-	  let csvContent = "data:text/csv;charset=utf-8,Name,Runden,Zeit,Geschlecht,Distanz,Note,Notenpunkte\n";
-	  roundTimes.forEach(row => {
-              const rowContent = `${row.name},${row.rounds},${row.time},${row.gender},${row.distance},${row.grade},${row.points}`;
-              csvContent += rowContent + "\n";
-	  });
-	  const currentDate = new Date(); // Erstelle ein neues Datum
-	  const formattedDate = currentDate.toISOString().split('T')[0]; // Formatiere das Datum (YYYY-MM-DD)
-	  const encodedUri = encodeURI(csvContent);
-	  const link = document.createElement("a");
-	  link.setAttribute("href", encodedUri);
-	  link.setAttribute("download", `auswertung-lauf-${formattedDate}.csv`);
-	  document.body.appendChild(link); // Benötigt, um Firefox zu unterstützen
-	  link.click(); // Auslösen des Downloads
-	  document.body.removeChild(link); // Entfernen des Links
-      }
-      
+ function downloadCSV() {
+    let csvContent = "data:text/csv;charset=utf-8,Name,Runden,Zeit,Geschlecht,Distanz,Note,Notenpunkte\n";
+    Object.values(roundTimes).forEach(row => {
+        const rowContent = `${row.name},${row.rounds},${row.time},${row.gender},${row.distance},${row.grade},${row.points}`;
+        csvContent += rowContent + "\n";
+    });
+    const currentDate = new Date(); // Erstelle ein neues Datum
+    const formattedDate = currentDate.toISOString().split('T')[0]; // Formatiere das Datum (YYYY-MM-DD)
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", `auswertung-lauf-${formattedDate}.csv`);
+    document.body.appendChild(link); // Benötigt, um Firefox zu unterstützen
+    link.click(); // Auslösen des Downloads
+    document.body.removeChild(link); // Entfernen des Links
+}
+     
     </script>
   </body>
 </html>
