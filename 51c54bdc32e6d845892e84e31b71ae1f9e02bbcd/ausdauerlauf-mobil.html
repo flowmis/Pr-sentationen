@@ -359,7 +359,7 @@ Bitte stelle sicher, dass der gesamte Code korrekt und funktionsfähig ist.
 	  const participantDiv = document.querySelector(`#participants > div[data-uuid="${uuid}"]`);
 	  const roundsInput = participantDiv.querySelector('.roundsInput');
 	  let currentRounds = parseFloat(roundsInput.value);
-	  currentRounds += adjustment; // Passe die Rundenzahl an
+	  currentRounds = Math.max(0, currentRounds + adjustment); // Passe die Rundenzahl an
 	  roundsInput.value = currentRounds.toFixed(1); // Setze die neue Rundenzahl
 	  const nameInput = participantDiv.querySelector('.nameInput').value; // Hole den Namen des Teilnehmers
 	  const genderDiv = participantDiv.querySelector('.gender-button').textContent; // Hole das Geschlecht
