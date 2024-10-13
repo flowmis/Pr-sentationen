@@ -1,3 +1,46 @@
+<!-- 
+Erstelle eine vollständige HTML-Seite mit einem Rundenzähler, die die folgenden spezifischen Anforderungen erfüllt:
+
+1. **Dokumentenstruktur**:
+   - Verwende die Doctype-Deklaration für HTML5.
+   - Setze die Sprache auf Deutsch.
+
+2. **Kopfbereich (Head)**:
+   - Setze den Zeichensatz auf UTF-8.
+   - Füge Viewport-Einstellungen für responsives Design hinzu.
+   - Definiere den Titel der Seite als 'Rundenzähler'.
+   - Integriere ein Stylesheet mit benutzerdefinierten CSS-Variablen für Farben, Schriftgrößen und Layout-Styles.
+
+3. **Body-Bereich**:
+   - **Timer-Bereich**:
+     - Zeige einen Countdown-Timer an, der bei 30 Minuten beginnt.
+     - Füge zwei Schaltflächen hinzu: eine zum Starten (mit Pause und Fortsetzen) und eine zum Zurücksetzen des Timers.
+     - Füge zwei Eingabefelder hinzu, um die Zeit für den Lauf und die Strecke anzupassen.
+   
+   - **Teilnehmerverwaltung**:
+     - Erlaube das Hinzufügen von Teilnehmern in den Farben Rot, Gelb und Grün über drei verschiedene "+"-Knöpfe.
+     - Jeder Teilnehmer hat:
+       - Ein Feld zum Löschen (links).
+       - Ein Eingabefeld für den Namen (mit einer Nummer von 1 bis 10, die sich wiederholt).
+       - Eine Schaltfläche zur Geschlechtsänderung (ändert die Farbe der Rundenknöpfe).
+       - Ein Feld zur Anzeige der Anzahl der hinzugefügten Runden.
+       - Vier Schaltflächen zur Anpassung der Rundenanzahl (+1, -1, -1/2, +1/2), wobei der +1-Button besonders groß ist. Die Farben der Buttons hängen vom Geschlecht ab (pink für weiblich, blau für männlich), während die Hintergrundfarbe der Teilnehmer rot, grün oder gelb bleibt.
+   
+   - **CSV-Download-Funktion**:
+     - Implementiere eine Schaltfläche, um die Ergebnisse in eine CSV-Datei herunterzuladen. Die Datei soll Namen, Runden, Zeiten, Geschlecht, Distanz, Noten und Punkte der Teilnehmer enthalten, basierend auf den folgenden Skalen:
+       - *Männlich*: (Hier die `maleGrades`-Konstanten einfügen)
+       - *Weiblich*: (Hier die `femaleGrades`-Konstanten einfügen)
+
+4. **JavaScript-Funktionen**:
+   - Implementiere die Logik für den Timer (Start, Pause, Zurücksetzen).
+   - Füge Funktionen hinzu, um Teilnehmer hinzuzufügen, deren Geschlecht zu wechseln und die Rundenanzahl anzupassen.
+   - Erstelle eine Funktion zur Berechnung von Noten und Punkten basierend auf Distanz und Geschlecht.
+   - Implementiere eine Funktion, um die Teilnehmerdaten in einem CSV-Format zu exportieren und herunterzuladen.
+
+Bitte stelle sicher, dass der gesamte Code korrekt und funktionsfähig ist.
+-->
+
+
 <!DOCTYPE html>
 <html lang="de">
   <head>
@@ -68,6 +111,7 @@
       }
 
       .button-male {
+	  color: var(--wh);
 	  background-color: var(--mann);
       }
 
