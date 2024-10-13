@@ -336,7 +336,7 @@ Bitte stelle sicher, dass der gesamte Code korrekt und funktionsfähig ist.
           <button class="button-big button-male" style="background-color: red; color: white;" onclick="deletePerson('${uuid}')">x</button>
           <input type="text" class="nameInput" placeholder="Name" value="${participantName}" />
           <button class="gender-button button-big ${gender === '♂' ? 'button-male' : 'button-female'}" onclick="switchGender('${uuid}')">${gender}</button>
-          <input type="number" class="roundsInput" value="0,0" step="0.5" readonly />
+          <input type="number" class="roundsInput" value="0.0" step="0.5" readonly />
           <button class="button-small ${gender === '♂' ? 'button-male' : 'button-female'}" onclick="adjustRounds('${uuid}', -1)">-1</button>
           <button class="button-small ${gender === '♂' ? 'button-male' : 'button-female'}" onclick="adjustRounds('${uuid}', -0.5)">-½</button>
           <button class="button-small ${gender === '♂' ? 'button-male' : 'button-female'}" onclick="adjustRounds('${uuid}', 0.5)">+½</button>
