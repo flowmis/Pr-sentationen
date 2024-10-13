@@ -1,23 +1,38 @@
-<!-- 
+<!-- ACHTUNG: 
+Speicherung der Teilnehmerwerte:
+Die Werte für die Teilnehmer werden gespeichert, nachdem der Rundenzählnopf gedrückt wurde.
+Wichtig: Einstellungen (Namen, Geschlecht Zeit und Laufstrecke) bitte vorab festlegen. Änderungen während des Ablaufs vermeiden, da die Ergebnisse sonst nicht mehr nachvollziehbar sind (bei Änderungen an der Zeit und der Strecke wird es echt problematisch)!
+
+Änderungen an Namen oder Geschlecht:
+Wenn nach dem Ablauf und vor dem Download Änderungen am Namen oder Geschlecht vorgenommen werden: Zuerst den -1 Button drücken. Dann den +1 Button drücken. Dies ist notwendig, damit die Änderungen im Namen- oder Geschlechtsfeld für den Download wirksam gespeichert werden.
+
+Löschen von Teilnehmern:
+Wenn Personen mit Runden gelöscht werden, bleiben sie weiterhin in der CSV-Datei. Die letzten, über den Rundenzählnopf gespeicherten Daten werden in der CSV somit weiter aufgeführt.
+
+Teilnehmerlisten: 
+Teilnehmer ohne Runden werden in der CSV-Datei somit auch nicht aufgelistet!
+-->
+
+<!-- Prompt zur Erstellung der Grundstruktur für die html:
 Erstelle eine vollständige HTML-Seite mit einem Rundenzähler, die die folgenden spezifischen Anforderungen erfüllt:
 
-1. **Dokumentenstruktur**:
+1. Dokumentenstruktur:
    - Verwende die Doctype-Deklaration für HTML5.
    - Setze die Sprache auf Deutsch.
 
-2. **Kopfbereich (Head)**:
+2. Kopfbereich (Head):
    - Setze den Zeichensatz auf UTF-8.
    - Füge Viewport-Einstellungen für responsives Design hinzu.
    - Definiere den Titel der Seite als 'Rundenzähler'.
    - Integriere ein Stylesheet mit benutzerdefinierten CSS-Variablen für Farben, Schriftgrößen und Layout-Styles.
 
-3. **Body-Bereich**:
-   - **Timer-Bereich**:
+3. Body-Bereich:
+   - Timer-Bereich:
      - Zeige einen Countdown-Timer an, der bei 30 Minuten beginnt.
      - Füge zwei Schaltflächen hinzu: eine zum Starten (mit Pause und Fortsetzen) und eine zum Zurücksetzen des Timers.
      - Füge zwei Eingabefelder hinzu, um die Zeit für den Lauf und die Strecke anzupassen.
    
-   - **Teilnehmerverwaltung**:
+   - Teilnehmerverwaltung:
      - Erlaube das Hinzufügen von Teilnehmern in den Farben Rot, Gelb und Grün über drei verschiedene "+"-Knöpfe.
      - Jeder Teilnehmer hat:
        - Ein Feld zum Löschen (links).
@@ -26,12 +41,12 @@ Erstelle eine vollständige HTML-Seite mit einem Rundenzähler, die die folgende
        - Ein Feld zur Anzeige der Anzahl der hinzugefügten Runden.
        - Vier Schaltflächen zur Anpassung der Rundenanzahl (+1, -1, -1/2, +1/2), wobei der +1-Button besonders groß ist. Die Farben der Buttons hängen vom Geschlecht ab (pink für weiblich, blau für männlich), während die Hintergrundfarbe der Teilnehmer rot, grün oder gelb bleibt.
    
-   - **CSV-Download-Funktion**:
+   - CSV-Download-Funktion:
      - Implementiere eine Schaltfläche, um die Ergebnisse in eine CSV-Datei herunterzuladen. Die Datei soll Namen, Runden, Zeiten, Geschlecht, Distanz, Noten und Punkte der Teilnehmer enthalten, basierend auf den folgenden Skalen:
-       - *Männlich*: (Hier die `maleGrades`-Konstanten einfügen)
-       - *Weiblich*: (Hier die `femaleGrades`-Konstanten einfügen)
+	- const maleGrades = [ { distance: 6750, grade: "1+", points: 15 }, { distance: 6300, grade: "1+", points: 14 }, { distance: 6075, grade: "1", points: 13 }, { distance: 5850, grade: "1-", points: 12 }, { distance: 5625, grade: "2+", points: 11 }, { distance: 5400, grade: "2", points: 10 }, { distance: 5175, grade: "2-", points: 9 }, { distance: 4950, grade: "3+", points: 8 }, { distance: 4725, grade: "3", points: 7 }, { distance: 4500, grade: "3-", points: 6 }, { distance: 4275, grade: "4+", points: 5 }, { distance: 4050, grade: "4", points: 4 }, { distance: 3825, grade: "4-", points: 3 }, { distance: 3600, grade: "5+", points: 2 }, { distance: 3375, grade: "5", points: 1 }, { distance: 3150, grade: "5", points: 0 }, { distance: 2925, grade: "5-", points: 0 }, { distance: 2700, grade: "6", points: 0 } ];
+	- const femaleGrades = [ { distance: 6300, grade: "1+", points: 15 }, { distance: 5850, grade: "1+", points: 14 }, { distance: 5625, grade: "1", points: 13 }, { distance: 5400, grade: "1-", points: 12 }, { distance: 5175, grade: "2+", points: 11 }, { distance: 4950, grade: "2", points: 10 }, { distance: 4725, grade: "2-", points: 9 }, { distance: 4500, grade: "3+", points: 8 }, { distance: 4275, grade: "3", points: 7 }, { distance: 4050, grade: "3-", points: 6 }, { distance: 3825, grade: "4+", points: 5 }, { distance: 3600, grade: "4", points: 4 }, { distance: 3375, grade: "4-", points: 3 }, { distance: 3150, grade: "5+", points: 2 }, { distance: 2925, grade: "5", points: 1 }, { distance: 2700, grade: "5", points: 1 }, { distance: 2475, grade: "5-", points: 0 }, { distance: 2250, grade: "6", points: 0 } ];
 
-4. **JavaScript-Funktionen**:
+4. JavaScript-Funktionen:
    - Implementiere die Logik für den Timer (Start, Pause, Zurücksetzen).
    - Füge Funktionen hinzu, um Teilnehmer hinzuzufügen, deren Geschlecht zu wechseln und die Rundenanzahl anzupassen.
    - Erstelle eine Funktion zur Berechnung von Noten und Punkten basierend auf Distanz und Geschlecht.
@@ -39,7 +54,6 @@ Erstelle eine vollständige HTML-Seite mit einem Rundenzähler, die die folgende
 
 Bitte stelle sicher, dass der gesamte Code korrekt und funktionsfähig ist.
 -->
-
 
 <!DOCTYPE html>
 <html lang="de">
