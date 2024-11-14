@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=0.5">
-    <title>Rundenzähler</title>
+    <title>800m</title>
     <style>
       :root {
 	  --re: #ff3400; 
@@ -12,7 +12,8 @@
 	  --yeb: #ffff0050; 
 	  --gr: #11ff11;      
 	  --grb: #11ff1150;      
-	  --bl: #000000;      
+	  --bl: #3030ff;      
+	  --blb: #3030ff50;      
 	  --wh: #ffffff;      
 	  --button: #99dddd;
 	  --mann: #007BFF;
@@ -52,6 +53,10 @@
       
       .gr-participant {
 	  background-color: var(--grb);
+      }
+      
+      .bl-participant {
+	  background-color: var(--blb);
       }
 
       .nameInput {
@@ -117,15 +122,6 @@
 	  height: 50px;
       }
 
-      #InputT {
-	  width: 100px;
-	  font-size: var(--font-size-large);
-      }
-
-      #InputS {
-	  width: 100px;
-	  font-size: var(--font-size-large);
-      }
     </style>
   </head>
   <body>
@@ -144,16 +140,13 @@
           </svg>
         </button>
       </div>
-
     </div>
-    <div style="font-size: var(--font-size-medium)"> Strecke:
-      <input type="number" id="InputS" value="800"> 
-    </div>
-
+    <div style="font-size: var(--font-size-medium)"> Ausdauerlauf: 800m</div>
     <div>
       <button style="background-color: var(--re); width: 10%; margin: 80px 0;" onclick="addParticipant('red')">+</button>
       <button style="background-color: var(--ye); width: 10%; margin: 80px 0;" onclick="addParticipant('yellow')">+</button>
       <button style="background-color: var(--gr); width: 10%; margin: 80px 0;" onclick="addParticipant('green')">+</button>
+      <button style="background-color: var(--bl); width: 10%; margin: 80px 0;" onclick="addParticipant('blue')">+</button>
     </div>
 
     <div id="participants"></div>
@@ -161,61 +154,12 @@
     <button style="margin-top: 80px;" onclick="downloadCSV()">Download</button>
 
     <script>
-      let participantCounts = { red: 0, yellow: 0, green: 0 };
+      let participantCounts = { red: 0, yellow: 0, green: 0, blue: 0 };
       let timer;
       let timeElapsed = 0; // Verstrichene Zeit in Sekunden, beginnt bei 0
       let timerRunning = false;
       let roundTimes = [];
 
-      function getGradeAndPoints(distance, gender) {
-	  const maleGrades = [
-              { distance: 6750, grade: "1+", points: 15 },
-              { distance: 6300, grade: "1+", points: 14 },
-              { distance: 6075, grade: "1", points: 13 },
-              { distance: 5850, grade: "1-", points: 12 },
-              { distance: 5625, grade: "2+", points: 11 },
-              { distance: 5400, grade: "2", points: 10 },
-              { distance: 5175, grade: "2-", points: 9 },
-              { distance: 4950, grade: "3+", points: 8 },
-              { distance: 4725, grade: "3", points: 7 },
-              { distance: 4500, grade: "3-", points: 6 },
-              { distance: 4275, grade: "4+", points: 5 },
-              { distance: 4050, grade: "4", points: 4 },
-              { distance: 3825, grade: "4-", points: 3 },
-              { distance: 3600, grade: "5+", points: 2 },
-              { distance: 3375, grade: "5", points: 1 },
-              { distance: 3150, grade: "5", points: 0 },
-              { distance: 2925, grade: "5-", points: 0 },
-              { distance: 2700, grade: "6", points: 0 }
-	  ];
-	  const femaleGrades = [
-              { distance: 6300, grade: "1+", points: 15 },
-              { distance: 5850, grade: "1+", points: 14 },
-              { distance: 5625, grade: "1", points: 13 },
-              { distance: 5400, grade: "1-", points: 12 },
-              { distance: 5175, grade: "2+", points: 11 },
-              { distance: 4950, grade: "2", points: 10 },
-              { distance: 4725, grade: "2-", points: 9 },
-              { distance: 4500, grade: "3+", points: 8 },
-              { distance: 4275, grade: "3", points: 7 },
-              { distance: 4050, grade: "3-", points: 6 },
-              { distance: 3825, grade: "4+", points: 5 },
-              { distance: 3600, grade: "4", points: 4 },
-              { distance: 3375, grade: "4-", points: 3 },
-              { distance: 3150, grade: "5+", points: 2 },
-              { distance: 2925, grade: "5", points: 1 },
-              { distance: 2700, grade: "5", points: 1 },
-              { distance: 2475, grade: "5-", points: 0 },
-              { distance: 2250, grade: "6", points: 0 }
-	  ];
-	  const grades = gender === '♂' ? maleGrades : femaleGrades;
-	  for (const entry of grades) {
-              if (distance >= entry.distance) {
-		  return { grade: entry.grade, points: entry.points };
-              }
-	  }
-	  return { grade: "N/A", points: 0 }; // Falls die Distanz unter den minimalen Werten liegt
-      }
       function setDefaultTime() {
 	  timeElapsed = 0; // Setze die verstrichene Zeit auf 0 Sekunden
 	  updateTimerDisplay(); // Aktualisiere die Timer-Anzeige
@@ -251,13 +195,11 @@
 	  document.getElementById('startButton').onclick = startTimer; // Setze die Schaltfläche wieder auf die Startfunktion
       }
       window.onload = setDefaultTime; // Setze die Standardzeit auf 0, wenn das Fenster geladen wird
-      
       function generateUUID() {
 	  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
               const r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
               return v.toString(16);
 	  });}
-      
       function addParticipant(color, name = null, gender = '♂') {
 	  const participantsDiv = document.getElementById('participants'); // Hole das Teilnehmer-Div
 	  const uuid = generateUUID(); // Generiere eine neue UUID
@@ -271,6 +213,8 @@
               personDiv.classList.add('ye-participant');
 	  } else if (color === 'green') {
               personDiv.classList.add('gr-participant');
+	  } else if (color === 'blue') {
+              personDiv.classList.add('bl-participant');
 	  }
 	  personDiv.setAttribute('data-uuid', uuid); // Setze die UUID als Datenattribut
 	  personDiv.innerHTML = `
@@ -283,7 +227,6 @@
         `;
 	  participantsDiv.appendChild(personDiv); // Füge das neue Teilnehmer-Div zum Haupt-Div hinzu
       }
-
       function deletePerson(uuid) {
 	  const participantsDiv = document.getElementById('participants'); // Hole das Teilnehmer-Div
 	  const participants = participantsDiv.getElementsByClassName('person'); // Hole alle Teilnehmer-Elemente
@@ -293,7 +236,6 @@
 		  participantsDiv.removeChild(participants[i]); // Entferne den Teilnehmer
 		  break; // Beende die Schleife, da der Teilnehmer gefunden wurde
 	      }}}
-      
       function adjustRounds(uuid, adjustment) {
 	  const participantDiv = document.querySelector(`#participants > div[data-uuid="${uuid}"]`);
 	  const roundsInput = participantDiv.querySelector('.roundsInput');
@@ -303,22 +245,13 @@
 	  const nameInput = participantDiv.querySelector('.nameInput').value; // Hole den Namen des Teilnehmers
 	  const genderDiv = participantDiv.querySelector('.gender-button').textContent; // Hole das Geschlecht
 	  const currentTime = document.getElementById('countdownDisplay').textContent; // Hole die aktuelle Zeit des Timers
-	  const distancePerRound = parseFloat(document.getElementById('InputS').value); // Hole den Wert für die Distanz pro Runde
-	  const distance = currentRounds * distancePerRound; // Berechne die Gesamtstrecke
-	  // Hole Note und Punkte
-	  const { grade, points } = getGradeAndPoints(distance, genderDiv);
-	  // Speichern der Rundenänderung mit Name, Zeit, Geschlecht, Distanz, Note und Punkten
 	  roundTimes.push({
               name: nameInput,
               rounds: currentRounds,
               time: currentTime,
               gender: genderDiv,
-              distance: distance,
-              grade: grade, // Füge die Note hinzu
-              points: points // Füge die Punkte hinzu
 	  });
       }
-
       function switchGender(uuid) {
 	  const genderDiv = document.querySelector(`#participants > div[data-uuid="${uuid}"] .gender-button`);
 	  const roundButtons = document.querySelectorAll(`#participants > div[data-uuid="${uuid}"] button`); // Hole die Runden-Anpassungs-Buttons des Teilnehmers
@@ -336,40 +269,63 @@
               });
 	  }
       }
-      
       function addPredefinedParticipants() {
 	  const predefinedParticipants = [
-              { name: "Max", color: "red", gender: "♂" },
-              { name: "Lisa", color: "green", gender: "♀" }
+              { name: "1 -r", color: "red", gender: "♂" },
+              { name: "1 -g", color: "green", gender: "♀" }
 	  ];
 	  predefinedParticipants.forEach(participant => {
               addParticipant(participant.color, participant.name, participant.gender);
 	  });
       }
-
-      
       window.onload = function() {
 	  setDefaultTime();
 	  addPredefinedParticipants(); // Vordefinierte Teilnehmer hinzufügen
       };
-      
       function downloadCSV() {
-	  let csvContent = "data:text/csv;charset=utf-8,Name,Runden,Zeit,Geschlecht,Distanz,Note,Notenpunkte\n";
+	  let csvContent = "data:text/csv;charset=utf-8,Name,Runden,Zeit,Geschlecht,DSA\n";
 	  roundTimes.forEach(row => {
-              const rowContent = `${row.name},${row.rounds},${row.time},${row.gender},${row.distance},${row.grade},${row.points}`;
-              csvContent += rowContent + "\n";
+	      let ergebnis = ""; // Standard-Ergebniswert
+	      
+	      // Überprüfen, ob genau 8 Runden absolviert wurden
+	      if (row.rounds === 8) {
+		  const [minutes, seconds] = row.time.split(":").map(Number);
+		  const totalSeconds = minutes * 60 + seconds;
+		  
+		  if (row.gender === '♀') {
+		      if (totalSeconds < 205) {
+			  ergebnis = "Gold"; // Unter 3:25
+		      } else if (totalSeconds < 245) {
+			  ergebnis = "Silber"; // Unter 4:05
+		      } else if (totalSeconds < 290) {
+			  ergebnis = "Bronze"; // Unter 4:50
+		      }
+		  } else if (row.gender === '♂') {
+		      if (totalSeconds < 165) {
+			  ergebnis = "Gold"; // Unter 2:45
+		      } else if (totalSeconds < 215) {
+			  ergebnis = "Silber"; // Unter 3:35
+		      } else if (totalSeconds < 245) {
+			  ergebnis = "Bronze"; // Unter 4:05
+		      }
+		  }
+	      }
+	      // Füge das Ergebnis in die CSV-Zeile ein
+	      const rowContent = `${row.name},${row.rounds},${row.time},${row.gender},${ergebnis}`;
+	      csvContent += rowContent + "\n";
 	  });
-	  const currentDate = new Date(); // Erstelle ein neues Datum
-	  const formattedDate = currentDate.toISOString().split('T')[0]; // Formatiere das Datum (YYYY-MM-DD)
+	  const currentDate = new Date();
+	  const formattedDate = currentDate.toISOString().split('T')[0];
+	  const formattedTime = currentDate.toTimeString().split(' ')[0].replace(/:/g, '-');
+	  const formattedDateTime = `${formattedDate}_${formattedTime}`;
 	  const encodedUri = encodeURI(csvContent);
 	  const link = document.createElement("a");
 	  link.setAttribute("href", encodedUri);
-	  link.setAttribute("download", `auswertung-lauf-${formattedDate}.csv`);
-	  document.body.appendChild(link); // Benötigt, um Firefox zu unterstützen
-	  link.click(); // Auslösen des Downloads
-	  document.body.removeChild(link); // Entfernen des Links
+	  link.setAttribute("download", `auswertung-lauf-${formattedDateTime}.csv`);
+	  document.body.appendChild(link);
+	  link.click();
+	  document.body.removeChild(link);
       }
-      
     </script>
   </body>
 </html>
