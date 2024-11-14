@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=0.5">
+    <title>3000m</title>
+    <style>
+      :root {
+	  --re: #ff3400; 
+	  --reb: #ff340050;
+	  --ye: #ffff00; 
+	  --yeb: #ffff0050; 
+	  --gr: #11ff11;      
+	  --grb: #11ff1150;      
+	  --bl: #3030ff;      
+	  --blb: #3030ff50;      
+	  --wh: #ffffff;      
+	  --button: #99dddd;
+	  --mann: #007BFF;
+	  --frau: #ff7BFF;
+	  --hover-color: #666666;
+	  --hintergrund: #f0f0f0;
+	  --font-size-small: 25px;
+	  --font-size-medium: 35px;
+	  --font-size-large: 45px;
+      }
+      
+      body {
+	  background-color: var(--hintergrund);
+      }
+
+      #participants {
+	  display: flex;
+	  flex-direction: column; /* Jeder Teilnehmer wird in einer neuen Zeile angezeigt */
+	  width: 100%; /* Nimmt die gesamte Breite ein */
+      }
+
+      .person {
+	  display: flex;
+	  align-items: center;
+	  width: 100%; /* Nimmt die gesamte Breite ein */
+	  justify-content: space-between;
+	  border: 1px solid var(--hover-color); 
+      }
+      
+      .re-participant {
+	  background-color: var(--reb);
+      }
+      
+      .ye-participant {
+	  background-color: var(--yeb);
+      }
+      
+      .gr-participant {
+	  background-color: var(--grb);
+      }
+      
+      .bl-participant {
+	  background-color: var(--blb);
+      }
+
+      .nameInput {
+	  flex-grow: 1;
+	  min-width: 210px;
+	  padding: 5px;
+	  font-size: var(--font-size-medium);
+      }
+
+      .roundsInput {
+	  width: 96px;
+	  padding: 5px; 
+	  font-size: var(--font-size-medium);
+      }
+
+      .button-male {
+	  color: var(--wh);
+	  background-color: var(--mann);
+      }
+
+      .button-female {
+	  background-color: var(--frau);
+      }
+
+      .button-small {
+	  font-size: var(--font-size-small);
+          margin: 0.1% 0.5%;
+          width: 60px;
+      }
+
+      .button-big {
+	  font-size: var(--font-size-large);
+          margin: 0.4% 2%; //Abstand ober-/unterhalb Button und links/rechts von button
+          width: 121px;
+      }
+
+      button {
+	  background-color: var(--button);
+	  font-size: var(--font-size-large);
+	  border-radius: 10px;
+	  padding: 10px;
+	  margin: 10px;
+	  cursor: pointer;
+	  transition: background-color 0.3s, transform 0.2s;
+      }
+
+      button:hover {
+	  background-color: var(--hover-color);
+	  transform: translateY(-2px);
+      }
+
+      .timer-container {
+	  text-align: center;
+      }
+
+      .countdown {
+	  font-size: var(--font-size-large);
+	  margin: 20px;
+      }
+
+      svg {
+	  width: 50px;
+	  height: 50px;
+      }
+
+    </style>
+  </head>
+  <body>
+
+    <div class="timer-container">
+      <div class="countdown" id="countdownDisplay" style="font-size: 100px;">00:00</div>
+      <div>
+        <button id="startButton" onclick="startTimer()">
+          <svg id="startIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M8 5v14l11-7z"/>
+          </svg>
+        </button>
+        <button id="reset-button" onclick="resetTimer()">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M12 5V1L7 6l5 5V7c3.3 0 6 2.7 6 6s-2.7 6-6 6-6-2.7-6-6H4c0 4.4 3.6 8 8 8s8-3.6 8-8-3.6-8-8-8z"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+    <div style="font-size: var(--font-size-medium)"> Ausdauerlauf: 3000m</div>
+    <div>
+      <button style="background-color: var(--re); width: 10%; margin: 80px 0;" onclick="addParticipant('red')">+</button>
+      <button style="background-color: var(--ye); width: 10%; margin: 80px 0;" onclick="addParticipant('yellow')">+</button>
+      <button style="background-color: var(--gr); width: 10%; margin: 80px 0;" onclick="addParticipant('green')">+</button>
+      <button style="background-color: var(--bl); width: 10%; margin: 80px 0;" onclick="addParticipant('blue')">+</button>
+    </div>
+
+    <div id="participants"></div>
+
+    <button style="margin-top: 80px;" onclick="downloadCSV()">Download</button>
+
+    <script>
+      let participantCounts = { red: 0, yellow: 0, green: 0, blue: 0 };
+      let timer;
+      let timeElapsed = 0; // Verstrichene Zeit in Sekunden, beginnt bei 0
+      let timerRunning = false;
+      let roundTimes = [];
+
+      function setDefaultTime() {
+	  timeElapsed = 0; // Setze die verstrichene Zeit auf 0 Sekunden
+	  updateTimerDisplay(); // Aktualisiere die Timer-Anzeige
+      }
+      function startTimer() {
+	  if (!timerRunning) {
+              timer = setInterval(() => {
+		  timeElapsed++; // Erhöhe die verstrichene Zeit um 1 Sekunde
+		  updateTimerDisplay(); // Aktualisiere die Anzeige der verstrichenen Zeit
+              }, 1000); // Intervall von 1000 Millisekunden (1 Sekunde)
+              timerRunning = true;
+              document.getElementById('startIcon').setAttribute("d", "M6 19h4V5H6zm8-14v14h4V5z"); // Ändere das Symbol zu einem Pausesymbol
+              document.getElementById('startButton').onclick = pauseTimer; // Setze die Schaltfläche auf die Pausefunktion
+	  }
+      }
+      function updateTimerDisplay() {
+	  const minutes = Math.floor(timeElapsed / 60); // Berechne die Minuten
+	  const seconds = timeElapsed % 60; // Berechne die Sekunden
+	  document.getElementById('countdownDisplay').textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`; // Zeige die verstrichene Zeit an
+      }
+      function pauseTimer() {
+	  clearInterval(timer); // Stoppe das Intervall des Timers
+	  timerRunning = false; // Setze den Status des Timers auf nicht laufend
+	  document.getElementById('startIcon').setAttribute("d", "M8 5v14l11-7z"); // Ändere das Symbol zurück zum Startsymbol
+	  document.getElementById('startButton').onclick = startTimer; // Setze die Schaltfläche wieder auf die Startfunktion
+      }
+      function resetTimer() {
+	  clearInterval(timer); // Stoppe das Intervall des Timers
+	  timerRunning = false;
+	  timeElapsed = 0; // Setze die verstrichene Zeit auf 0 Sekunden
+	  updateTimerDisplay(); // Aktualisiere die Anzeige des Timers
+	  document.getElementById('startIcon').setAttribute("d", "M8 5v14l11-7z"); // Ändere das Symbol zurück zum Startsymbol
+	  document.getElementById('startButton').onclick = startTimer; // Setze die Schaltfläche wieder auf die Startfunktion
+      }
+      window.onload = setDefaultTime; // Setze die Standardzeit auf 0, wenn das Fenster geladen wird
+      function generateUUID() {
+	  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+              const r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
+              return v.toString(16);
+	  });}
+      function addParticipant(color, name = null, gender = '♂') {
+	  const participantsDiv = document.getElementById('participants'); // Hole das Teilnehmer-Div
+	  const uuid = generateUUID(); // Generiere eine neue UUID
+	  const participantName = name || `${participantCounts[color] + 1} -${color.charAt(0)}`; // z.B. "1 R" oder "1 G"
+	  participantCounts[color]++; // Erhöhe die Anzahl der Teilnehmer für diese Farbe
+	  const personDiv = document.createElement('div'); // Erstelle ein neues Div für den Teilnehmer
+	  personDiv.classList.add('person', color); // Füge Klassen für Styling hinzu
+	  if (color === 'red') {
+              personDiv.classList.add('re-participant');
+	  } else if (color === 'yellow') {
+              personDiv.classList.add('ye-participant');
+	  } else if (color === 'green') {
+              personDiv.classList.add('gr-participant');
+	  } else if (color === 'blue') {
+              personDiv.classList.add('bl-participant');
+	  }
+	  personDiv.setAttribute('data-uuid', uuid); // Setze die UUID als Datenattribut
+	  personDiv.innerHTML = `
+          <button class="button-big button-male" style="background-color: red; color: white;" onclick="deletePerson('${uuid}')">x</button>
+          <input type="text" class="nameInput" placeholder="Name" value="${participantName}" />
+          <button class="gender-button button-big ${gender === '♂' ? 'button-male' : 'button-female'}" onclick="switchGender('${uuid}')">${gender}</button>
+          <input type="number" class="roundsInput" value="0.0" step="1" readonly />
+          <button class="button-small ${gender === '♂' ? 'button-male' : 'button-female'}" onclick="adjustRounds('${uuid}', -1)">-1</button>
+          <button class="button-big ${gender === '♂' ? 'button-male' : 'button-female'}" onclick="adjustRounds('${uuid}', 1)">+1</button>
+        `;
+	  participantsDiv.appendChild(personDiv); // Füge das neue Teilnehmer-Div zum Haupt-Div hinzu
+      }
+      function deletePerson(uuid) {
+	  const participantsDiv = document.getElementById('participants'); // Hole das Teilnehmer-Div
+	  const participants = participantsDiv.getElementsByClassName('person'); // Hole alle Teilnehmer-Elemente
+	  // Suche nach dem Teilnehmer mit der angegebenen UUID
+	  for (let i = 0; i < participants.length; i++) {
+	      if (participants[i].getAttribute('data-uuid') === uuid) {
+		  participantsDiv.removeChild(participants[i]); // Entferne den Teilnehmer
+		  break; // Beende die Schleife, da der Teilnehmer gefunden wurde
+	      }}}
+      function adjustRounds(uuid, adjustment) {
+	  const participantDiv = document.querySelector(`#participants > div[data-uuid="${uuid}"]`);
+	  const roundsInput = participantDiv.querySelector('.roundsInput');
+	  let currentRounds = parseFloat(roundsInput.value);
+	  currentRounds = Math.max(0, currentRounds + adjustment); // Passe die Rundenzahl an
+	  roundsInput.value = currentRounds.toFixed(1); // Setze die neue Rundenzahl
+	  const nameInput = participantDiv.querySelector('.nameInput').value; // Hole den Namen des Teilnehmers
+	  const genderDiv = participantDiv.querySelector('.gender-button').textContent; // Hole das Geschlecht
+	  const currentTime = document.getElementById('countdownDisplay').textContent; // Hole die aktuelle Zeit des Timers
+	  roundTimes.push({
+              name: nameInput,
+              rounds: currentRounds,
+              time: currentTime,
+              gender: genderDiv,
+	  });
+      }
+      function switchGender(uuid) {
+	  const genderDiv = document.querySelector(`#participants > div[data-uuid="${uuid}"] .gender-button`);
+	  const roundButtons = document.querySelectorAll(`#participants > div[data-uuid="${uuid}"] button`); // Hole die Runden-Anpassungs-Buttons des Teilnehmers
+	  if (genderDiv.textContent === '♂') {
+              genderDiv.textContent = '♀';
+              roundButtons.forEach(button => {
+		  button.classList.remove('button-male');
+		  button.classList.add('button-female');
+              });
+	  } else {
+              genderDiv.textContent = '♂';
+              roundButtons.forEach(button => {
+		  button.classList.remove('button-female');
+		  button.classList.add('button-male');
+              });
+	  }
+      }
+      function addPredefinedParticipants() {
+	  const predefinedParticipants = [
+              { name: "1 -r", color: "red", gender: "♂" },
+              { name: "1 -g", color: "green", gender: "♀" }
+	  ];
+	  predefinedParticipants.forEach(participant => {
+              addParticipant(participant.color, participant.name, participant.gender);
+	  });
+      }
+      window.onload = function() {
+	  setDefaultTime();
+	  addPredefinedParticipants(); // Vordefinierte Teilnehmer hinzufügen
+      };
+      function downloadCSV() {
+	  let csvContent = "data:text/csv;charset=utf-8,Name,Runden,Zeit,Geschlecht,DSA\n";
+	  roundTimes.forEach(row => {
+	      let ergebnis = ""; // Standard-Ergebniswert
+	      
+	      // Überprüfen, ob genau 8 Runden absolviert wurden
+	      if (row.rounds === 30) {
+		  const [minutes, seconds] = row.time.split(":").map(Number);
+		  const totalSeconds = minutes * 60 + seconds;
+		  
+		  if (row.gender === '♀') {
+		      if (totalSeconds <= 1010) {
+			  ergebnis = "Gold"; // Unter 16:50
+		      } else if (totalSeconds <= 1130) {
+			  ergebnis = "Silber"; // Unter 18:50
+		      } else if (totalSeconds <= 1250) {
+			  ergebnis = "Bronze"; // Unter 20:50
+		      }
+		  } else if (row.gender === '♂') {
+		      if (totalSeconds <= 830) {
+			  ergebnis = "Gold"; // Unter 13:50
+		      } else if (totalSeconds <= 950) {
+			  ergebnis = "Silber"; // Unter 15:50
+		      } else if (totalSeconds <= 1070) {
+			  ergebnis = "Bronze"; // Unter 17:50
+		      }
+		  }
+	      }
+	      // Füge das Ergebnis in die CSV-Zeile ein
+	      const rowContent = `${row.name},${row.rounds},${row.time},${row.gender},${ergebnis}`;
+	      csvContent += rowContent + "\n";
+	  });
+	  const currentDate = new Date();
+	  const formattedDate = currentDate.toISOString().split('T')[0];
+	  const formattedTime = currentDate.toTimeString().split(' ')[0].replace(/:/g, '-');
+	  const formattedDateTime = `${formattedDate}_${formattedTime}`;
+	  const encodedUri = encodeURI(csvContent);
+	  const link = document.createElement("a");
+	  link.setAttribute("href", encodedUri);
+	  link.setAttribute("download", `auswertung-3000m-lauf-${formattedDateTime}.csv`);
+	  document.body.appendChild(link);
+	  link.click();
+	  document.body.removeChild(link);
+      }
+    </script>
+  </body>
+</html>
