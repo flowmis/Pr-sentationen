@@ -293,19 +293,19 @@
 		  const totalSeconds = minutes * 60 + seconds;
 		  
 		  if (row.gender === '♀') {
-		      if (totalSeconds < 205) {
+		      if (totalSeconds <= 205) {
 			  ergebnis = "Gold"; // Unter 3:25
-		      } else if (totalSeconds < 245) {
+		      } else if (totalSeconds <= 245) {
 			  ergebnis = "Silber"; // Unter 4:05
-		      } else if (totalSeconds < 290) {
+		      } else if (totalSeconds <= 290) {
 			  ergebnis = "Bronze"; // Unter 4:50
 		      }
 		  } else if (row.gender === '♂') {
-		      if (totalSeconds < 165) {
+		      if (totalSeconds <= 165) {
 			  ergebnis = "Gold"; // Unter 2:45
-		      } else if (totalSeconds < 215) {
+		      } else if (totalSeconds <= 215) {
 			  ergebnis = "Silber"; // Unter 3:35
-		      } else if (totalSeconds < 245) {
+		      } else if (totalSeconds <= 245) {
 			  ergebnis = "Bronze"; // Unter 4:05
 		      }
 		  }
