@@ -322,6 +322,8 @@
 	      const rowContent = `${row.name},${row.rounds},${row.time},${row.gender},${ergebnis}`;
 	      csvContent += rowContent + "\n";
 	  });
+      	  const remarks = document.getElementById('remarks').value.replace(/\n/g, ' '); // Anmerkungen ohne Zeilenumbrüche
+	  csvContent += `\nAnmerkungen:,${remarks}`; // Füge Anmerkungen in die CSV ein
 	  const currentDate = new Date();
 	  const formattedDate = currentDate.toISOString().split('T')[0];
 	  const formattedTime = currentDate.toTimeString().split(' ')[0].replace(/:/g, '-');
