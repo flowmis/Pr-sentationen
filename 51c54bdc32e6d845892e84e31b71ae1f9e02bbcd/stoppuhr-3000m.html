@@ -153,6 +153,11 @@
 
     <div id="participants"></div>
 
+    <div style="margin-top: 20px;">
+      <label for="remarks" style="font-size: var(--font-size-medium);">Anmerkungen:</label>
+      <textarea id="remarks" style="width: 100%; height: 100px; font-size: var(--font-size-medium);"></textarea>
+    </div>
+
     <button style="margin-top: 80px;" onclick="downloadCSV()">Download</button>
 
     <script>
@@ -242,7 +247,7 @@
 	  const participantDiv = document.querySelector(`#participants > div[data-uuid="${uuid}"]`);
 	  const roundsInput = participantDiv.querySelector('.roundsInput');
 	  let currentRounds = parseFloat(roundsInput.value);
-	  currentRounds = Math.max(0, currentRounds + adjustment); // Passe die Rundenzahl an
+  	  currentRounds = Math.min(8, Math.max(0, currentRounds + adjustment)); // Beschränke auf [0, 8]
 	  roundsInput.value = currentRounds.toFixed(1); // Setze die neue Rundenzahl
 	  const nameInput = participantDiv.querySelector('.nameInput').value; // Hole den Namen des Teilnehmers
 	  const genderDiv = participantDiv.querySelector('.gender-button').textContent; // Hole das Geschlecht
