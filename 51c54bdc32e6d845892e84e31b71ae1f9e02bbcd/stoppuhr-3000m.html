@@ -318,7 +318,8 @@
 		  }
 	      }
 	      // Füge das Ergebnis in die CSV-Zeile ein
-	      const rowContent = `${row.name},${row.rounds},${row.time},${row.gender},${ergebnis}`;
+	      const genderAbbreviation = row.gender === '♀' ? 'w' : 'm';
+	      const rowContent = `${row.name},${row.rounds},${row.time},${genderAbbreviation},${ergebnis}`;
 	      csvContent += rowContent + "\n";
 	  });
 	  const remarks = document.getElementById('remarks').value.replace(/\n/g, ' '); // Anmerkungen ohne Zeilenumbrüche
