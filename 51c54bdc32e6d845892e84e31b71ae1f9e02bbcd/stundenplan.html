@@ -1,0 +1,277 @@
+<!-- Abendschule 5 Stunden an zwei Tagen mit 2 Lehrkräften. Eine Lehrkraft will nicht jede Woche herfahren. Die andere Lehrkraft will nicht zu viele Stunden am Stück arbeiten. Aktuell wird im Wechsel 2 Stunden und 3 Stunden gearbeitet pro Tag gearbeitet. Ich will eine möglichst faire Entscheidung treffen und hierbei spielen viele Faktoren eine Rolle. -->
+
+<!-- Funktionen der Webseite -->
+<!-- - Eingabe der Rahmenbedingungen: Lehrkräfte, Präferenzen der Lehrkräfte in Bezug auf relevante Faktoren steuerbar über Schieberegler (z. B. "Unterrichtsstunden am Stück", "Pausenbedarf", "Anreisezeit"), Tage an denen der Unterricht stattfinden soll, Anzahl der Stunden, Eingabefeld für sonstige Wünsche auch von Seiten der Schulleitung das berücksichtigt werden soll -->
+<!-- - Lehrer sollen mit Namen hinzugefügt werden können. -->
+<!-- - Ein Button, um neue Gründe/Faktoren hinzuzufügen bei den Lehrern mit Schiebereglern zum einstellen. -->
+<!-- - Name der Unterrichtsstunde soll eingegeben werden können -->
+<!-- - Ein API soll alle Infos gebündelt an ChatGPT schicken -->
+<!-- - Visualisierung des Stundenplans als Tabelle oder Kalender. -->
+<!-- - Möglichkeit, Änderungen vorzunehmen und erneut berechnen zu lassen. -->
+
+<!-- Vorteile dieser Lösung: -->
+<!-- - Flexibilität: Lehrkräfte können individuell eingetragen werden, inklusive ihrer Präferenzen. -->
+<!-- - Erweiterbarkeit: Neue Faktoren können hinzugefügt und über die API verarbeitet werden. -->
+<!-- - Optimierung: Über den Wechsel der API kann man unterschiedliche Modelle ansteuern und von sich verbessernde Sprachmodellen profitieren -->
+<!-- - Nutzerfreundlichkeit: Intuitive Bedienung über die Weboberfläche. -->
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stundenplan Optimierer</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <style>
+        .teacher {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        .factor {
+            margin-top: 10px;
+        }
+        .lesson {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            background-color: #f1f1f1;
+        }
+
+        /* Schieberegler anpassen */
+        .form-range {
+            width: 100%;
+            height: 20px;
+            background: #ddd;
+            border-radius: 10px;
+            box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .form-range:focus {
+            outline: none;
+        }
+
+        .form-range-label {
+            margin-top: 5px;
+            font-weight: bold;
+        }
+
+        .form-range-container {
+            margin-bottom: 15px;
+        }
+
+        .teacher, .lesson, .factor {
+            margin-bottom: 20px;
+        }
+
+        .range-labels {
+            display: flex;
+            justify-content: space-between;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <h1>Stundenplan Optimierer</h1>
+        <form id="preferencesForm">
+            <!-- Lehrkräften eingeben -->
+            <h3>Lehrkräfte</h3>
+            <div id="teacherInputs">
+                <div class="teacher">
+                    <label>Lehrername:</label>
+                    <input type="text" class="form-control mb-2" name="teacherName[]" placeholder="Name des Lehrers" required>
+                    
+                    <div class="form-range-container">
+                        <label>Präferenz für Stunden am Stück:</label>
+                        <input type="range" min="1" max="10" value="5" name="continuousHours[]" class="form-range" id="continuousHours">
+                        <div class="range-labels">
+                            <span>Niedrig</span>
+                            <span>Hoch</span>
+                        </div>
+                    </div>
+
+                    <div class="form-range-container">
+                        <label>Präferenz für Pausen:</label>
+                        <input type="range" min="1" max="10" value="5" name="breakPreference[]" class="form-range" id="breakPreference">
+                        <div class="range-labels">
+                            <span>Niedrig</span>
+                            <span>Hoch</span>
+                        </div>
+                    </div>
+
+                    <div class="additional-factors">
+                        <div class="factor">
+                            <label>Anreisezeit:</label>
+                            <input type="range" min="1" max="10" value="5" name="travelTime[]" class="form-range" id="travelTime">
+                            <div class="range-labels">
+                                <span>Niedrig</span>
+                                <span>Hoch</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="button" class="btn btn-link addFactor">Faktor hinzufügen</button>
+                </div>
+            </div>
+            <button type="button" id="addTeacher" class="btn btn-secondary mt-3">Lehrer hinzufügen</button>
+
+            <!-- Unterrichtsstunden -->
+            <h3 class="mt-4">Unterrichtsstunden</h3>
+            <div id="lessonInputs">
+                <div class="lesson">
+                    <label>Name der Unterrichtsstunde:</label>
+                    <input type="text" name="lessonNames[]" class="form-control mb-2" placeholder="Unterrichtsstunde (z. B. Mathematik)">
+                    
+                    <label>Anzahl der Stunden:</label>
+                    <input type="number" name="lessonHours[]" min="1" max="10" class="form-control mb-2" placeholder="Anzahl der Stunden">
+
+                    <label>Wochentage:</label>
+                    <div>
+                        <label><input type="checkbox" name="lessonDays[]" value="Montag"> Montag</label>
+                        <label><input type="checkbox" name="lessonDays[]" value="Dienstag"> Dienstag</label>
+                        <label><input type="checkbox" name="lessonDays[]" value="Mittwoch"> Mittwoch</label>
+                        <label><input type="checkbox" name="lessonDays[]" value="Donnerstag"> Donnerstag</label>
+                        <label><input type="checkbox" name="lessonDays[]" value="Freitag"> Freitag</label>
+                    </div>
+                </div>
+            </div>
+            <button type="button" id="addLesson" class="btn btn-secondary mt-3">Unterrichtsstunde hinzufügen</button>
+
+            <!-- Weitere Wünsche -->
+            <h3 class="mt-4">Weitere Wünsche</h3>
+            <textarea class="form-control" name="additionalRequests" placeholder="Weitere Wünsche für die KI (z.B. Pausen, Sonderregeln, etc.)"></textarea>
+
+            <!-- Optimierungsbutton -->
+            <button type="button" id="submitForm" class="btn btn-primary mt-4">Stundenplan optimieren</button>
+        </form>
+
+        <!-- Ergebnis -->
+        <div id="result" class="mt-4">
+            <h2>Stundenplan</h2>
+            <div class="table-container">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Tag</th>
+                            <th>Lehrer</th>
+                            <th>Unterrichtsstunde</th>
+                            <th>Zeit</th>
+                        </tr>
+                    </thead>
+                    <tbody id="scheduleTable">
+                        <!-- Dynamische Inhalte -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Funktion zum Hinzufügen von Lehrkräften
+        document.getElementById('addTeacher').addEventListener('click', () => {
+            const teacherInputs = document.createElement('div');
+            teacherInputs.className = 'teacher';
+            teacherInputs.innerHTML = `
+                <label>Lehrername:</label>
+                <input type="text" class="form-control mb-2" name="teacherName[]" placeholder="Name des Lehrers" required>
+                <div class="form-range-container">
+                    <label>Präferenz für Stunden am Stück:</label>
+                    <input type="range" min="1" max="10" value="5" name="continuousHours[]" class="form-range" id="continuousHours">
+                    <div class="range-labels">
+                        <span>Niedrig</span>
+                        <span>Hoch</span>
+                    </div>
+                </div>
+                <div class="form-range-container">
+                    <label>Präferenz für Pausen:</label>
+                    <input type="range" min="1" max="10" value="5" name="breakPreference[]" class="form-range" id="breakPreference">
+                    <div class="range-labels">
+                        <span>Niedrig</span>
+                        <span>Hoch</span>
+                    </div>
+                </div>
+                <div class="additional-factors">
+                    <div class="factor">
+                        <label>Anreisezeit:</label>
+                        <input type="range" min="1" max="10" value="5" name="travelTime[]" class="form-range" id="travelTime">
+                        <div class="range-labels">
+                            <span>Niedrig</span>
+                            <span>Hoch</span>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-link addFactor">Faktor hinzufügen</button>
+            `;
+            document.getElementById('teacherInputs').appendChild(teacherInputs);
+        });
+
+        // Funktion zum Hinzufügen von Faktoren
+        document.querySelectorAll('.addFactor').forEach(button => {
+            button.addEventListener('click', () => {
+                const factor = document.createElement('div');
+                factor.className = 'factor';
+                factor.innerHTML = `
+                    <input type="text" class="form-control mb-2" name="newFactorName[]" placeholder="Faktorname" required>
+                    <div class="form-range-container">
+                        <input type="range" min="1" max="10" value="5" name="newFactorValue[]" class="form-range">
+                        <div class="range-labels">
+                            <span>Niedrig</span>
+                            <span>Hoch</span>
+                        </div>
+                    </div>
+                `;
+                button.parentElement.appendChild(factor);
+            });
+        });
+
+        // Funktion zum Hinzufügen von Unterrichtsstunden
+        document.getElementById('addLesson').addEventListener('click', () => {
+            const lessonInputs = document.createElement('div');
+            lessonInputs.className = 'lesson';
+            lessonInputs.innerHTML = `
+                <label>Name der Unterrichtsstunde:</label>
+                <input type="text" name="lessonNames[]" class="form-control mb-2" placeholder="Unterrichtsstunde" required>
+                <label>Anzahl der Stunden:</label>
+                <input type="number" name="lessonHours[]" min="1" max="10" class="form-control mb-2" placeholder="Anzahl der Stunden" required>
+                <label>Wochentage:</label>
+                <div>
+                    <label><input type="checkbox" name="lessonDays[]" value="Montag"> Montag</label>
+                    <label><input type="checkbox" name="lessonDays[]" value="Dienstag"> Dienstag</label>
+                    <label><input type="checkbox" name="lessonDays[]" value="Mittwoch"> Mittwoch</label>
+                    <label><input type="checkbox" name="lessonDays[]" value="Donnerstag"> Donnerstag</label>
+                    <label><input type="checkbox" name="lessonDays[]" value="Freitag"> Freitag</label>
+                </div>
+            `;
+            document.getElementById('lessonInputs').appendChild(lessonInputs);
+        });
+
+        // Funktion zum Optimieren und Anzeigen eines Beispiel-Stundenplans
+        document.getElementById('submitForm').addEventListener('click', () => {
+            // Beispiel-Stundenplan anzeigen
+            const scheduleTable = document.getElementById('scheduleTable');
+            scheduleTable.innerHTML = `
+                <tr>
+                    <td>Montag</td>
+                    <td>Lehrer A</td>
+                    <td>Mathematik</td>
+                    <td>08:00 - 10:00</td>
+                </tr>
+                <tr>
+                    <td>Dienstag</td>
+                    <td>Lehrer B</td>
+                    <td>Deutsch</td>
+                    <td>10:30 - 12:30</td>
+                </tr>
+                <tr>
+                    <td>Mittwoch</td>
+                    <td>Lehrer A</td>
+                    <td>Physik</td>
+                    <td>14:00 - 16:00</td>
+                </tr>
+            `;
+        });
+    </script>
+</body>
+</html>
