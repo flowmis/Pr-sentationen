@@ -19,6 +19,8 @@
             text-align: center;
             color: #333;
             font-weight: 500;
+            margin-top: 10px;
+            margin-bottom: 10px;
         }
         .container {
             display: flex;
@@ -41,17 +43,25 @@
             margin: 0;
             padding: 10px;
             font-size: 1.1em;
+            text-align: center;
+        }
+        /* Tabellen werden bei kleiner Breite scrollbar */
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
         }
         table {
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 0px;
             background-color: #fff;
+            font-size: 0.95em;
         }
         th, td {
             border-bottom: 1px solid #ddd;
             padding: 8px;
             text-align: center;
+            white-space: nowrap;
         }
         th {
             background-color: #f7f7f7;
@@ -64,9 +74,25 @@
             color: #555;
         }
         @media (max-width: 768px) {
-            .container {
-                flex-direction: column;
-                align-items: center;
+            body {
+                margin: 10px;
+            }
+            table {
+                font-size: 0.9em;
+            }
+            .search-input {
+                width: 150px;
+            }
+            .score-input, input[type="text"] {
+                font-size: 0.9em;
+            }
+        }
+        @media (max-width: 600px) {
+            table {
+                font-size: 0.85em;
+            }
+            h1, h2, h3 {
+                font-size: 1em;
             }
         }
         .past {
@@ -92,10 +118,11 @@
         }
         .score-input {
             width: 50px;
-            padding: 5px;
+            padding: 7px;
             margin: 0 5px;
             border: 1px solid #ccc;
             border-radius: 4px;
+            font-size: 0.95em;
         }
         .score-input.invalid {
             border: 2px solid red;
@@ -105,9 +132,10 @@
             text-align: left;
             border: none;
             background: #fafafa;
-            padding: 4px;
+            padding: 6px;
             border-radius: 4px;
             transition: background 0.2s;
+            font-size: 0.95em;
         }
         .team-name:hover, input[type="text"]:hover {
             background: #f0f0f0;
@@ -125,7 +153,7 @@
             background: #4a90e2;
             color: #fff;
             border: none;
-            padding: 10px 20px;
+            padding: 12px 25px;
             font-size: 1em;
             border-radius: 4px;
             cursor: pointer;
@@ -146,11 +174,13 @@
             width: 100%;
             border-collapse: collapse;
             background-color: #fff;
+            overflow-x: auto;
         }
         .result-table th, .result-table td {
             border-bottom: 1px solid #ddd;
             padding: 8px;
             text-align: center;
+            white-space: nowrap;
         }
         .result-table th {
             background-color: #f7f7f7;
@@ -208,20 +238,22 @@
     <div class="container" id="platzierungsspiele-container">
       <div class="field">
         <h3>Feld 1</h3>
-        <table>
-          <tr>
-            <th>Zeit</th>
-            <th>Spiel</th>
-          </tr>
-          <tr data-time="10:50"><td>10:50</td><td><input type="text" placeholder="1. Gruppe A" data-user-override="false" /> vs <input type="text" placeholder="1. Gruppe B" data-user-override="false"/></td></tr>
-          <tr data-time="10:50"><td>11:00</td><td><input type="text" placeholder="1. Gruppe A" data-user-override="false"/> vs <input type="text" placeholder="1. Gruppe C" data-user-override="false"/></td></tr>
-          <tr data-time="10:50"><td>11:10</td><td><input type="text" placeholder="1. Gruppe C" data-user-override="false"/> vs <input type="text" placeholder="1. Gruppe B" data-user-override="false"/></td></tr>
-          <tr data-time="10:50"><td>11:20</td><td><input type="text" placeholder="2. Gruppe A" data-user-override="false"/> vs <input type="text" placeholder="2. Gruppe B" data-user-override="false"/></td></tr>
-          <tr data-time="10:50"><td>11:30</td><td><input type="text" placeholder="2. Gruppe A" data-user-override="false"/> vs <input type="text" placeholder="2. Gruppe C" data-user-override="false"/></td></tr>
-          <tr data-time="10:50"><td>11:40</td><td><input type="text" placeholder="2. Gruppe C" data-user-override="false"/> vs <input type="text" placeholder="2. Gruppe B" data-user-override="false"/></td></tr>
-        </table>
+        <div class="table-responsive">
+          <table>
+            <tr>
+              <th>Zeit</th>
+              <th>Spiel</th>
+            </tr>
+            <tr data-time="10:50"><td>10:50</td><td><input type="text" placeholder="1. Gruppe A" data-user-override="false" /> vs <input type="text" placeholder="1. Gruppe B" data-user-override="false"/></td></tr>
+	    <tr data-time="10:50"><td>11:00</td><td><input type="text" placeholder="1. Gruppe A" data-user-override="false"/> vs <input type="text" placeholder="1. Gruppe C" data-user-override="false"/></td></tr>
+            <tr data-time="10:50"><td>11:10</td><td><input type="text" placeholder="1. Gruppe C" data-user-override="false"/> vs <input type="text" placeholder="1. Gruppe B" data-user-override="false"/></td></tr>
+            <tr data-time="10:50"><td>11:20</td><td><input type="text" placeholder="2. Gruppe A" data-user-override="false"/> vs <input type="text" placeholder="2. Gruppe B" data-user-override="false"/></td></tr>
+            <tr data-time="10:50"><td>11:30</td><td><input type="text" placeholder="2. Gruppe A" data-user-override="false"/> vs <input type="text" placeholder="2. Gruppe C" data-user-override="false"/></td></tr>
+            <tr data-time="10:50"><td>11:40</td><td><input type="text" placeholder="2. Gruppe C" data-user-override="false"/> vs <input type="text" placeholder="2. Gruppe B" data-user-override="false"/></td></tr>
+          </table>
+        </div>
       </div>
-      
+    
       <div class="field">
         <h3>Feld 2</h3>
         <table>
@@ -254,6 +286,8 @@
         </table>
       </div>
     </div>
+    
+    </div>
     <div class="button-container">
       <button id="platzierungsspiele-auswertung-button">Auswertung Platzierungsspiele</button>
     </div>
@@ -277,7 +311,7 @@
     </div>
 
     <script>
-      const team = {
+  const team = {
         a: "Pritsch Perfect",
         b: "Gladiators",
         c: "Juventus Urin",
