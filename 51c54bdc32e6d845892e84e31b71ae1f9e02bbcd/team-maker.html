@@ -188,7 +188,6 @@
     font-size: 0.9em;
     color: #555;
   }
-
 </style>
 </head>
 <body>
@@ -218,16 +217,16 @@
       </div>
       <button id="addPlayerBtn">Hinzufügen</button>
     </div>
-    <p class="hint">Leistungsklasse: 1 = werdender Volleyballer, 2 = erfahrener Volleyballer, 3 = Führungsspieler</p>
+    <p class="hint">Leistungsklasse: 1 = schwach, 2 = mittel, 3 = stark</p>
   </div>
 
   <div class="section">
     <h2>CSV Import</h2>
     <p>CSV-Format: <code>Name,Leistungsklasse,Geschlecht,Positionen(optional)</code><br>
-    Beispiel:<br>Max,3,m,AA;MB<br>Anna,1,w<br>Lukas,2,m,D;Z</p>
+    Beispiel:<br>Max,3,m,AA,MB<br>Anna,1,w<br>Lukas,2,m,D,Z</p>
     <input type="file" id="uploadCsv" accept=".csv" />
     <button id="importCsvBtn">Importieren</button>
-    <p class="hint">Ungültige Klassen oder Geschlechter werden auf Standardwerte gesetzt (2 = mittel, m = männlich). Positionen per Semikolon trennen. Positionsangabe ist optional.</p>
+    <p class="hint">Ungültige Klassen oder Geschlechter auf Standardwerte (2=m, m=männlich). Positionen per Komma trennen. Keine Angabe = AA,MB,Z.</p>
   </div>
 
   <div class="section">
@@ -243,13 +242,13 @@
     <input type="number" id="teamCount" value="2" min="1" />
 
     <div class="option-buttons">
-      <div class="option-button" id="performanceOption">Leistungsverteilung: Homogen</div>
-      <div class="option-button" id="genderOption">Geschlechter: Mischen</div>
-      <div class="option-button" id="positionOption">Positionen: Normal</div>
+      <div class="option-button active" id="performanceOption">Leistungsverteilung: Heterogen</div>
+      <div class="option-button active" id="genderOption">Geschlechter: Mischen</div>
+      <div class="option-button active" id="positionOption">Positionen: Ausbalancieren</div>
     </div>
 
     <button id="createTeamsBtn">Teams erstellen</button>
-    <p class="hint">Auf mobilen Geräten kannst du einen Kreis auf dem Bildschirm zeichnen, um die Teams neu zu mischen.</p>
+    <p class="hint">Auf mobilen Geräten: Zweimal schnell mit zwei Fingern auf den Bildschirm tippen, um neu zu mischen.</p>
   </div>
 
   <div class="teams" id="teamsContainer"></div>
@@ -287,11 +286,11 @@ let currentTeams = [];
 let currentTeamNames = [];
 
 // Zustände der Optionen
-let isHeterogen = false; // false = homogen, true = heterogen
-let genderSeparated = false; // false = mischen, true = trennen
-let positionsBalanced = false; // false = normal, true = ausbalancieren
+let isHeterogen = true;    // Standard = heterogen
+let genderSeparated = false; // Standard = gemischt
+let positionsBalanced = true; // Standard = ausbalanciert
 
-// Klick-Handler für Optionen
+// Click-Handler für Optionen
 performanceOption.addEventListener('click', () => {
   isHeterogen = !isHeterogen;
   performanceOption.textContent = isHeterogen ? "Leistungsverteilung: Heterogen" : "Leistungsverteilung: Homogen";
@@ -347,7 +346,7 @@ importCsvBtn.addEventListener('click', () => {
       const text = e.target.result;
       const lines = text.split(/\r?\n/).map(line => line.trim()).filter(line => line);
       for (const line of lines) {
-        const parts = line.split(',').map(p => p.trim());
+        const parts = line.split(',').map(p => p.trim()).filter(p => p !== '');
         if (parts.length >= 1) {
           const name = parts[0] || '';
           let skill = 2; 
@@ -369,18 +368,18 @@ importCsvBtn.addEventListener('click', () => {
           }
 
           if (parts.length > 3) {
-            // Positionen z. B. "AA;MB;Z"
-            const posString = parts[3];
-            if (posString) {
-              positions = posString.split(';').map(p => p.trim()).filter(p => p);
-              // Filtern auf gültige Positionen?
-              const validPositions = ['AA','MB','D','Z','L'];
-              positions = positions.filter(pos => validPositions.includes(pos));
-              // Nur 1-3 Positionen zulassen
-              if (positions.length < 1 || positions.length > 3) {
-                positions = [];
-              }
+            // weitere Teile sind Positionen, per Komma getrennt, aber wir haben schon Komma für CSV
+            // Format ist Name,Skill,Geschlecht,Pos1,Pos2,... -> ab parts[3] sind Positionen
+            positions = parts.slice(3);
+            const validPositions = ['AA','MB','D','Z','L'];
+            positions = positions.filter(pos => validPositions.includes(pos));
+            // Wenn keine oder zu viele (max 3) gültige Positionen gefunden werden, Standard zuweisen
+            if (positions.length < 1 || positions.length > 3) {
+              positions = ['AA','MB','Z'];
             }
+          } else {
+            // Keine Positionen angegeben -> Standardwerte
+            positions = ['AA','MB','Z'];
           }
 
           if (name) {
@@ -641,64 +640,31 @@ function displayTeams(teams) {
   });
 }
 
-// Kreis-Geste für Neu-Mischen
-let touchPoints = [];
-let isTouching = false;
+// Doppeltippen mit zwei Fingern zum Neu-Mischen
+let lastTapTime = 0;
+let doubleTapTimeout = 300; // ms
+let tapCount = 0;
 
 document.addEventListener('touchstart', (e) => {
-  isTouching = true;
-  touchPoints = [];
-  touchPoints.push(getTouchPos(e));
-}, {passive: true});
-
-document.addEventListener('touchmove', (e) => {
-  if (isTouching) {
-    touchPoints.push(getTouchPos(e));
-  }
-}, {passive: true});
-
-document.addEventListener('touchend', () => {
-  isTouching = false;
-  if (touchPoints.length > 10 && currentTeams.length > 0) {
-    if (isCircleGesture(touchPoints)) {
-      createOrShuffleTeams();
-      alert('Teams neu gemischt (Kreis-Geste)!');
+  if (e.touches.length === 2) {
+    const currentTime = Date.now();
+    if (currentTime - lastTapTime < doubleTapTimeout) {
+      // double tap erkannt
+      tapCount++;
+      if (tapCount === 2) {
+        tapCount = 0;
+        if (currentTeams.length > 0) {
+          createOrShuffleTeams();
+          alert('Teams neu gemischt (Doppeltippen mit zwei Fingern)!');
+        }
+      }
+    } else {
+      tapCount = 1; 
+      lastTapTime = currentTime;
     }
   }
 }, {passive: true});
 
-function getTouchPos(e) {
-  const t = e.touches[0];
-  return {x: t.clientX, y: t.clientY};
-}
-
-function isCircleGesture(points) {
-  const start = points[0];
-  const end = points[points.length-1];
-  const distStartEnd = distance(start, end);
-  if (distStartEnd > 50) return false; 
-
-  let sumX = 0, sumY = 0;
-  for (const p of points) {
-    sumX += p.x;
-    sumY += p.y;
-  }
-  const cx = sumX / points.length;
-  const cy = sumY / points.length;
-
-  const distances = points.map(p => distance(p, {x:cx,y:cy}));
-  const avgDist = distances.reduce((a,b) => a+b,0)/distances.length;
-  const variance = distances.map(d => (d - avgDist)**2).reduce((a,b)=>a+b,0)/distances.length;
-  const stdDev = Math.sqrt(variance);
-
-  return stdDev < avgDist * 0.3 && avgDist > 30; 
-}
-
-function distance(a, b) {
-  const dx = a.x - b.x;
-  const dy = a.y - b.y;
-  return Math.sqrt(dx*dx + dy*dy);
-}
 </script>
 
 </body>
