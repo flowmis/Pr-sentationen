@@ -3,11 +3,11 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>TSV: Team Maker</title>
+<title>TSV Weihnachtsturnier - Team Maker</title>
 <style>
   body {
     font-family: Arial, sans-serif;
-    background: #fff; /* weißer Hintergrund */
+    background: #fff;
     margin: 0;
     padding: 0;
     color: #000;
@@ -21,7 +21,7 @@
 
   header {
     background: #ffffff;
-    color: #ff0000; /* Rot */
+    color: #ff0000; 
     margin-bottom: 20px;
   }
 
@@ -29,7 +29,7 @@
     margin: 0;
     padding: 10px 0;
     text-align: center;
-    color: #ff0000; /* Rot */
+    color: #ff0000; 
   }
 
   .section {
@@ -37,12 +37,12 @@
     padding: 20px;
     border-radius: 5px;
     margin-bottom: 20px;
-    border: 2px solid #ff0000; /* Roter Rand */
+    border: 2px solid #ff0000; 
   }
 
   .section h2 {
     margin-top: 0;
-    color: #ff0000; /* Rot */
+    color: #ff0000; 
   }
 
   label {
@@ -57,12 +57,13 @@
     margin-right: 10px;
     border: 1px solid #ccc;
     border-radius: 3px;
+    margin-bottom: 5px;
   }
 
   button {
     padding: 7px 15px;
     cursor: pointer;
-    background: #0033cc; /* Blau */
+    background: #0033cc; 
     color: #fff;
     border: none;
     border-radius: 3px;
@@ -108,6 +109,18 @@
     font-weight: bold;
     margin-bottom: 5px;
     color: #ff0000;
+    display: flex;
+    align-items: center;
+  }
+
+  .team-title input[type="text"] {
+    border: none;
+    border-bottom: 1px solid #ccc;
+    margin-left: 10px;
+    flex: 1;
+    font-weight: bold;
+    color: #000;
+    font-size: 1em;
   }
 
   .team ul {
@@ -129,60 +142,51 @@
     margin-top: 20px;
   }
 
-  .switch-container {
+  .positions-container {
+    margin: 0 0 5px 0;
+  }
+
+  .positions-container label {
+    display: inline-block;
+    margin-right: 10px;
+    font-weight: normal;
+  }
+
+  .option-buttons {
+    display: flex;
+    gap: 10px;
+    margin: 10px 0;
+    flex-wrap: wrap;
+  }
+
+  .option-button {
+    background: #eee;
+    color: #000;
+    padding: 10px 15px;
+    border-radius: 5px;
+    border: 2px solid #ccc;
+    cursor: pointer;
+    user-select: none;
+    font-weight: bold;
+    text-align: center;
+    min-width: 200px;
+  }
+
+  .option-button.active {
+    border-color: #0033cc;
+    background: #cce;
+  }
+
+  .player-input-row {
     display: flex;
     align-items: center;
-    margin-bottom: 10px;
+    flex-wrap: wrap;
+    gap: 10px;
   }
 
-  .switch-container label {
-    margin-bottom: 0;
-    font-weight: normal;
-    margin-left: 10px;
-    color: #000;
-  }
-
-  /* Einfache Switches (Toggle) für die Optionen */
-  .switch {
-    position: relative;
-    display: inline-block;
-    width: 60px;
-    height: 30px;
-  }
-
-  .switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
-  }
-
-  .slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background-color: #ccc;
-    border-radius: 30px;
-    transition: .4s;
-  }
-
-  .slider:before {
-    position: absolute;
-    content: "";
-    height: 22px;
-    width: 22px;
-    left: 4px;
-    bottom: 4px;
-    background-color: white;
-    border-radius: 22px;
-    transition: .4s;
-  }
-
-  input:checked + .slider {
-    background-color: #0033cc;
-  }
-
-  input:checked + .slider:before {
-    transform: translateX(30px);
+  .hint {
+    font-size: 0.9em;
+    color: #555;
   }
 
 </style>
@@ -197,25 +201,33 @@
 
   <div class="section">
     <h2>Spieler hinzufügen</h2>
-    <label>Neuen Spieler hinzufügen (Name, Leistungsklasse, Geschlecht):</label>
-    <input type="text" id="playerName" placeholder="Name des Spielers" />
-    <input type="number" id="playerSkill" min="1" max="3" value="2" title="1 = schwach, 2 = mittel, 3 = stark" />
-    <select id="playerGender">
-      <option value="M">M</option>
-      <option value="W">W</option>
-      <option value="D">D</option>
-    </select>
-    <button id="addPlayerBtn">Hinzufügen</button>
-    <p>Leistungsklasse: 1 = werdender Volleyballer, 2 = erfahrener Volleyballer, 3 = Führungsspieler</p>
+    <div class="player-input-row">
+      <input type="text" id="playerName" placeholder="Name" />
+      <input type="number" id="playerSkill" min="1" max="3" value="2" title="1 = schwach, 2 = mittel, 3 = stark" />
+      <select id="playerGender">
+        <option value="m">m</option>
+        <option value="w">w</option>
+      </select>
+      <div class="positions-container">
+        Positionen:
+        <label><input type="checkbox" name="position" value="AA" />AA</label>
+        <label><input type="checkbox" name="position" value="MB" />MB</label>
+        <label><input type="checkbox" name="position" value="D" />D</label>
+        <label><input type="checkbox" name="position" value="Z" />Z</label>
+        <label><input type="checkbox" name="position" value="L" />L</label>
+      </div>
+      <button id="addPlayerBtn">Hinzufügen</button>
+    </div>
+    <p class="hint">Leistungsklasse: 1 = werdender Volleyballer, 2 = erfahrener Volleyballer, 3 = Führungsspieler</p>
   </div>
 
   <div class="section">
     <h2>CSV Import</h2>
-    <p>CSV-Format: <code>Name,Leistungsklasse,Geschlecht</code><br>
-    Beispiel:<br>Max,3,M<br>Anna,1,W<br>Lukas,2,M</p>
+    <p>CSV-Format: <code>Name,Leistungsklasse,Geschlecht,Positionen(optional)</code><br>
+    Beispiel:<br>Max,3,m,AA;MB<br>Anna,1,w<br>Lukas,2,m,D;Z</p>
     <input type="file" id="uploadCsv" accept=".csv" />
     <button id="importCsvBtn">Importieren</button>
-    <p>Ungültige Klassen oder Geschlechter werden auf Standardwerte gesetzt (2 = mittel, M = männlich)</p>
+    <p class="hint">Ungültige Klassen oder Geschlechter werden auf Standardwerte gesetzt (2 = mittel, m = männlich). Positionen per Semikolon trennen. Positionsangabe ist optional.</p>
   </div>
 
   <div class="section">
@@ -230,31 +242,14 @@
     <label>Anzahl der Teams:</label>
     <input type="number" id="teamCount" value="2" min="1" />
 
-    <!-- Switch für Leistungs-Verteilung -->
-    <div class="switch-container">
-      <div class="switch">
-        <input type="checkbox" id="performanceSwitch" />
-        <span class="slider"></span>
-      </div>
-      <label for="performanceSwitch">Heterogen (ein) / Homogen (aus)</label>
-    </div>
-
-    <!-- Switch für Geschlechter-Verteilung -->
-    <div class="switch-container">
-      <div class="switch">
-        <input type="checkbox" id="genderSwitch" />
-        <span class="slider"></span>
-      </div>
-      <label for="genderSwitch">Geschlechter trennen (ein) / Geschlechter mischen (aus)</label>
+    <div class="option-buttons">
+      <div class="option-button" id="performanceOption">Leistungsverteilung: Homogen</div>
+      <div class="option-button" id="genderOption">Geschlechter: Mischen</div>
+      <div class="option-button" id="positionOption">Positionen: Normal</div>
     </div>
 
     <button id="createTeamsBtn">Teams erstellen</button>
-  </div>
-
-  <div class="section" id="teamNamesSection" style="display:none;">
-    <h2>Teamnamen anpassen</h2>
-    <div class="team-name-inputs" id="teamNameInputs"></div>
-    <button id="updateTeamNamesBtn">Namen aktualisieren</button>
+    <p class="hint">Auf mobilen Geräten kannst du einen Kreis auf dem Bildschirm zeichnen, um die Teams neu zu mischen.</p>
   </div>
 
   <div class="teams" id="teamsContainer"></div>
@@ -264,315 +259,446 @@
 </div>
 
 <footer>
-  <p>&copy; Dir gefällt die Seite - Mane freut sich über ein Bier</p>
+  <p>&copy; Wenn dir die Seite gefällt, spendier Mane ein Bier!</p>
 </footer>
 
 <script>
-  const playerNameInput = document.getElementById('playerName');
-  const playerSkillInput = document.getElementById('playerSkill');
-  const playerGenderInput = document.getElementById('playerGender');
-  const addPlayerBtn = document.getElementById('addPlayerBtn');
-  const uploadCsv = document.getElementById('uploadCsv');
-  const importCsvBtn = document.getElementById('importCsvBtn');
-  const playerList = document.getElementById('playerList');
-  const teamCountInput = document.getElementById('teamCount');
-  const createTeamsBtn = document.getElementById('createTeamsBtn');
-  const teamsContainer = document.getElementById('teamsContainer');
-  const savePlayersBtn = document.getElementById('savePlayersBtn');
-  const loadPlayersBtn = document.getElementById('loadPlayersBtn');
-  const reshuffleBtn = document.getElementById('reshuffleBtn');
-  const teamNamesSection = document.getElementById('teamNamesSection');
-  const teamNameInputs = document.getElementById('teamNameInputs');
-  const updateTeamNamesBtn = document.getElementById('updateTeamNamesBtn');
+// Globale Variablen und Elemente
+const playerNameInput = document.getElementById('playerName');
+const playerSkillInput = document.getElementById('playerSkill');
+const playerGenderInput = document.getElementById('playerGender');
+const addPlayerBtn = document.getElementById('addPlayerBtn');
+const uploadCsv = document.getElementById('uploadCsv');
+const importCsvBtn = document.getElementById('importCsvBtn');
+const playerList = document.getElementById('playerList');
+const teamCountInput = document.getElementById('teamCount');
+const createTeamsBtn = document.getElementById('createTeamsBtn');
+const teamsContainer = document.getElementById('teamsContainer');
+const savePlayersBtn = document.getElementById('savePlayersBtn');
+const loadPlayersBtn = document.getElementById('loadPlayersBtn');
+const reshuffleBtn = document.getElementById('reshuffleBtn');
 
-  const performanceSwitch = document.getElementById('performanceSwitch');
-  const genderSwitch = document.getElementById('genderSwitch');
+const performanceOption = document.getElementById('performanceOption');
+const genderOption = document.getElementById('genderOption');
+const positionOption = document.getElementById('positionOption');
 
-  let players = [];
-  let currentTeams = [];
-  let currentTeamNames = [];
+let players = [];
+let currentTeams = [];
+let currentTeamNames = [];
 
-  // Spieler hinzufügen
-  addPlayerBtn.addEventListener('click', () => {
-    const name = playerNameInput.value.trim();
-    let skill = parseInt(playerSkillInput.value, 10);
-    if (isNaN(skill) || skill < 1 || skill > 3) {
-      skill = 2; // Standard mittel
-    }
-    const gender = ['M','W','D'].includes(playerGenderInput.value.toUpperCase()) 
-                   ? playerGenderInput.value.toUpperCase() : 'M';
+// Zustände der Optionen
+let isHeterogen = false; // false = homogen, true = heterogen
+let genderSeparated = false; // false = mischen, true = trennen
+let positionsBalanced = false; // false = normal, true = ausbalancieren
 
-    if (name) {
-      players.push({ name, skill, gender });
-      updatePlayerList();
-      playerNameInput.value = '';
-      playerNameInput.focus();
-    }
-  });
+// Klick-Handler für Optionen
+performanceOption.addEventListener('click', () => {
+  isHeterogen = !isHeterogen;
+  performanceOption.textContent = isHeterogen ? "Leistungsverteilung: Heterogen" : "Leistungsverteilung: Homogen";
+  performanceOption.classList.toggle('active', isHeterogen);
+});
 
-  // CSV importieren
-  importCsvBtn.addEventListener('click', () => {
-    const file = uploadCsv.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = function (e) {
-        const text = e.target.result;
-        const lines = text.split(/\r?\n/).map(line => line.trim()).filter(line => line);
-        for (const line of lines) {
-          const parts = line.split(',').map(p => p.trim());
-          if (parts.length >= 1) {
-            const name = parts[0];
-            let skill = 2; // Standard mittel
-            let gender = 'M'; // Standard M
-            if (parts.length > 1) {
-              const skillVal = parseInt(parts[1], 10);
-              if (!isNaN(skillVal) && skillVal >= 1 && skillVal <= 3) {
-                skill = skillVal;
-              }
-            }
-            if (parts.length > 2) {
-              const gVal = parts[2].toUpperCase();
-              if (['M','W','D'].includes(gVal)) {
-                gender = gVal;
-              }
-            }
-            if (name) {
-              players.push({ name, skill, gender });
+genderOption.addEventListener('click', () => {
+  genderSeparated = !genderSeparated;
+  genderOption.textContent = genderSeparated ? "Geschlechter: Trennen" : "Geschlechter: Mischen";
+  genderOption.classList.toggle('active', genderSeparated);
+});
+
+positionOption.addEventListener('click', () => {
+  positionsBalanced = !positionsBalanced;
+  positionOption.textContent = positionsBalanced ? "Positionen: Ausbalancieren" : "Positionen: Normal";
+  positionOption.classList.toggle('active', positionsBalanced);
+});
+
+// Spieler hinzufügen
+addPlayerBtn.addEventListener('click', () => {
+  const name = playerNameInput.value.trim();
+  let skill = parseInt(playerSkillInput.value, 10);
+  if (isNaN(skill) || skill < 1 || skill > 3) {
+    skill = 2; // Standard mittel
+  }
+  let gender = playerGenderInput.value.toLowerCase();
+  if (!['m','w'].includes(gender)) gender = 'm';
+
+  // Positionen erfassen
+  const checkedPositions = Array.from(document.querySelectorAll('input[name="position"]:checked'))
+    .map(el => el.value);
+  if (checkedPositions.length < 1 || checkedPositions.length > 3) {
+    alert("Bitte 1 bis 3 Positionen auswählen.");
+    return;
+  }
+
+  if (name) {
+    players.push({ name, skill, gender, positions: checkedPositions });
+    updatePlayerList();
+    playerNameInput.value = '';
+    playerNameInput.focus();
+    // Checkboxes zurücksetzen
+    document.querySelectorAll('input[name="position"]:checked').forEach(cb => cb.checked = false);
+  }
+});
+
+// CSV importieren
+importCsvBtn.addEventListener('click', () => {
+  const file = uploadCsv.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = function (e) {
+      const text = e.target.result;
+      const lines = text.split(/\r?\n/).map(line => line.trim()).filter(line => line);
+      for (const line of lines) {
+        const parts = line.split(',').map(p => p.trim());
+        if (parts.length >= 1) {
+          const name = parts[0] || '';
+          let skill = 2; 
+          let gender = 'm'; 
+          let positions = [];
+
+          if (parts.length > 1) {
+            const skillVal = parseInt(parts[1], 10);
+            if (!isNaN(skillVal) && skillVal >= 1 && skillVal <= 3) {
+              skill = skillVal;
             }
           }
+
+          if (parts.length > 2) {
+            const gVal = parts[2].toLowerCase();
+            if (['m','w'].includes(gVal)) {
+              gender = gVal;
+            }
+          }
+
+          if (parts.length > 3) {
+            // Positionen z. B. "AA;MB;Z"
+            const posString = parts[3];
+            if (posString) {
+              positions = posString.split(';').map(p => p.trim()).filter(p => p);
+              // Filtern auf gültige Positionen?
+              const validPositions = ['AA','MB','D','Z','L'];
+              positions = positions.filter(pos => validPositions.includes(pos));
+              // Nur 1-3 Positionen zulassen
+              if (positions.length < 1 || positions.length > 3) {
+                positions = [];
+              }
+            }
+          }
+
+          if (name) {
+            players.push({ name, skill, gender, positions });
+          }
         }
-        updatePlayerList();
-      };
-      reader.readAsText(file);
-    } else {
-      alert('Bitte eine gültige CSV-Datei auswählen.');
-    }
-  });
-
-  // Spielerliste aktualisieren
-  function updatePlayerList() {
-    playerList.innerHTML = '';
-    players.forEach((player, index) => {
-      const li = document.createElement('li');
-      const span = document.createElement('span');
-      span.textContent = `${player.name} (Klasse: ${player.skill}, Geschlecht: ${player.gender})`;
-      li.appendChild(span);
-
-      const removeBtn = document.createElement('button');
-      removeBtn.textContent = 'Entfernen';
-      removeBtn.style.marginLeft = '10px';
-      removeBtn.addEventListener('click', () => {
-        players.splice(index, 1);
-        updatePlayerList();
-      });
-      li.appendChild(removeBtn);
-      playerList.appendChild(li);
-    });
-  }
-
-  // Speichern der Spielerliste
-  savePlayersBtn.addEventListener('click', () => {
-    localStorage.setItem('players', JSON.stringify(players));
-    alert('Spielerliste wurde gespeichert.');
-  });
-
-  // Laden der Spielerliste
-  loadPlayersBtn.addEventListener('click', () => {
-    const stored = localStorage.getItem('players');
-    if (stored) {
-      players = JSON.parse(stored);
-      updatePlayerList();
-      alert('Spielerliste wurde geladen.');
-    } else {
-      alert('Keine gespeicherte Liste gefunden.');
-    }
-  });
-
-  // Teams erstellen
-  createTeamsBtn.addEventListener('click', () => {
-    createOrShuffleTeams();
-  });
-
-  // Neu mischen (Shake)
-  reshuffleBtn.addEventListener('click', () => {
-    createOrShuffleTeams();
-  });
-
-  function createOrShuffleTeams() {
-    const teamCount = parseInt(teamCountInput.value, 10);
-    if (teamCount < 1 || players.length === 0) {
-      alert('Bitte gültige Anzahl Teams eingeben und sicherstellen, dass mindestens ein Spieler vorhanden ist.');
-      return;
-    }
-
-    const isHeterogen = performanceSwitch.checked; // true = heterogen, false = homogen
-    const genderSeparated = genderSwitch.checked;  // true = trennen, false = mischen
-
-    let teams;
-    if (genderSeparated) {
-      // Geschlechtertrennung
-      teams = createGenderSeparatedTeams(players, teamCount);
-    } else {
-      // Nach Leistung verteilen
-      if (isHeterogen) {
-        teams = createHeterogeneousTeams(players, teamCount);
-      } else {
-        teams = createHomogeneousTeams(players, teamCount);
       }
-    }
+      updatePlayerList();
+    };
+    reader.readAsText(file);
+  } else {
+    alert('Bitte eine gültige CSV-Datei auswählen.');
+  }
+});
 
-    currentTeams = teams;
-    // Standard-Teamnamen erstellen (Team 1, Team 2, ...)
-    currentTeamNames = teams.map((_, i) => `Team ${i+1}`);
-    
-    displayTeams(teams);
-    showTeamNameInputs();
-    reshuffleBtn.style.display = 'inline-block';
+// Spielerliste aktualisieren
+function updatePlayerList() {
+  playerList.innerHTML = '';
+  players.forEach((player, index) => {
+    const li = document.createElement('li');
+    const span = document.createElement('span');
+    span.textContent = `${player.name} (K:${player.skill}, G:${player.gender}, Pos:${player.positions.join('/')})`;
+    li.appendChild(span);
+
+    const removeBtn = document.createElement('button');
+    removeBtn.textContent = 'Entfernen';
+    removeBtn.style.marginLeft = '10px';
+    removeBtn.addEventListener('click', () => {
+      players.splice(index, 1);
+      updatePlayerList();
+    });
+    li.appendChild(removeBtn);
+    playerList.appendChild(li);
+  });
+}
+
+// Speichern/Laden
+savePlayersBtn.addEventListener('click', () => {
+  localStorage.setItem('players', JSON.stringify(players));
+  alert('Spielerliste wurde gespeichert.');
+});
+
+loadPlayersBtn.addEventListener('click', () => {
+  const stored = localStorage.getItem('players');
+  if (stored) {
+    players = JSON.parse(stored);
+    updatePlayerList();
+    alert('Spielerliste wurde geladen.');
+  } else {
+    alert('Keine gespeicherte Liste gefunden.');
+  }
+});
+
+// Teams erstellen
+createTeamsBtn.addEventListener('click', () => {
+  createOrShuffleTeams();
+});
+
+// Neu mischen
+reshuffleBtn.addEventListener('click', () => {
+  createOrShuffleTeams();
+});
+
+function createOrShuffleTeams() {
+  const teamCount = parseInt(teamCountInput.value, 10);
+  if (teamCount < 1 || players.length === 0) {
+    alert('Bitte gültige Anzahl Teams eingeben und sicherstellen, dass mindestens ein Spieler vorhanden ist.');
+    return;
   }
 
-  function createHomogeneousTeams(players, teamCount) {
-    let sorted = [...players].sort((a, b) => a.skill - b.skill);
-    const teams = Array.from({ length: teamCount }, () => []);
-    let currentTeam = 0;
-    for (const player of sorted) {
+  let teams;
+  if (genderSeparated) {
+    teams = createGenderSeparatedTeams(players, teamCount);
+  } else {
+    if (isHeterogen) {
+      teams = createHeterogeneousTeams(players, teamCount);
+    } else {
+      teams = createHomogeneousTeams(players, teamCount);
+    }
+  }
+
+  if (positionsBalanced) {
+    teams = balancePositions(teams);
+  }
+
+  currentTeams = teams;
+  currentTeamNames = teams.map((_, i) => `Team ${i+1}`);
+  
+  displayTeams(teams);
+  reshuffleBtn.style.display = 'inline-block';
+}
+
+function createHomogeneousTeams(players, teamCount) {
+  let sorted = [...players].sort((a, b) => a.skill - b.skill);
+  const teams = Array.from({ length: teamCount }, () => []);
+  let currentTeam = 0;
+  for (const player of sorted) {
+    teams[currentTeam].push(player);
+    currentTeam = (currentTeam + 1) % teamCount;
+  }
+  return teams;
+}
+
+function createHeterogeneousTeams(players, teamCount) {
+  const skillGroups = {
+    1: players.filter(p => p.skill === 1),
+    2: players.filter(p => p.skill === 2),
+    3: players.filter(p => p.skill === 3)
+  };
+
+  shuffle(skillGroups[1]);
+  shuffle(skillGroups[2]);
+  shuffle(skillGroups[3]);
+
+  const teams = Array.from({ length: teamCount }, () => []);
+
+  distributeGroup(skillGroups[1], teams);
+  distributeGroup(skillGroups[2], teams);
+  distributeGroup(skillGroups[3], teams);
+
+  return teams;
+}
+
+function createGenderSeparatedTeams(players, teamCount) {
+  const genders = {};
+  for (const p of players) {
+    if (!genders[p.gender]) genders[p.gender] = [];
+    genders[p.gender].push(p);
+  }
+
+  for (const g in genders) {
+    shuffle(genders[g]);
+  }
+
+  const genderKeys = Object.keys(genders);
+  const teams = Array.from({ length: teamCount }, () => []);
+
+  let currentTeam = 0;
+  for (const g of genderKeys) {
+    for (const player of genders[g]) {
       teams[currentTeam].push(player);
       currentTeam = (currentTeam + 1) % teamCount;
     }
-    return teams;
   }
 
-  function createHeterogeneousTeams(players, teamCount) {
-    const skillGroups = {
-      1: players.filter(p => p.skill === 1),
-      2: players.filter(p => p.skill === 2),
-      3: players.filter(p => p.skill === 3)
-    };
+  return teams;
+}
 
-    shuffle(skillGroups[1]);
-    shuffle(skillGroups[2]);
-    shuffle(skillGroups[3]);
-
-    const teams = Array.from({ length: teamCount }, () => []);
-
-    distributeGroup(skillGroups[1], teams);
-    distributeGroup(skillGroups[2], teams);
-    distributeGroup(skillGroups[3], teams);
-
-    return teams;
+function distributeGroup(group, teams) {
+  let index = 0;
+  for (const player of group) {
+    teams[index].push(player);
+    index = (index + 1) % teams.length;
   }
+}
 
-  function createGenderSeparatedTeams(players, teamCount) {
-    const genders = {};
-    for (const p of players) {
-      if (!genders[p.gender]) genders[p.gender] = [];
-      genders[p.gender].push(p);
-    }
-
-    for (const g in genders) {
-      shuffle(genders[g]);
-    }
-
-    const genderKeys = Object.keys(genders);
-    const teams = Array.from({ length: teamCount }, () => []);
-
-    let currentTeam = 0;
-    for (const g of genderKeys) {
-      for (const player of genders[g]) {
-        teams[currentTeam].push(player);
-        currentTeam = (currentTeam + 1) % teamCount;
-      }
-    }
-
-    return teams;
+function shuffle(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random()*(i+1));
+    [array[i], array[j]] = [array[j], array[i]];
   }
+  return array;
+}
 
-  function distributeGroup(group, teams) {
-    let index = 0;
-    for (const player of group) {
-      teams[index].push(player);
-      index = (index + 1) % teams.length;
-    }
+// Positionsbalancierung (heuristisch)
+function balancePositions(teams) {
+  const MAX_ATTEMPTS = 200; 
+  for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
+    const improvements = tryToImprovePositions(teams);
+    if (!improvements) break;
   }
+  return teams;
+}
 
-  function shuffle(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [array[i], array[j]] = [array[j], array[i]];
-    }
-    return array;
-  }
+function tryToImprovePositions(teams) {
+  const teamCount = teams.length;
+  let bestTeams = copyTeams(teams);
+  let bestViolations = countPositionViolations(bestTeams);
 
-  // Teams anzeigen (nur Name)
-  function displayTeams(teams) {
-    teamsContainer.innerHTML = '';
-    teams.forEach((team, i) => {
-      const teamDiv = document.createElement('div');
-      teamDiv.className = 'team';
-      const title = document.createElement('div');
-      title.className = 'team-title';
-      title.textContent = currentTeamNames[i] || `Team ${i + 1}`;
-      teamDiv.appendChild(title);
+  for (let t1 = 0; t1 < teamCount; t1++) {
+    for (let t2 = t1+1; t2 < teamCount; t2++) {
+      for (let i = 0; i < teams[t1].length; i++) {
+        for (let j = 0; j < teams[t2].length; j++) {
+          const newTeams = copyTeams(teams);
+          const temp = newTeams[t1][i];
+          newTeams[t1][i] = newTeams[t2][j];
+          newTeams[t2][j] = temp;
 
-      const ul = document.createElement('ul');
-      team.forEach(member => {
-        const li = document.createElement('li');
-        li.textContent = member.name; // Nur Name
-        ul.appendChild(li);
-      });
-
-      teamDiv.appendChild(ul);
-      teamsContainer.appendChild(teamDiv);
-    });
-  }
-
-  function showTeamNameInputs() {
-    teamNamesSection.style.display = 'block';
-    teamNameInputs.innerHTML = '';
-    currentTeams.forEach((_, i) => {
-      const div = document.createElement('div');
-      div.innerHTML = `Name für Team ${i+1}: <input type="text" value="${currentTeamNames[i]}" data-team-index="${i}" />`;
-      teamNameInputs.appendChild(div);
-    });
-  }
-
-  updateTeamNamesBtn.addEventListener('click', () => {
-    const inputs = teamNameInputs.querySelectorAll('input');
-    inputs.forEach(input => {
-      const index = parseInt(input.getAttribute('data-team-index'), 10);
-      currentTeamNames[index] = input.value.trim() || `Team ${index+1}`;
-    });
-    displayTeams(currentTeams);
-  });
-
-  // Shake-to-reshuffle: Mobilgeräte
-  let lastShakeTime = 0;
-  const SHAKE_THRESHOLD = 15; // Empfindlichkeit für "Shake"-Geste
-  
-  if (window.DeviceMotionEvent) {
-    window.addEventListener('devicemotion', (event) => {
-      const acceleration = event.accelerationIncludingGravity;
-      if (!acceleration) return;
-
-      const x = acceleration.x;
-      const y = acceleration.y;
-      const z = acceleration.z;
-
-      const currentTime = Date.now();
-      if ((currentTime - lastShakeTime) > 1000) { 
-        // Berechne Stärke der Erschütterung
-        const shakeMagnitude = Math.sqrt(x*x + y*y + z*z);
-        if (shakeMagnitude > SHAKE_THRESHOLD) {
-          // Mind. 1 Sekunde zwischen Shakes
-          lastShakeTime = currentTime;
-          // Neu mischen auslösen
-          if (currentTeams.length > 0) {
-            createOrShuffleTeams();
-            alert('Teams neu gemischt (per Shake)!');
+          const v = countPositionViolations(newTeams);
+          if (v < bestViolations) {
+            bestViolations = v;
+            bestTeams = newTeams;
           }
         }
       }
-    });
+    }
   }
+
+  if (bestViolations < countPositionViolations(teams)) {
+    for (let k = 0; k < teams.length; k++) {
+      teams[k] = bestTeams[k];
+    }
+    return true;
+  }
+  return false;
+}
+
+function countPositionViolations(teams) {
+  let violations = 0;
+  for (const team of teams) {
+    const countPos = {AA:0,MB:0,D:0,Z:0,L:0};
+    for (const p of team) {
+      for (const pos of p.positions) {
+        if (countPos[pos] !== undefined) countPos[pos]++;
+      }
+    }
+    if (countPos['AA'] > 2) violations += (countPos['AA'] - 2);
+    if (countPos['MB'] > 2) violations += (countPos['MB'] - 2);
+    if (countPos['Z'] > 1) violations += (countPos['Z'] - 1);
+    if (countPos['D'] > 1) violations += (countPos['D'] - 1);
+  }
+  return violations;
+}
+
+function copyTeams(teams) {
+  return teams.map(t => t.slice());
+}
+
+// Teams anzeigen
+function displayTeams(teams) {
+  teamsContainer.innerHTML = '';
+  teams.forEach((team, i) => {
+    const teamDiv = document.createElement('div');
+    teamDiv.className = 'team';
+
+    const titleDiv = document.createElement('div');
+    titleDiv.className = 'team-title';
+    titleDiv.textContent = `Team ${i + 1}: `;
+    // Bearbeitbares Textfeld für den Teamnamen
+    const titleInput = document.createElement('input');
+    titleInput.type = 'text';
+    titleInput.value = currentTeamNames[i];
+    titleInput.addEventListener('input', () => {
+      currentTeamNames[i] = titleInput.value;
+    });
+    titleDiv.appendChild(titleInput);
+    teamDiv.appendChild(titleDiv);
+
+    const ul = document.createElement('ul');
+    team.forEach(member => {
+      const li = document.createElement('li');
+      li.textContent = member.name; 
+      ul.appendChild(li);
+    });
+
+    teamDiv.appendChild(ul);
+    teamsContainer.appendChild(teamDiv);
+  });
+}
+
+// Kreis-Geste für Neu-Mischen
+let touchPoints = [];
+let isTouching = false;
+
+document.addEventListener('touchstart', (e) => {
+  isTouching = true;
+  touchPoints = [];
+  touchPoints.push(getTouchPos(e));
+}, {passive: true});
+
+document.addEventListener('touchmove', (e) => {
+  if (isTouching) {
+    touchPoints.push(getTouchPos(e));
+  }
+}, {passive: true});
+
+document.addEventListener('touchend', () => {
+  isTouching = false;
+  if (touchPoints.length > 10 && currentTeams.length > 0) {
+    if (isCircleGesture(touchPoints)) {
+      createOrShuffleTeams();
+      alert('Teams neu gemischt (Kreis-Geste)!');
+    }
+  }
+}, {passive: true});
+
+function getTouchPos(e) {
+  const t = e.touches[0];
+  return {x: t.clientX, y: t.clientY};
+}
+
+function isCircleGesture(points) {
+  const start = points[0];
+  const end = points[points.length-1];
+  const distStartEnd = distance(start, end);
+  if (distStartEnd > 50) return false; 
+
+  let sumX = 0, sumY = 0;
+  for (const p of points) {
+    sumX += p.x;
+    sumY += p.y;
+  }
+  const cx = sumX / points.length;
+  const cy = sumY / points.length;
+
+  const distances = points.map(p => distance(p, {x:cx,y:cy}));
+  const avgDist = distances.reduce((a,b) => a+b,0)/distances.length;
+  const variance = distances.map(d => (d - avgDist)**2).reduce((a,b)=>a+b,0)/distances.length;
+  const stdDev = Math.sqrt(variance);
+
+  return stdDev < avgDist * 0.3 && avgDist > 30; 
+}
+
+function distance(a, b) {
+  const dx = a.x - b.x;
+  const dy = a.y - b.y;
+  return Math.sqrt(dx*dx + dy*dy);
+}
 </script>
 
 </body>
