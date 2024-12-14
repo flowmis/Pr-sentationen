@@ -4,77 +4,113 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Volleyball-Turnierplan</title>
+    <!-- Google Fonts Beispiel -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Roboto', sans-serif;
             margin: 20px;
             line-height: 1.6;
-            background-color: #f9f9f9;
+            background: linear-gradient(135deg, #f9f9f9, #efefef);
+            color: #333;
         }
         h1, h2, h3 {
             text-align: center;
             color: #333;
+            font-weight: 500;
         }
         .container {
             display: flex;
             flex-wrap: wrap;
             justify-content: space-around;
+            margin-bottom: 30px;
         }
         .field {
             margin: 10px;
             flex: 1;
             min-width: 300px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .field h3 {
+            background: #4a90e2;
+            color: #fff;
+            margin: 0;
+            padding: 10px;
+            font-size: 1.1em;
         }
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 20px;
+            margin-bottom: 0px;
             background-color: #fff;
         }
         th, td {
-            border: 1px solid #ccc;
+            border-bottom: 1px solid #ddd;
             padding: 8px;
             text-align: center;
         }
         th {
-            background-color: #f0f0f0;
+            background-color: #f7f7f7;
+            font-weight: 500;
         }
-        p {
-            text-align: center;
+        tr:hover {
+            background: #f0f8ff;
+        }
+        p, label {
             color: #555;
         }
         @media (max-width: 768px) {
             .container {
                 flex-direction: column;
+                align-items: center;
             }
         }
         .past {
-            background-color: #ffdddd;
+            background-color: #ffe5e5 !important;
         }
         .current {
-            background-color: #ddffdd;
+            background-color: #e5ffe5 !important;
         }
         .next {
-            background-color: #fffacd;
+            background-color: #fffce5 !important;
         }
         .team-container {
             display: flex;
             align-items: center;
             justify-content: space-between;
+            flex: 1;
         }
         .score-container {
-            display: flex;
+            display: inline-flex;
             align-items: center;
             justify-content: center;
+            margin-left: 10px;
         }
         .score-input {
             width: 50px;
             padding: 5px;
-            margin: 0 10px;
+            margin: 0 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
         }
-        .team-name {
+        .score-input.invalid {
+            border: 2px solid red;
+        }
+        .team-name, input[type="text"] {
             flex-grow: 1;
             text-align: left;
+            border: none;
+            background: #fafafa;
+            padding: 4px;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+        .team-name:hover, input[type="text"]:hover {
+            background: #f0f0f0;
         }
         .match {
             display: flex;
@@ -83,10 +119,28 @@
         }
         .button-container {
             text-align: center;
-            margin-top: 20px;
+            margin: 20px 0;
+        }
+        button {
+            background: #4a90e2;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1em;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s, box-shadow 0.2s;
+        }
+        button:hover {
+            background: #3b7bc0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
         .result-container {
-            margin-bottom: 40px;
+            margin: 40px 0;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            padding: 20px;
         }
         .result-table {
             width: 100%;
@@ -94,21 +148,134 @@
             background-color: #fff;
         }
         .result-table th, .result-table td {
-            border: 1px solid #ccc;
+            border-bottom: 1px solid #ddd;
             padding: 8px;
             text-align: center;
         }
         .result-table th {
-            background-color: #f0f0f0;
+            background-color: #f7f7f7;
+            font-weight: 500;
+        }
+        .warning {
+            color: #d00;
+            font-weight: bold;
+            text-align: center;
+            margin: 10px 0;
+        }
+        .leader-row {
+            background-color: #e0ffe0;
+        }
+        .search-container {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .search-input {
+            padding: 5px;
+            width: 200px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        #finale-container {
+            text-align: center;
+            margin-top: 40px;
+        }
+        #finale-container .final-match {
+            display: inline-block;
+            margin: 20px;
+            background: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+        #Gesamt-Übersicht {
+            margin-top: 40px;
+        }
+        input[type="text"][data-user-override="true"] {
+            font-weight: 700;
+            background: #fffde0;
         }
     </style>
 </head>
 <body>
     <h1>Weihnachtsvolleyballturnier Technische Schule Aalen</h1>
     <h2>Gruppenphase (08:10 - 10:40 Uhr)</h2>
-    <div class="container"></div>
-    <div class="button-container"></div>
+    <div class="container" id="gruppen-container"></div>
+    <div class="button-container">
+      <button id="gruppenphase-auswertung-button">Auswertung Gruppenphase</button>
+    </div>
     
+    <h2>Platzierungsspiele (10:50 - 11:50 Uhr)</h2>
+    <div class="container" id="platzierungsspiele-container">
+      <div class="field">
+        <h3>Feld 1</h3>
+        <table>
+          <tr>
+            <th>Zeit</th>
+            <th>Spiel</th>
+          </tr>
+          <tr data-time="10:50"><td>10:50</td><td><input type="text" placeholder="1. Gruppe A" data-user-override="false" /> vs <input type="text" placeholder="1. Gruppe B" data-user-override="false"/></td></tr>
+          <tr data-time="10:50"><td>11:00</td><td><input type="text" placeholder="1. Gruppe A" data-user-override="false"/> vs <input type="text" placeholder="1. Gruppe C" data-user-override="false"/></td></tr>
+          <tr data-time="10:50"><td>11:10</td><td><input type="text" placeholder="1. Gruppe C" data-user-override="false"/> vs <input type="text" placeholder="1. Gruppe B" data-user-override="false"/></td></tr>
+          <tr data-time="10:50"><td>11:20</td><td><input type="text" placeholder="2. Gruppe A" data-user-override="false"/> vs <input type="text" placeholder="2. Gruppe B" data-user-override="false"/></td></tr>
+          <tr data-time="10:50"><td>11:30</td><td><input type="text" placeholder="2. Gruppe A" data-user-override="false"/> vs <input type="text" placeholder="2. Gruppe C" data-user-override="false"/></td></tr>
+          <tr data-time="10:50"><td>11:40</td><td><input type="text" placeholder="2. Gruppe C" data-user-override="false"/> vs <input type="text" placeholder="2. Gruppe B" data-user-override="false"/></td></tr>
+        </table>
+      </div>
+      
+      <div class="field">
+        <h3>Feld 2</h3>
+        <table>
+          <tr>
+            <th>Zeit</th>
+            <th>Spiel</th>
+          </tr>
+          <tr data-time="10:50"><td>10:50</td><td><input type="text" placeholder="3. Gruppe A" data-user-override="false"/> vs <input type="text" placeholder="3. Gruppe B" data-user-override="false"/></td></tr>
+          <tr data-time="10:50"><td>11:00</td><td><input type="text" placeholder="3. Gruppe A" data-user-override="false"/> vs <input type="text" placeholder="3. Gruppe C" data-user-override="false"/></td></tr>
+          <tr data-time="10:50"><td>11:10</td><td><input type="text" placeholder="3. Gruppe C" data-user-override="false"/> vs <input type="text" placeholder="3. Gruppe B" data-user-override="false"/></td></tr>
+          <tr data-time="10:50"><td>11:20</td><td><input type="text" placeholder="4. Gruppe A" data-user-override="false"/> vs <input type="text" placeholder="4. Gruppe B" data-user-override="false"/></td></tr>
+          <tr data-time="10:50"><td>11:30</td><td><input type="text" placeholder="4. Gruppe A" data-user-override="false"/> vs <input type="text" placeholder="4. Gruppe C" data-user-override="false"/></td></tr>
+          <tr data-time="10:50"><td>11:40</td><td><input type="text" placeholder="4. Gruppe C" data-user-override="false"/> vs <input type="text" placeholder="4. Gruppe B" data-user-override="false"/></td></tr>
+        </table>
+      </div>
+
+      <div class="field">
+        <h3>Feld 3</h3>
+        <table>
+          <tr>
+            <th>Zeit</th>
+            <th>Spiel</th>
+          </tr>
+          <tr data-time="10:50"><td>10:50</td><td><input type="text" placeholder="5. Gruppe A" data-user-override="false"/> vs <input type="text" placeholder="5. Gruppe B" data-user-override="false"/></td></tr>
+          <tr data-time="10:50"><td>11:00</td><td><input type="text" placeholder="5. Gruppe A" data-user-override="false"/> vs <input type="text" placeholder="5. Gruppe C" data-user-override="false"/></td></tr>
+          <tr data-time="10:50"><td>11:10</td><td><input type="text" placeholder="5. Gruppe C" data-user-override="false"/> vs <input type="text" placeholder="5. Gruppe B" data-user-override="false"/></td></tr>
+          <tr data-time="10:50"><td>11:20</td><td><input type="text" placeholder="6. Gruppe A" data-user-override="false"/> vs <input type="text" placeholder="6. Gruppe B" data-user-override="false"/></td></tr>
+          <tr data-time="10:50"><td>11:30</td><td><input type="text" placeholder="6. Gruppe A" data-user-override="false"/> vs <input type="text" placeholder="6. Gruppe C" data-user-override="false"/></td></tr>
+          <tr data-time="10:50"><td>11:40</td><td><input type="text" placeholder="6. Gruppe C" data-user-override="false"/> vs <input type="text" placeholder="6. Gruppe B" data-user-override="false"/></td></tr>
+        </table>
+      </div>
+    </div>
+    <div class="button-container">
+      <button id="platzierungsspiele-auswertung-button">Auswertung Platzierungsspiele</button>
+    </div>
+
+    <div id="finale-container">
+      <h2>Finale (12:20 - 12:50 Uhr)</h2>
+      <p>Auf dem Centercourt spielen:</p>
+      <div class="final-match">
+        <span id="final-team1">Turniersieger</span> 
+        vs 
+        <span id="final-team2">Lehrerteam</span>
+        <div class="score-container">
+          <input class="score-input" id="final-score1" type="number" min="0" value="0" />
+          <span>:</span>
+          <input class="score-input" id="final-score2" type="number" min="0" value="0" />
+        </div>
+      </div>
+    </div>
+    <div class="button-container">
+      <button id="finale-auswertung-button">Auswertung Finale</button>
+    </div>
+
     <script>
       const team = {
         a: "Pritsch Perfect",
@@ -185,15 +352,51 @@
         { time: "10:30", match: [team.q, team.r], score: [0, 3] },
       ];
 
-      // Gruppen-Map um einfach auf die richtigen Schedules zugreifen zu können
       const groups = {
         "Feld 1: Gruppe A": scheduleA,
         "Feld 2: Gruppe B": scheduleB,
         "Feld 3: Gruppe C": scheduleC
       };
 
-      // Tabelle Gruppenphase
-      function generateTable(schedule, groupName, fieldId) {
+      const groupNameMap = {
+        "Gruppe A": "Feld 1: Gruppe A",
+        "Gruppe B": "Feld 2: Gruppe B",
+        "Gruppe C": "Feld 3: Gruppe C"
+      };
+
+      let placements = {}; 
+      let placementResultsGlobal = [];
+      let finalWinner = null;
+      let finalLoser = null;
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const gruppenContainer = document.getElementById("gruppen-container");
+        gruppenContainer.appendChild(generateTable(scheduleA, "Feld 1: Gruppe A"));
+        gruppenContainer.appendChild(generateTable(scheduleB, "Feld 2: Gruppe B"));
+        gruppenContainer.appendChild(generateTable(scheduleC, "Feld 3: Gruppe C"));
+        loadScoresFromLocalStorage();
+        updateColors();
+        setInterval(updateColors, 600);
+
+        const allInputs = document.querySelectorAll('.score-input');
+        allInputs.forEach(input => {
+          input.addEventListener('input', handleScoreInputChange);
+        });
+
+        // Event-Listener für manuelle Overrides in Platzierungsteams
+        document.querySelectorAll('#platzierungsspiele-container input[type="text"]').forEach(inp => {
+          inp.addEventListener('input', (e) => {
+            e.target.setAttribute('data-user-override', 'true');
+            saveScoresToLocalStorage();
+          });
+        });
+
+        document.getElementById('gruppenphase-auswertung-button').addEventListener('click', evaluateGroupPhase);
+        document.getElementById('platzierungsspiele-auswertung-button').addEventListener('click', evaluatePlacementPhase);
+        document.getElementById('finale-auswertung-button').addEventListener('click', evaluateFinalPhase);
+      });
+
+      function generateTable(schedule, groupName) {
         const tableContainer = document.createElement("div");
         const heading = document.createElement("h3");
         heading.innerText = groupName;  
@@ -205,7 +408,7 @@
             <th>Spiel</th>
           </tr>
         `;
-        schedule.forEach(({ time, match, score }) => {
+        schedule.forEach(({ time, match, score }, index) => {
           const row = document.createElement("tr");
           row.dataset.time = time;
           row.innerHTML = `
@@ -219,33 +422,79 @@
                 <span class="team-name">${match[1]}</span>
               </div>
               <div class="score-container">
-                <input class="score-input" type="number" min="0" value="${score[0]}" data-team="${match[0]}" />
+                <input class="score-input" type="number" min="0" value="${score[0]}" data-team="${match[0]}" data-group="${groupName}" data-match-index="${index}" />
                 <span>:</span>
-                <input class="score-input" type="number" min="0" value="${score[1]}" data-team="${match[1]}" />
+                <input class="score-input" type="number" min="0" value="${score[1]}" data-team="${match[1]}" data-group="${groupName}" data-match-index="${index}" />
               </div>
             </td>
           `;
           table.appendChild(row);
         });
-        const button = document.createElement("button");
-        button.innerText = `Auswertung`;
-        button.classList.add("auswertung-button");
-        button.addEventListener("click", () => evaluateScores(groupName, `resultTableField${fieldId}`));
         tableContainer.appendChild(table);
-        tableContainer.appendChild(button);
         return tableContainer;
       }
 
-      document.addEventListener("DOMContentLoaded", () => {
-        const container = document.querySelector(".container");
-        container.appendChild(generateTable(scheduleA, "Feld 1: Gruppe A", 1));
-        container.appendChild(generateTable(scheduleB, "Feld 2: Gruppe B", 2));
-        container.appendChild(generateTable(scheduleC, "Feld 3: Gruppe C", 3));
-        updateColors();
-        setInterval(updateColors, 600);
-      });
+      function handleScoreInputChange(e) {
+        let val = e.target.value;
+        if (isNaN(val) || val < 0) {
+          e.target.classList.add("invalid");
+          e.target.value = 0;
+        } else {
+          e.target.classList.remove("invalid");
+        }
+        saveScoresToLocalStorage();
+      }
 
-      // Farbe in Tabellen anpassen
+      function saveScoresToLocalStorage() {
+        const data = { groups: {}, placement: [], final: {} };
+        // Gruppen
+        const groupInputs = document.querySelectorAll('.score-input[data-group]');
+        groupInputs.forEach(input => {
+          const group = input.dataset.group;
+          const matchIndex = input.dataset.matchIndex;
+          if (!data.groups[group]) data.groups[group] = {};
+          if (!data.groups[group][matchIndex]) data.groups[group][matchIndex] = [];
+          data.groups[group][matchIndex].push(parseInt(input.value, 10) || 0);
+        });
+
+        // Platzierungsspiele
+        const placementMatches = getPlacementMatchData();
+        data.placement = placementMatches.map(m => {
+          return {teams: m.teams, scores: m.scores};
+        });
+
+        // Finale
+        const finalData = getFinalScores();
+        data.final = finalData;
+
+        localStorage.setItem('scores', JSON.stringify(data));
+      }
+
+      function loadScoresFromLocalStorage() {
+        const data = JSON.parse(localStorage.getItem('scores') || '{}');
+        if (data.groups) {
+          for (const groupName in data.groups) {
+            for (const matchIndex in data.groups[groupName]) {
+              const values = data.groups[groupName][matchIndex];
+              const inputs = document.querySelectorAll(`.score-input[data-group="${groupName}"][data-match-index="${matchIndex}"]`);
+              if (inputs.length === 2) {
+                inputs[0].value = values[0] || 0;
+                inputs[1].value = values[1] || 0;
+              }
+            }
+          }
+        }
+
+        if (data.placement && data.placement.length > 0) {
+          applyPlacementData(data.placement);
+        }
+
+        if (data.final) {
+          document.getElementById('final-score1').value = data.final.score1 || 0;
+          document.getElementById('final-score2').value = data.final.score2 || 0;
+        }
+      }
+
       function updateColors() {
         const now = new Date();
         const currentTime = now.getHours() * 60 + now.getMinutes();
@@ -264,32 +513,80 @@
         });
       }
 
-      // Auswertungs-Funktion
-      function evaluateScores(groupName, resultTableId) {
-        const schedule = groups[groupName] || [];
-        // Datensammlung
-        const results = {};
+      function evaluateGroupPhase() {
+        let allResults = [];
+        let incompleteDataFound = false;
+        placements = {};
 
-        // Alle zugehörigen Tabellenzeilen für diese Gruppe finden:
-        // Da wir die Tabellen dynamisch erzeugen, suchen wir anhand des groupName im DOM.
-        const allTables = document.querySelectorAll("h3");
+        const groupNames = Object.keys(groups);
+        groupNames.forEach(g => {
+          const {results, incompleteData} = evaluateScoresForGroup(g);
+          if (incompleteData) incompleteDataFound = true;
+          allResults = allResults.concat(results);
+          placements[g] = results; 
+        });
+
+        displayPhaseResults(allResults, incompleteDataFound, "Gruppenphase-Ergebnisse", true, "gruppen-container");
+        fillPlacementMatches();
+        saveScoresToLocalStorage();
+      }
+
+      function evaluatePlacementPhase() {
+        const placementResults = evaluatePlacementMatches();
+        placementResultsGlobal = placementResults.results; 
+        displayPhaseResults(placementResults.results, placementResults.incompleteData, "Platzierungsspiele-Ergebnisse", false, "platzierungsspiele-container");
+
+        if (placementResults.results.length > 0) {
+          const topTeam = placementResults.results[0].team;
+          document.getElementById('final-team1').textContent = topTeam;
+        } else {
+          document.getElementById('final-team1').textContent = "Noch kein Sieger";
+        }
+
+        saveScoresToLocalStorage();
+      }
+
+      function evaluateFinalPhase() {
+        const finalResult = evaluateFinal();
+        if (finalResult) {
+          finalWinner = finalResult.winner;
+          finalLoser = (finalResult.winner === finalResult.team1) ? finalResult.team2 : finalResult.team1;
+          displayFinalResult(finalResult);
+          displayFinalOverview();
+        }
+        saveScoresToLocalStorage();
+      }
+
+      function evaluateScoresForGroup(groupName) {
+        const results = {};
+        let incompleteData = false;
+
         let parentTable;
-        allTables.forEach(h3 => {
+        const allHeadings = document.querySelectorAll("h3");
+        allHeadings.forEach(h3 => {
           if (h3.innerText === groupName) {
             parentTable = h3.parentNode.querySelector("table");
           }
         });
 
-        if (!parentTable) return;
+        if (!parentTable) return {results: [], incompleteData: false};
 
         const rows = parentTable.querySelectorAll("tr[data-time]");
-        rows.forEach(row => {
+        rows.forEach((row, index) => {
           const inputs = row.querySelectorAll(".score-input");
           if (inputs.length === 2) {
+            const val1 = parseInt(inputs[0].value, 10);
+            const val2 = parseInt(inputs[1].value, 10);
+
+            if (isNaN(val1) || isNaN(val2)) {
+              incompleteData = true;
+            }
+
+            const score1 = isNaN(val1) ? 0 : val1;
+            const score2 = isNaN(val2) ? 0 : val2;
+
             const team1 = inputs[0].dataset.team;
             const team2 = inputs[1].dataset.team;
-            const score1 = parseInt(inputs[0].value, 10) || 0;
-            const score2 = parseInt(inputs[1].value, 10) || 0;
 
             if (!results[team1]) results[team1] = { wins: 0, scored: 0, allowed: 0 };
             if (!results[team2]) results[team2] = { wins: 0, scored: 0, allowed: 0 };
@@ -307,138 +604,474 @@
           }
         });
 
-        // Ergebnisse sortieren
+        const sortedResults = Object.keys(results).map(teamName => {
+          return {
+            group: groupName,
+            team: teamName,
+            wins: results[teamName].wins,
+            diff: results[teamName].scored - results[teamName].allowed,
+            scored: results[teamName].scored
+          };
+        }).sort((a, b) => {
+          if (b.wins !== a.wins) return b.wins - a.wins;
+          if (b.diff !== a.diff) return b.diff - a.diff;
+          if (b.scored !== a.scored) return b.scored - a.scored;
+          return a.team.localeCompare(b.team);
+        });
+
+        return {results: sortedResults, incompleteData};
+      }
+
+      function displayPhaseResults(results, incompleteData, phaseTitle, isGroupPhase, containerId) {
+        const oldResults = document.getElementById(phaseTitle);
+        if (oldResults) oldResults.remove();
+
+        const resultContainer = document.createElement("div");
+        resultContainer.id = phaseTitle;
+        resultContainer.className = "result-container";
+
+        const heading = document.createElement("h3");
+        heading.innerText = phaseTitle;
+        resultContainer.appendChild(heading);
+
+        const searchContainer = document.createElement("div");
+        searchContainer.className = "search-container";
+        const searchInput = document.createElement("input");
+        searchInput.type = "text";
+        searchInput.className = "search-input";
+        searchInput.placeholder = "Team suchen...";
+        searchInput.addEventListener('input', () => filterResults(phaseTitle, searchInput.value, isGroupPhase));
+        searchContainer.appendChild(searchInput);
+        resultContainer.appendChild(searchContainer);
+
+        if (incompleteData) {
+          const warningEl = document.createElement('p');
+          warningEl.className = 'warning';
+          warningEl.innerText = "Einige Spiele hatten unvollständige Punktedaten. Es wurden 0 Punkte angenommen.";
+          resultContainer.appendChild(warningEl);
+        }
+
+        const table = document.createElement("table");
+        table.className = "result-table";
+
+        table.innerHTML = isGroupPhase ? `
+          <thead>
+            <tr>
+              <th>Gruppe</th>
+              <th>Platz</th>
+              <th>Team</th>
+              <th>Siege</th>
+              <th>Punktedifferenz</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        ` : `
+          <thead>
+            <tr>
+              <th>Platz</th>
+              <th>Team</th>
+              <th>Siege</th>
+              <th>Punktedifferenz</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        `;
+
+        const tbody = table.querySelector("tbody");
+
+        if (isGroupPhase) {
+          const groupedResults = {};
+          results.forEach(res => {
+            if (!groupedResults[res.group]) groupedResults[res.group] = [];
+            groupedResults[res.group].push(res);
+          });
+
+          for (const g in groupedResults) {
+            const groupArray = groupedResults[g];
+            groupArray.forEach((res, index) => {
+              const tr = document.createElement("tr");
+              if (index === 0) tr.classList.add("leader-row");
+              tr.innerHTML = `
+                <td>${g}</td>
+                <td>${index + 1}</td>
+                <td>${res.team}</td>
+                <td>${res.wins}</td>
+                <td>${res.diff}</td>
+              `;
+              tbody.appendChild(tr);
+            });
+          }
+        } else {
+          results.forEach((res, index) => {
+            const tr = document.createElement("tr");
+            if (index === 0) tr.classList.add("leader-row");
+            tr.innerHTML = `
+              <td>${index + 1}</td>
+              <td>${res.team}</td>
+              <td>${res.wins}</td>
+              <td>${res.diff}</td>
+            `;
+            tbody.appendChild(tr);
+          });
+        }
+
+        resultContainer.appendChild(table);
+
+        const container = document.getElementById(containerId);
+        container.parentNode.insertBefore(resultContainer, container.nextSibling);
+      }
+
+      function filterResults(resultTableId, query, isGroupPhase) {
+        const resultContainer = document.getElementById(resultTableId);
+        if (!resultContainer) return;
+        const rows = resultContainer.querySelectorAll("tbody tr");
+        query = query.toLowerCase();
+        let teamCol = isGroupPhase ? 3 : 2;
+        rows.forEach(row => {
+          const teamCell = row.querySelector(`td:nth-child(${teamCol})`);
+          const teamName = teamCell ? teamCell.innerText.toLowerCase() : "";
+          row.style.display = teamName.includes(query) ? "" : "none";
+        });
+      }
+
+      function setTeamNameFromPlaceholder(input) {
+        const placeholder = input.getAttribute('placeholder');
+        // Nur aktualisieren, wenn der Nutzer nicht manuell geändert hat
+        if (input.getAttribute('data-user-override') === 'true') return;
+
+        const match = placeholder.match(/^(\d+)\. Gruppe ([ABC])$/);
+        if (match) {
+          const rank = parseInt(match[1], 10);
+          const groupLetter = match[2];
+          const fullGroupName = groupNameMap["Gruppe " + groupLetter];
+          if (placements[fullGroupName] && placements[fullGroupName][rank - 1]) {
+            const teamName = placements[fullGroupName][rank - 1].team;
+            input.value = teamName;
+            input.readOnly = false; 
+          } else {
+            input.value = "N/A";
+            input.readOnly = false; 
+          }
+        }
+      }
+
+      function convertPlacementInputsToMatches() {
+        const placementRows = document.querySelectorAll('#platzierungsspiele-container .field table tr[data-time]');
+        placementRows.forEach(row => {
+          const cell = row.querySelector('td:nth-child(2)');
+          const txtInputs = cell.querySelectorAll('input[type="text"]');
+          if (txtInputs.length === 2) {
+            const team1 = txtInputs[0].value;
+            const team2 = txtInputs[1].value;
+
+            // Behalte data-user-override bei, falls vorhanden
+            const override1 = txtInputs[0].getAttribute('data-user-override');
+            const override2 = txtInputs[1].getAttribute('data-user-override');
+
+            cell.innerHTML = `
+              <div class="match">
+                <div class="team-container">
+                  <input type="text" value="${team1}" data-user-override="${override1}" />
+                </div>
+                :
+                <div class="team-container">
+                  <input type="text" value="${team2}" data-user-override="${override2}" />
+                </div>
+                <div class="score-container">
+                  <input class="score-input placement-score" type="number" min="0" value="0" data-team="${team1}"/>
+                  <span>:</span>
+                  <input class="score-input placement-score" type="number" min="0" value="0" data-team="${team2}"/>
+                </div>
+              </div>
+            `;
+
+            // Neu hinzugefügte Inputs wieder mit Listenern versehen
+            const newInputs = cell.querySelectorAll('input[type="text"]');
+            newInputs.forEach(inp => {
+              inp.addEventListener('input', (e) => {
+                e.target.setAttribute('data-user-override', 'true');
+                saveScoresToLocalStorage();
+              });
+            });
+          }
+        });
+      }
+
+      function fillPlacementMatches() {
+        const placementRows = document.querySelectorAll('#platzierungsspiele-container .field table tr[data-time]');
+        placementRows.forEach(row => {
+          const inputs = row.querySelectorAll('input[placeholder]');
+          inputs.forEach(input => {
+            setTeamNameFromPlaceholder(input);
+          });
+        });
+
+        convertPlacementInputsToMatches();
+        const placementScoreInputs = document.querySelectorAll('.placement-score');
+        placementScoreInputs.forEach(input => {
+          input.addEventListener('input', handleScoreInputChange);
+        });
+      }
+
+      function getPlacementMatchData() {
+        const placementRows = document.querySelectorAll('#platzierungsspiele-container .field table tr[data-time]');
+        const matches = [];
+        placementRows.forEach(row => {
+          const matchObj = {teams:[],scores:[]};
+          const matchContainer = row.querySelector('.match');
+          if (matchContainer) {
+            const teamInputs = matchContainer.querySelectorAll('input[type="text"]');
+            const scoreInputs = matchContainer.querySelectorAll('.placement-score');
+            teamInputs.forEach(tn => matchObj.teams.push(tn.value));
+            scoreInputs.forEach(si => matchObj.scores.push(parseInt(si.value,10)||0));
+            matches.push(matchObj);
+          } else {
+            const inputs = row.querySelectorAll('input[type="text"]');
+            if (inputs.length === 2) {
+              matchObj.teams.push(inputs[0].value);
+              matchObj.teams.push(inputs[1].value);
+              matchObj.scores = [0,0];
+              matches.push(matchObj);
+            }
+          }
+        });
+        return matches;
+      }
+
+      function applyPlacementData(placementData) {
+        // Lade Daten ins UI
+        const placementRows = document.querySelectorAll('#platzierungsspiele-container .field table tr[data-time]');
+        placementRows.forEach((row, index) => {
+          const match = placementData[index];
+          if (match && match.teams.length === 2) {
+            const cell = row.querySelector('td:nth-child(2)');
+            if (cell.querySelector('.match')) {
+              const teamInputs = cell.querySelectorAll('.match input[type="text"]');
+              const scoreInputs = cell.querySelectorAll('.placement-score');
+
+              if (teamInputs.length === 2) {
+                // Teams beibehalten, da manuell änderbar
+                teamInputs[0].value = match.teams[0];
+                teamInputs[1].value = match.teams[1];
+              }
+              if (scoreInputs.length === 2) {
+                scoreInputs[0].value = match.scores[0] || 0;
+                scoreInputs[1].value = match.scores[1] || 0;
+              }
+            } else {
+              // Noch nicht konvertiert
+              cell.innerHTML = `
+                <div class="match">
+                  <div class="team-container">
+                    <input type="text" value="${match.teams[0]}" data-user-override="false"/>
+                  </div>
+                  :
+                  <div class="team-container">
+                    <input type="text" value="${match.teams[1]}" data-user-override="false"/>
+                  </div>
+                  <div class="score-container">
+                    <input class="score-input placement-score" type="number" min="0" value="${match.scores[0]||0}" data-team="${match.teams[0]}"/>
+                    <span>:</span>
+                    <input class="score-input placement-score" type="number" min="0" value="${match.scores[1]||0}" data-team="${match.teams[1]}"/>
+                  </div>
+                </div>
+              `;
+
+              cell.querySelectorAll('input[type="text"]').forEach(inp => {
+                inp.addEventListener('input', (e) => {
+                  e.target.setAttribute('data-user-override', 'true');
+                  saveScoresToLocalStorage();
+                });
+              });
+
+              cell.querySelectorAll('.placement-score').forEach(inp => {
+                inp.addEventListener('input', handleScoreInputChange);
+              });
+            }
+          }
+        });
+      }
+
+      function evaluatePlacementMatches() {
+        const rows = document.querySelectorAll('#platzierungsspiele-container .field table tr[data-time]');
+        const results = {};
+        let incompleteData = false;
+
+        rows.forEach(row => {
+          const scoreInputs = row.querySelectorAll('.placement-score');
+          if (scoreInputs.length === 2) {
+            const team1 = scoreInputs[0].dataset.team;
+            const team2 = scoreInputs[1].dataset.team;
+
+            const val1 = parseInt(scoreInputs[0].value,10);
+            const val2 = parseInt(scoreInputs[1].value,10);
+
+            if (isNaN(val1) || isNaN(val2)) {
+              incompleteData = true;
+            }
+
+            const score1 = isNaN(val1)?0:val1;
+            const score2 = isNaN(val2)?0:val2;
+
+            if (!team1 || !team2) {
+              return;
+            }
+
+            if (!results[team1]) results[team1] = { wins: 0, scored: 0, allowed: 0 };
+            if (!results[team2]) results[team2] = { wins: 0, scored: 0, allowed: 0 };
+
+            results[team1].scored += score1;
+            results[team1].allowed += score2;
+            results[team2].scored += score2;
+            results[team2].allowed += score1;
+
+            if (score1 > score2) {
+              results[team1].wins += 1;
+            } else if (score2 > score1) {
+              results[team2].wins += 1;
+            }
+          }
+        });
+
         const sortedResults = Object.keys(results).map(teamName => {
           return {
             team: teamName,
             wins: results[teamName].wins,
-            diff: results[teamName].scored - results[teamName].allowed
+            diff: results[teamName].scored - results[teamName].allowed,
+            scored: results[teamName].scored
           };
         }).sort((a, b) => {
-          // Sortierung: Erst nach Siegen, dann nach Punktedifferenz
           if (b.wins !== a.wins) return b.wins - a.wins;
-          return b.diff - a.diff;
+          if (b.diff !== a.diff) return b.diff - a.diff;
+          if (b.scored !== a.scored) return b.scored - a.scored;
+          return a.team.localeCompare(b.team);
         });
 
-        // Tabelle leeren und neu aufbauen
-        const resultContainer = document.getElementById(resultTableId);
-        const tbody = resultContainer.querySelector("tbody");
-        tbody.innerHTML = "";
+        return {results:sortedResults, incompleteData};
+      }
 
-        sortedResults.forEach((res, index) => {
+      function evaluateFinal() {
+        const team1 = document.getElementById('final-team1').textContent;
+        const team2 = document.getElementById('final-team2').textContent;
+
+        if (team1 === "Turniersieger" || team1 === "Noch kein Sieger") {
+          return null;
+        }
+
+        const val1 = parseInt(document.getElementById('final-score1').value,10);
+        const val2 = parseInt(document.getElementById('final-score2').value,10);
+
+        const score1 = isNaN(val1)?0:val1;
+        const score2 = isNaN(val2)?0:val2;
+
+        let incompleteData = (isNaN(val1) || isNaN(val2));
+        let winner = null;
+        if (score1 > score2) winner = team1;
+        else if (score2 > score1) winner = team2;
+
+        return {team1, team2, score1, score2, winner, incompleteData};
+      }
+
+      function displayFinalResult(finalRes) {
+        const oldFinal = document.getElementById("Final-Ergebnis");
+        if (oldFinal) oldFinal.remove();
+
+        const resultContainer = document.createElement("div");
+        resultContainer.id = "Final-Ergebnis";
+        resultContainer.className = "result-container";
+
+        const heading = document.createElement("h3");
+        heading.innerText = "Final-Ergebnis";
+        resultContainer.appendChild(heading);
+
+        if (finalRes.incompleteData) {
+          const warningEl = document.createElement('p');
+          warningEl.className = 'warning';
+          warningEl.innerText = "Finale hatte unvollständige Punktedaten. Es wurden 0 Punkte angenommen.";
+          resultContainer.appendChild(warningEl);
+        }
+
+        const table = document.createElement("table");
+        table.className = "result-table";
+        table.innerHTML = `
+          <thead>
+            <tr>
+              <th>Team 1</th>
+              <th>Team 2</th>
+              <th>Ergebnis</th>
+              <th>Sieger</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        `;
+
+        const tbody = table.querySelector("tbody");
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${finalRes.team1}</td>
+          <td>${finalRes.team2}</td>
+          <td>${finalRes.score1} : ${finalRes.score2}</td>
+          <td>${finalRes.winner ? finalRes.winner : "Unentschieden"}</td>
+        `;
+        tbody.appendChild(tr);
+        resultContainer.appendChild(table);
+
+        document.body.appendChild(resultContainer);
+      }
+
+      function displayFinalOverview() {
+        const oldOverview = document.getElementById("Gesamt-Übersicht");
+        if (oldOverview) oldOverview.remove();
+
+        const overviewContainer = document.createElement("div");
+        overviewContainer.id = "Gesamt-Übersicht";
+        overviewContainer.className = "result-container";
+
+        const heading = document.createElement("h3");
+        heading.innerText = "Übersicht aller Teams mit ihrer Platzierung";
+        overviewContainer.appendChild(heading);
+
+        const allTeamsRanked = [];
+        if (finalWinner) {
+          allTeamsRanked.push({team: finalWinner, place: 1});
+        }
+        if (finalLoser && finalLoser !== finalWinner) {
+          allTeamsRanked.push({team: finalLoser, place: 2});
+        }
+
+        let startPlace = allTeamsRanked.length + 1;
+        placementResultsGlobal.forEach((res, i) => {
+          const thisPlace = startPlace + i;
+          if (res.team !== finalWinner && res.team !== finalLoser) {
+            allTeamsRanked.push({team: res.team, place: thisPlace});
+          }
+        });
+
+        const table = document.createElement("table");
+        table.className = "result-table";
+        table.innerHTML = `
+          <thead>
+            <tr>
+              <th>Platz</th>
+              <th>Team</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        `;
+
+        const tbody = table.querySelector("tbody");
+        allTeamsRanked.forEach(r => {
           const tr = document.createElement("tr");
           tr.innerHTML = `
-            <td>${index + 1}</td>
-            <td>${res.team}</td>
-            <td>${res.wins}</td>
-            <td>${res.diff}</td>
+            <td>${r.place}</td>
+            <td>${r.team}</td>
           `;
           tbody.appendChild(tr);
         });
+
+        overviewContainer.appendChild(table);
+        document.body.appendChild(overviewContainer);
       }
     </script>
-
-    <div class="result-container" id="resultTableField1">
-      <h3>Ergebnisse für Gruppe A</h3>
-      <table class="result-table">
-        <thead>
-          <tr>
-            <th>Platz</th>
-            <th>Team</th>
-            <th>Siege</th>
-            <th>Punktedifferenz</th>
-          </tr>
-        </thead>
-        <tbody>
-          <!-- Ergebnisse hier -->
-        </tbody>
-      </table>
-    </div>
-    <div class="result-container" id="resultTableField2">
-      <h3>Ergebnisse für Gruppe B</h3>
-      <table class="result-table">
-        <thead>
-          <tr>
-            <th>Platz</th>
-            <th>Team</th>
-            <th>Siege</th>
-            <th>Punktedifferenz</th>
-          </tr>
-        </thead>
-        <tbody>
-          <!-- Ergebnisse hier -->
-        </tbody>
-      </table>
-    </div>
-    <div class="result-container" id="resultTableField3">
-      <h3>Ergebnisse für Gruppe C</h3>
-      <table class="result-table">
-        <thead>
-          <tr>
-            <th>Platz</th>
-            <th>Team</th>
-            <th>Siege</th>
-            <th>Punktedifferenz</th>
-          </tr>
-        </thead>
-        <tbody>
-          <!-- Ergebnisse hier -->
-        </tbody>
-      </table>
-    </div>
-
-    <h2>Platzierungsspiele (10:50 - 11:50 Uhr)</h2>
-    <div class="container">
-      <div class="field">
-        <h3>Feld 1</h3>
-        <table>
-          <tr>
-            <th>Zeit</th>
-            <th>Spiel</th>
-          </tr>
-          <tr data-time="10:50"><td>10:50</td><td><input type="text" placeholder="1. Gruppe A" /> vs <input type="text" placeholder="1. Gruppe B" /></td></tr>
-          <tr data-time="10:50"><td>11:00</td><td><input type="text" placeholder="1. Gruppe A" /> vs <input type="text" placeholder="1. Gruppe C" /></td></tr>
-          <tr data-time="10:50"><td>11:10</td><td><input type="text" placeholder="1. Gruppe C" /> vs <input type="text" placeholder="1. Gruppe B" /></td></tr>
-          <tr data-time="10:50"><td>11:20</td><td><input type="text" placeholder="2. Gruppe A" /> vs <input type="text" placeholder="2. Gruppe B" /></td></tr>
-          <tr data-time="10:50"><td>11:30</td><td><input type="text" placeholder="2. Gruppe A" /> vs <input type="text" placeholder="2. Gruppe C" /></td></tr>
-          <tr data-time="10:50"><td>11:40</td><td><input type="text" placeholder="2. Gruppe C" /> vs <input type="text" placeholder="2. Gruppe B" /></td></tr>
-        </table>
-      </div>
-      
-      <div class="field">
-        <h3>Feld 2</h3>
-        <table>
-          <tr>
-            <th>Zeit</th>
-            <th>Spiel</th>
-          </tr>
-          <tr data-time="10:50"><td>10:50</td><td><input type="text" placeholder="3. Gruppe A" /> vs <input type="text" placeholder="3. Gruppe B" /></td></tr>
-          <tr data-time="10:50"><td>11:00</td><td><input type="text" placeholder="3. Gruppe A" /> vs <input type="text" placeholder="3. Gruppe C" /></td></tr>
-          <tr data-time="10:50"><td>11:10</td><td><input type="text" placeholder="3. Gruppe C" /> vs <input type="text" placeholder="3. Gruppe B" /></td></tr>
-          <tr data-time="10:50"><td>11:20</td><td><input type="text" placeholder="4. Gruppe A" /> vs <input type="text" placeholder="4. Gruppe B" /></td></tr>
-          <tr data-time="10:50"><td>11:30</td><td><input type="text" placeholder="4. Gruppe A" /> vs <input type="text" placeholder="4. Gruppe C" /></td></tr>
-          <tr data-time="10:50"><td>11:40</td><td><input type="text" placeholder="4. Gruppe C" /> vs <input type="text" placeholder="4. Gruppe B" /></td></tr>
-        </table>
-      </div>
-
-      <div class="field">
-        <h3>Feld 3</h3>
-        <table>
-          <tr>
-            <th>Zeit</th>
-            <th>Spiel</th>
-          </tr>
-          <tr data-time="10:50"><td>10:50</td><td><input type="text" placeholder="5. Gruppe A" /> vs <input type="text" placeholder="5. Gruppe B" /></td></tr>
-          <tr data-time="10:50"><td>11:00</td><td><input type="text" placeholder="5. Gruppe A" /> vs <input type="text" placeholder="5. Gruppe C" /></td></tr>
-          <tr data-time="10:50"><td>11:10</td><td><input type="text" placeholder="5. Gruppe C" /> vs <input type="text" placeholder="5. Gruppe B" /></td></tr>
-          <tr data-time="10:50"><td>11:20</td><td><input type="text" placeholder="6. Gruppe A" /> vs <input type="text" placeholder="6. Gruppe B" /></td></tr>
-          <tr data-time="10:50"><td>11:30</td><td><input type="text" placeholder="6. Gruppe A" /> vs <input type="text" placeholder="6. Gruppe C" /></td></tr>
-          <tr data-time="10:50"><td>11:40</td><td><input type="text" placeholder="6. Gruppe C" /> vs <input type="text" placeholder="6. Gruppe B" /></td></tr>
-        </table>
-      </div>
-    </div>
-
-    <h2>Finale (12:20 - 12:50 Uhr)</h2>
-    <p>Auf dem Centercourt spielen: Turniersieger vs. Lehrerteam (1 Satz bis 25, oder 2 Sätze bis 15 oder auf Zeit?)</p>
 </body>
 </html>
