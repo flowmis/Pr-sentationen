@@ -248,7 +248,7 @@
     </div>
 
     <button id="createTeamsBtn">Teams erstellen</button>
-    <p class="hint">Auf mobilen Geräten: Zweimal schnell mit zwei Fingern auf den Bildschirm tippen, um neu zu mischen.</p>
+    <p class="hint">Auf mobilen Geräten: Dreimal schnell mit zwei Fingern tippen, um neu zu mischen.</p>
   </div>
 
   <div class="teams" id="teamsContainer"></div>
@@ -285,7 +285,7 @@ let players = [];
 let currentTeams = [];
 let currentTeamNames = [];
 
-// Zustände der Optionen
+// Zustände der Optionen (Standardwerte)
 let isHeterogen = true;    // Standard = heterogen
 let genderSeparated = false; // Standard = gemischt
 let positionsBalanced = true; // Standard = ausbalanciert
@@ -322,13 +322,15 @@ addPlayerBtn.addEventListener('click', () => {
   // Positionen erfassen
   const checkedPositions = Array.from(document.querySelectorAll('input[name="position"]:checked'))
     .map(el => el.value);
-  if (checkedPositions.length < 1 || checkedPositions.length > 3) {
-    alert("Bitte 1 bis 3 Positionen auswählen.");
-    return;
+
+  let positions = checkedPositions;
+  if (positions.length < 1 || positions.length > 3) {
+    // Wenn keine oder ungültige Anzahl Positionen gewählt wurde, Standard verwenden
+    positions = ['AA','MB','Z'];
   }
 
   if (name) {
-    players.push({ name, skill, gender, positions: checkedPositions });
+    players.push({ name, skill, gender, positions });
     updatePlayerList();
     playerNameInput.value = '';
     playerNameInput.focus();
@@ -368,17 +370,13 @@ importCsvBtn.addEventListener('click', () => {
           }
 
           if (parts.length > 3) {
-            // weitere Teile sind Positionen, per Komma getrennt, aber wir haben schon Komma für CSV
-            // Format ist Name,Skill,Geschlecht,Pos1,Pos2,... -> ab parts[3] sind Positionen
             positions = parts.slice(3);
             const validPositions = ['AA','MB','D','Z','L'];
             positions = positions.filter(pos => validPositions.includes(pos));
-            // Wenn keine oder zu viele (max 3) gültige Positionen gefunden werden, Standard zuweisen
             if (positions.length < 1 || positions.length > 3) {
               positions = ['AA','MB','Z'];
             }
           } else {
-            // Keine Positionen angegeben -> Standardwerte
             positions = ['AA','MB','Z'];
           }
 
@@ -640,22 +638,21 @@ function displayTeams(teams) {
   });
 }
 
-// Doppeltippen mit zwei Fingern zum Neu-Mischen
+// Dreifachtippen mit zwei Fingern zum Neu-Mischen
 let lastTapTime = 0;
-let doubleTapTimeout = 300; // ms
 let tapCount = 0;
 
 document.addEventListener('touchstart', (e) => {
   if (e.touches.length === 2) {
     const currentTime = Date.now();
-    if (currentTime - lastTapTime < doubleTapTimeout) {
-      // double tap erkannt
+    if (currentTime - lastTapTime < 300) {
+      // innerhalb 300ms getippt
       tapCount++;
-      if (tapCount === 2) {
+      if (tapCount === 3) {
         tapCount = 0;
         if (currentTeams.length > 0) {
           createOrShuffleTeams();
-          alert('Teams neu gemischt (Doppeltippen mit zwei Fingern)!');
+          // Keine Meldung
         }
       }
     } else {
