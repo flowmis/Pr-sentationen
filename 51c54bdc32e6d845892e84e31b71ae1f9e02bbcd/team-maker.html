@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>TSV: Team Maker</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #fff; /* weißer Hintergrund */
+    margin: 0;
+    padding: 0;
+    color: #000;
+  }
+
+  header, .content, footer {
+    max-width: 900px;
+    margin: auto;
+    padding: 20px;
+  }
+
+  header {
+    background: #ffffff;
+    color: #ff0000; /* Rot */
+    margin-bottom: 20px;
+  }
+
+  header h1 {
+    margin: 0;
+    padding: 10px 0;
+    text-align: center;
+    color: #ff0000; /* Rot */
+  }
+
+  .section {
+    background: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    border: 2px solid #ff0000; /* Roter Rand */
+  }
+
+  .section h2 {
+    margin-top: 0;
+    color: #ff0000; /* Rot */
+  }
+
+  label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #000;
+  }
+
+  input[type="text"], input[type="file"], input[type="number"], select {
+    padding: 5px;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+  }
+
+  button {
+    padding: 7px 15px;
+    cursor: pointer;
+    background: #0033cc; /* Blau */
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    margin-top: 5px;
+  }
+
+  button:hover {
+    background: #002699;
+  }
+
+  #playerList {
+    list-style: none;
+    padding: 0;
+  }
+
+  #playerList li {
+    margin: 5px 0;
+    padding: 5px;
+    background: #eee;
+    border-radius: 3px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  #playerList li span {
+    flex: 1;
+  }
+
+  .teams {
+    margin-top: 20px;
+  }
+
+  .team {
+    margin-bottom: 20px;
+    background: #fff;
+    border: 2px solid #ff0000; 
+    padding: 10px;
+    border-radius: 5px;
+  }
+
+  .team-title {
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #ff0000;
+  }
+
+  .team ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .team li {
+    margin: 5px 0;
+    background: #f0f0f0;
+    padding: 5px;
+    border-radius: 3px;
+    color: #000;
+  }
+
+  footer {
+    text-align: center;
+    color: #888;
+    margin-top: 20px;
+  }
+
+  .switch-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  .switch-container label {
+    margin-bottom: 0;
+    font-weight: normal;
+    margin-left: 10px;
+    color: #000;
+  }
+
+  /* Einfache Switches (Toggle) für die Optionen */
+  .switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 30px;
+  }
+
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: #ccc;
+    border-radius: 30px;
+    transition: .4s;
+  }
+
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 22px;
+    width: 22px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    border-radius: 22px;
+    transition: .4s;
+  }
+
+  input:checked + .slider {
+    background-color: #0033cc;
+  }
+
+  input:checked + .slider:before {
+    transform: translateX(30px);
+  }
+
+</style>
+</head>
+<body>
+
+<header>
+  <h1>TSV Weihnachtsturnier - Team Maker</h1>
+</header>
+
+<div class="content">
+
+  <div class="section">
+    <h2>Spieler hinzufügen</h2>
+    <label>Neuen Spieler hinzufügen (Name, Leistungsklasse, Geschlecht):</label>
+    <input type="text" id="playerName" placeholder="Name des Spielers" />
+    <input type="number" id="playerSkill" min="1" max="3" value="2" title="1 = schwach, 2 = mittel, 3 = stark" />
+    <select id="playerGender">
+      <option value="M">M</option>
+      <option value="W">W</option>
+      <option value="D">D</option>
+    </select>
+    <button id="addPlayerBtn">Hinzufügen</button>
+    <p>Leistungsklasse: 1 = werdender Volleyballer, 2 = erfahrener Volleyballer, 3 = Führungsspieler</p>
+  </div>
+
+  <div class="section">
+    <h2>CSV Import</h2>
+    <p>CSV-Format: <code>Name,Leistungsklasse,Geschlecht</code><br>
+    Beispiel:<br>Max,3,M<br>Anna,1,W<br>Lukas,2,M</p>
+    <input type="file" id="uploadCsv" accept=".csv" />
+    <button id="importCsvBtn">Importieren</button>
+    <p>Ungültige Klassen oder Geschlechter werden auf Standardwerte gesetzt (2 = mittel, M = männlich)</p>
+  </div>
+
+  <div class="section">
+    <h2>Spielerliste verwalten</h2>
+    <button id="savePlayersBtn">Liste speichern</button>
+    <button id="loadPlayersBtn">Liste laden</button>
+    <ul id="playerList"></ul>
+  </div>
+
+  <div class="section">
+    <h2>Teams erstellen</h2>
+    <label>Anzahl der Teams:</label>
+    <input type="number" id="teamCount" value="2" min="1" />
+
+    <!-- Switch für Leistungs-Verteilung -->
+    <div class="switch-container">
+      <div class="switch">
+        <input type="checkbox" id="performanceSwitch" />
+        <span class="slider"></span>
+      </div>
+      <label for="performanceSwitch">Heterogen (ein) / Homogen (aus)</label>
+    </div>
+
+    <!-- Switch für Geschlechter-Verteilung -->
+    <div class="switch-container">
+      <div class="switch">
+        <input type="checkbox" id="genderSwitch" />
+        <span class="slider"></span>
+      </div>
+      <label for="genderSwitch">Geschlechter trennen (ein) / Geschlechter mischen (aus)</label>
+    </div>
+
+    <button id="createTeamsBtn">Teams erstellen</button>
+  </div>
+
+  <div class="section" id="teamNamesSection" style="display:none;">
+    <h2>Teamnamen anpassen</h2>
+    <div class="team-name-inputs" id="teamNameInputs"></div>
+    <button id="updateTeamNamesBtn">Namen aktualisieren</button>
+  </div>
+
+  <div class="teams" id="teamsContainer"></div>
+
+  <button id="reshuffleBtn" style="display:none;">Neu Mischen</button>
+
+</div>
+
+<footer>
+  <p>&copy; Dir gefällt die Seite - Mane freut sich über ein Bier</p>
+</footer>
+
+<script>
+  const playerNameInput = document.getElementById('playerName');
+  const playerSkillInput = document.getElementById('playerSkill');
+  const playerGenderInput = document.getElementById('playerGender');
+  const addPlayerBtn = document.getElementById('addPlayerBtn');
+  const uploadCsv = document.getElementById('uploadCsv');
+  const importCsvBtn = document.getElementById('importCsvBtn');
+  const playerList = document.getElementById('playerList');
+  const teamCountInput = document.getElementById('teamCount');
+  const createTeamsBtn = document.getElementById('createTeamsBtn');
+  const teamsContainer = document.getElementById('teamsContainer');
+  const savePlayersBtn = document.getElementById('savePlayersBtn');
+  const loadPlayersBtn = document.getElementById('loadPlayersBtn');
+  const reshuffleBtn = document.getElementById('reshuffleBtn');
+  const teamNamesSection = document.getElementById('teamNamesSection');
+  const teamNameInputs = document.getElementById('teamNameInputs');
+  const updateTeamNamesBtn = document.getElementById('updateTeamNamesBtn');
+
+  const performanceSwitch = document.getElementById('performanceSwitch');
+  const genderSwitch = document.getElementById('genderSwitch');
+
+  let players = [];
+  let currentTeams = [];
+  let currentTeamNames = [];
+
+  // Spieler hinzufügen
+  addPlayerBtn.addEventListener('click', () => {
+    const name = playerNameInput.value.trim();
+    let skill = parseInt(playerSkillInput.value, 10);
+    if (isNaN(skill) || skill < 1 || skill > 3) {
+      skill = 2; // Standard mittel
+    }
+    const gender = ['M','W','D'].includes(playerGenderInput.value.toUpperCase()) 
+                   ? playerGenderInput.value.toUpperCase() : 'M';
+
+    if (name) {
+      players.push({ name, skill, gender });
+      updatePlayerList();
+      playerNameInput.value = '';
+      playerNameInput.focus();
+    }
+  });
+
+  // CSV importieren
+  importCsvBtn.addEventListener('click', () => {
+    const file = uploadCsv.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        const text = e.target.result;
+        const lines = text.split(/\r?\n/).map(line => line.trim()).filter(line => line);
+        for (const line of lines) {
+          const parts = line.split(',').map(p => p.trim());
+          if (parts.length >= 1) {
+            const name = parts[0];
+            let skill = 2; // Standard mittel
+            let gender = 'M'; // Standard M
+            if (parts.length > 1) {
+              const skillVal = parseInt(parts[1], 10);
+              if (!isNaN(skillVal) && skillVal >= 1 && skillVal <= 3) {
+                skill = skillVal;
+              }
+            }
+            if (parts.length > 2) {
+              const gVal = parts[2].toUpperCase();
+              if (['M','W','D'].includes(gVal)) {
+                gender = gVal;
+              }
+            }
+            if (name) {
+              players.push({ name, skill, gender });
+            }
+          }
+        }
+        updatePlayerList();
+      };
+      reader.readAsText(file);
+    } else {
+      alert('Bitte eine gültige CSV-Datei auswählen.');
+    }
+  });
+
+  // Spielerliste aktualisieren
+  function updatePlayerList() {
+    playerList.innerHTML = '';
+    players.forEach((player, index) => {
+      const li = document.createElement('li');
+      const span = document.createElement('span');
+      span.textContent = `${player.name} (Klasse: ${player.skill}, Geschlecht: ${player.gender})`;
+      li.appendChild(span);
+
+      const removeBtn = document.createElement('button');
+      removeBtn.textContent = 'Entfernen';
+      removeBtn.style.marginLeft = '10px';
+      removeBtn.addEventListener('click', () => {
+        players.splice(index, 1);
+        updatePlayerList();
+      });
+      li.appendChild(removeBtn);
+      playerList.appendChild(li);
+    });
+  }
+
+  // Speichern der Spielerliste
+  savePlayersBtn.addEventListener('click', () => {
+    localStorage.setItem('players', JSON.stringify(players));
+    alert('Spielerliste wurde gespeichert.');
+  });
+
+  // Laden der Spielerliste
+  loadPlayersBtn.addEventListener('click', () => {
+    const stored = localStorage.getItem('players');
+    if (stored) {
+      players = JSON.parse(stored);
+      updatePlayerList();
+      alert('Spielerliste wurde geladen.');
+    } else {
+      alert('Keine gespeicherte Liste gefunden.');
+    }
+  });
+
+  // Teams erstellen
+  createTeamsBtn.addEventListener('click', () => {
+    createOrShuffleTeams();
+  });
+
+  // Neu mischen (Shake)
+  reshuffleBtn.addEventListener('click', () => {
+    createOrShuffleTeams();
+  });
+
+  function createOrShuffleTeams() {
+    const teamCount = parseInt(teamCountInput.value, 10);
+    if (teamCount < 1 || players.length === 0) {
+      alert('Bitte gültige Anzahl Teams eingeben und sicherstellen, dass mindestens ein Spieler vorhanden ist.');
+      return;
+    }
+
+    const isHeterogen = performanceSwitch.checked; // true = heterogen, false = homogen
+    const genderSeparated = genderSwitch.checked;  // true = trennen, false = mischen
+
+    let teams;
+    if (genderSeparated) {
+      // Geschlechtertrennung
+      teams = createGenderSeparatedTeams(players, teamCount);
+    } else {
+      // Nach Leistung verteilen
+      if (isHeterogen) {
+        teams = createHeterogeneousTeams(players, teamCount);
+      } else {
+        teams = createHomogeneousTeams(players, teamCount);
+      }
+    }
+
+    currentTeams = teams;
+    // Standard-Teamnamen erstellen (Team 1, Team 2, ...)
+    currentTeamNames = teams.map((_, i) => `Team ${i+1}`);
+    
+    displayTeams(teams);
+    showTeamNameInputs();
+    reshuffleBtn.style.display = 'inline-block';
+  }
+
+  function createHomogeneousTeams(players, teamCount) {
+    let sorted = [...players].sort((a, b) => a.skill - b.skill);
+    const teams = Array.from({ length: teamCount }, () => []);
+    let currentTeam = 0;
+    for (const player of sorted) {
+      teams[currentTeam].push(player);
+      currentTeam = (currentTeam + 1) % teamCount;
+    }
+    return teams;
+  }
+
+  function createHeterogeneousTeams(players, teamCount) {
+    const skillGroups = {
+      1: players.filter(p => p.skill === 1),
+      2: players.filter(p => p.skill === 2),
+      3: players.filter(p => p.skill === 3)
+    };
+
+    shuffle(skillGroups[1]);
+    shuffle(skillGroups[2]);
+    shuffle(skillGroups[3]);
+
+    const teams = Array.from({ length: teamCount }, () => []);
+
+    distributeGroup(skillGroups[1], teams);
+    distributeGroup(skillGroups[2], teams);
+    distributeGroup(skillGroups[3], teams);
+
+    return teams;
+  }
+
+  function createGenderSeparatedTeams(players, teamCount) {
+    const genders = {};
+    for (const p of players) {
+      if (!genders[p.gender]) genders[p.gender] = [];
+      genders[p.gender].push(p);
+    }
+
+    for (const g in genders) {
+      shuffle(genders[g]);
+    }
+
+    const genderKeys = Object.keys(genders);
+    const teams = Array.from({ length: teamCount }, () => []);
+
+    let currentTeam = 0;
+    for (const g of genderKeys) {
+      for (const player of genders[g]) {
+        teams[currentTeam].push(player);
+        currentTeam = (currentTeam + 1) % teamCount;
+      }
+    }
+
+    return teams;
+  }
+
+  function distributeGroup(group, teams) {
+    let index = 0;
+    for (const player of group) {
+      teams[index].push(player);
+      index = (index + 1) % teams.length;
+    }
+  }
+
+  function shuffle(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+  }
+
+  // Teams anzeigen (nur Name)
+  function displayTeams(teams) {
+    teamsContainer.innerHTML = '';
+    teams.forEach((team, i) => {
+      const teamDiv = document.createElement('div');
+      teamDiv.className = 'team';
+      const title = document.createElement('div');
+      title.className = 'team-title';
+      title.textContent = currentTeamNames[i] || `Team ${i + 1}`;
+      teamDiv.appendChild(title);
+
+      const ul = document.createElement('ul');
+      team.forEach(member => {
+        const li = document.createElement('li');
+        li.textContent = member.name; // Nur Name
+        ul.appendChild(li);
+      });
+
+      teamDiv.appendChild(ul);
+      teamsContainer.appendChild(teamDiv);
+    });
+  }
+
+  function showTeamNameInputs() {
+    teamNamesSection.style.display = 'block';
+    teamNameInputs.innerHTML = '';
+    currentTeams.forEach((_, i) => {
+      const div = document.createElement('div');
+      div.innerHTML = `Name für Team ${i+1}: <input type="text" value="${currentTeamNames[i]}" data-team-index="${i}" />`;
+      teamNameInputs.appendChild(div);
+    });
+  }
+
+  updateTeamNamesBtn.addEventListener('click', () => {
+    const inputs = teamNameInputs.querySelectorAll('input');
+    inputs.forEach(input => {
+      const index = parseInt(input.getAttribute('data-team-index'), 10);
+      currentTeamNames[index] = input.value.trim() || `Team ${index+1}`;
+    });
+    displayTeams(currentTeams);
+  });
+
+  // Shake-to-reshuffle: Mobilgeräte
+  let lastShakeTime = 0;
+  const SHAKE_THRESHOLD = 15; // Empfindlichkeit für "Shake"-Geste
+  
+  if (window.DeviceMotionEvent) {
+    window.addEventListener('devicemotion', (event) => {
+      const acceleration = event.accelerationIncludingGravity;
+      if (!acceleration) return;
+
+      const x = acceleration.x;
+      const y = acceleration.y;
+      const z = acceleration.z;
+
+      const currentTime = Date.now();
+      if ((currentTime - lastShakeTime) > 1000) { 
+        // Berechne Stärke der Erschütterung
+        const shakeMagnitude = Math.sqrt(x*x + y*y + z*z);
+        if (shakeMagnitude > SHAKE_THRESHOLD) {
+          // Mind. 1 Sekunde zwischen Shakes
+          lastShakeTime = currentTime;
+          // Neu mischen auslösen
+          if (currentTeams.length > 0) {
+            createOrShuffleTeams();
+            alert('Teams neu gemischt (per Shake)!');
+          }
+        }
+      }
+    });
+  }
+</script>
+
+</body>
+</html>
