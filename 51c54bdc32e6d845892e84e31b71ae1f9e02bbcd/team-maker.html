@@ -191,7 +191,6 @@
     color: #555;
   }
 
-  /* Hervorhebung von Skill 3 Spielern (Führungsspieler) */
   .skill-3 {
     font-weight: bold;
     color: #000;
@@ -234,7 +233,7 @@
     Beispiel:<br>Max,3,m,AA,MB<br>Anna,1,w<br>Lukas,2,m,D,Z</p>
     <input type="file" id="uploadCsv" accept=".csv" />
     <button id="importCsvBtn">Importieren</button>
-    <p class="hint">Ungültige Klassen/Geschlechter auf Standardwerte (2=m, m=männlich). Positionen per Komma trennen. Keine Angabe = AA,MB,Z.</p>
+    <p class="hint">Keine Positionsangabe = AA,MB,Z. Positionen per Komma trennen. Ungültige Klassen/Geschlechter = Standard (2, m).</p>
   </div>
 
   <div class="section">
@@ -263,7 +262,7 @@
   <div class="section">
     <h2>Konfiguration exportieren/importieren</h2>
     <button id="exportConfigBtn">Konfiguration exportieren (CSV)</button>
-    <p class="hint">Die Konfiguration enthält Einstellungen und Spieler. Beim Import werden Optionen und Spieler angepasst.</p>
+    <p class="hint">Die Konfiguration enthält Optionen und Spieler. Beim Import werden Optionen und Spieler angepasst.</p>
   </div>
 
   <div class="teams" id="teamsContainer"></div>
@@ -280,6 +279,11 @@
 let players = [];
 let currentTeams = [];
 let currentTeamNames = [];
+
+// Standardwerte für Optionen
+let isHeterogen = true;
+let genderSeparated = false;
+let positionsBalanced = true;
 
 const playerNameInput = document.getElementById('playerName');
 const playerSkillInput = document.getElementById('playerSkill');
@@ -301,11 +305,6 @@ const performanceOption = document.getElementById('performanceOption');
 const genderOption = document.getElementById('genderOption');
 const positionOption = document.getElementById('positionOption');
 
-let isHeterogen = true;    // Standard = heterogen
-let genderSeparated = false; // Standard = gemischt
-let positionsBalanced = true; // Standard = ausbalanciert
-
-// Optionen togglen
 performanceOption.addEventListener('click', () => {
   isHeterogen = !isHeterogen;
   performanceOption.textContent = isHeterogen ? "Leistungsverteilung: Heterogen" : "Leistungsverteilung: Homogen";
@@ -324,12 +323,11 @@ positionOption.addEventListener('click', () => {
   positionOption.classList.toggle('active', positionsBalanced);
 });
 
-// Spieler hinzufügen
 addPlayerBtn.addEventListener('click', () => {
   const name = playerNameInput.value.trim();
   let skill = parseInt(playerSkillInput.value, 10);
   if (isNaN(skill) || skill < 1 || skill > 3) {
-    skill = 2; // Standard mittel
+    skill = 2;
   }
   let gender = playerGenderInput.value.toLowerCase();
   if (!['m','w'].includes(gender)) gender = 'm';
@@ -350,13 +348,11 @@ addPlayerBtn.addEventListener('click', () => {
   }
 });
 
-// Spieler-Liste aktualisieren
 function updatePlayerList() {
   playerList.innerHTML = '';
   players.forEach((player, index) => {
     const li = document.createElement('li');
     const span = document.createElement('span');
-    // Hervorhebung bei Skill 3
     const playerText = `${player.name} (K:${player.skill}, G:${player.gender}, Pos:${player.positions.join('/')})`;
     span.innerHTML = (player.skill === 3) ? `<span class="skill-3">${playerText}</span>` : playerText;
     li.appendChild(span);
@@ -373,25 +369,27 @@ function updatePlayerList() {
   });
 }
 
-// Sortieren nach Name
 sortPlayersBtn.addEventListener('click', () => {
   players.sort((a,b) => a.name.localeCompare(b.name));
   updatePlayerList();
 });
 
-// CSV-Import (Spieler+Optionen wenn #)
 importCsvBtn.addEventListener('click', () => {
   const file = uploadCsv.files[0];
   if (file) {
     const reader = new FileReader();
     reader.onload = (e) => {
       const lines = e.target.result.split(/\r?\n/).map(l => l.trim()).filter(l => l);
-      // Zuerst Optionen zurücksetzen
-      // Danach Spieler leeren
+
       players = [];
-      // Konfiguration aus CSV
-      let configRead = false;
       let teamNamesFromConfig = [];
+      let configRead = false;
+
+      // Optionen auf Standard zurücksetzen
+      isHeterogen = true;
+      genderSeparated = false;
+      positionsBalanced = true;
+      updateOptionsUI();
 
       for (const line of lines) {
         if (line.startsWith('#')) {
@@ -407,18 +405,12 @@ importCsvBtn.addEventListener('click', () => {
                 break;
               case 'IS_HETEROGEN':
                 isHeterogen = (val === 'true');
-                performanceOption.textContent = isHeterogen ? "Leistungsverteilung: Heterogen" : "Leistungsverteilung: Homogen";
-                performanceOption.classList.toggle('active', isHeterogen);
                 break;
               case 'GENDER_SEPARATED':
                 genderSeparated = (val === 'true');
-                genderOption.textContent = genderSeparated ? "Geschlechter: Trennen" : "Geschlechter: Mischen";
-                genderOption.classList.toggle('active', genderSeparated);
                 break;
               case 'POSITIONS_BALANCED':
                 positionsBalanced = (val === 'true');
-                positionOption.textContent = positionsBalanced ? "Positionen: Ausbalancieren" : "Positionen: Normal";
-                positionOption.classList.toggle('active', positionsBalanced);
                 break;
               case 'TEAMNAMES':
                 teamNamesFromConfig = val.split('|').map(t=>t.trim());
@@ -426,7 +418,6 @@ importCsvBtn.addEventListener('click', () => {
             }
           }
         } else if (line.startsWith('---')) {
-          // Trenner zwischen Konfig und Spielern
           configRead = true;
         } else {
           // Spielerzeile
@@ -475,6 +466,7 @@ importCsvBtn.addEventListener('click', () => {
         currentTeamNames = teamNamesFromConfig;
       }
 
+      updateOptionsUI();
       updatePlayerList();
     };
     reader.readAsText(file);
@@ -483,7 +475,17 @@ importCsvBtn.addEventListener('click', () => {
   }
 });
 
-// Speichern/Laden Spieler
+function updateOptionsUI() {
+  performanceOption.textContent = isHeterogen ? "Leistungsverteilung: Heterogen" : "Leistungsverteilung: Homogen";
+  performanceOption.classList.toggle('active', isHeterogen);
+
+  genderOption.textContent = genderSeparated ? "Geschlechter: Trennen" : "Geschlechter: Mischen";
+  genderOption.classList.toggle('active', genderSeparated);
+
+  positionOption.textContent = positionsBalanced ? "Positionen: Ausbalancieren" : "Positionen: Normal";
+  positionOption.classList.toggle('active', positionsBalanced);
+}
+
 savePlayersBtn.addEventListener('click', () => {
   localStorage.setItem('players', JSON.stringify(players));
   alert('Spielerliste wurde gespeichert.');
@@ -500,12 +502,10 @@ loadPlayersBtn.addEventListener('click', () => {
   }
 });
 
-// Teams erstellen
 createTeamsBtn.addEventListener('click', () => {
   createOrShuffleTeams();
 });
 
-// Neu mischen
 reshuffleBtn.addEventListener('click', () => {
   createOrShuffleTeams();
 });
@@ -532,11 +532,34 @@ function createOrShuffleTeams() {
     teams = balancePositions(teams);
   }
 
+  // Versuche, Teams auszugleichen, falls möglich
+  teams = balanceTeamSizes(teams);
+
   currentTeams = teams;
   currentTeamNames = teams.map((_, i) => currentTeamNames[i] || `Team ${i+1}`);
   
   displayTeams(teams);
   reshuffleBtn.style.display = 'inline-block';
+}
+
+// Versucht, Teams möglichst gleich groß zu machen
+function balanceTeamSizes(teams) {
+  // Solange der Größenunterschied größer als 1 ist, versuche auszugleichen
+  // Einfache Heuristik: Sortiere Teams nach Größe, verschiebe Spieler vom größten zum kleinsten Team
+  let changed = true;
+  while(changed) {
+    changed = false;
+    teams.sort((a,b) => a.length - b.length);
+    const smallest = teams[0];
+    const largest = teams[teams.length-1];
+    if (largest.length - smallest.length > 1) {
+      // Verschiebe einen Spieler vom largest zu smallest
+      const playerToMove = largest.pop();
+      smallest.push(playerToMove);
+      changed = true;
+    }
+  }
+  return teams;
 }
 
 function createHomogeneousTeams(players, teamCount) {
@@ -611,7 +634,6 @@ function shuffle(array) {
   return array;
 }
 
-// Positionsbalancierung
 function balancePositions(teams) {
   const MAX_ATTEMPTS = 200; 
   for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
@@ -687,7 +709,7 @@ function displayTeams(teams) {
     titleDiv.textContent = `Team ${i + 1}: `;
     const titleInput = document.createElement('input');
     titleInput.type = 'text';
-    titleInput.value = currentTeamNames[i];
+    titleInput.value = currentTeamNames[i] || `Team ${i+1}`;
     titleInput.addEventListener('input', () => {
       currentTeamNames[i] = titleInput.value;
     });
@@ -707,12 +729,6 @@ function displayTeams(teams) {
 }
 
 // Konfiguration exportieren
-// Format:
-// #KEY=VALUE
-// ... (Optionen)
-// #TEAMNAMES=Name1|Name2|...
-// ---
-// Name,Skill,Geschlecht,Pos1,Pos2,Pos3...
 exportConfigBtn.addEventListener('click', () => {
   let csv = '';
   csv += `#TEAM_COUNT=${teamCountInput.value}\n`;
@@ -742,7 +758,6 @@ document.addEventListener('touchstart', (e) => {
   if (e.touches.length === 1) {
     const currentTime = Date.now();
     if (currentTime - lastTapTime < 300) {
-      // double tap
       tapCount++;
       if (tapCount === 2) {
         tapCount = 0;
