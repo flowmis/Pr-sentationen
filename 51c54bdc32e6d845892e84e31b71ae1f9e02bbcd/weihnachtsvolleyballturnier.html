@@ -224,11 +224,51 @@
             font-weight: 700;
             background: #fffde0;
         }
+.hinweis-box {
+    border: 2px solid #cc0000;
+    background: #ffe5e5;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+  }
+
+  .hinweis-box h2 {
+    text-align: center;
+    color: #cc0000;
+    margin-bottom: 15px;
+    font-weight: 600;
+  }
+
+  .hinweis-box ul {
+    list-style-type: disc;
+    margin-left: 20px;
+    color: #333;
+  }
+
+  .hinweis-box ul li {
+    margin-bottom: 8px;
+  }
     </style>
 </head>
 <body>
     <h1>Weihnachtsvolleyballturnier Technische Schule Aalen</h1>
-    <h2>Gruppenphase (08:10 - 10:40 Uhr)</h2>
+<div class="hinweis-box">
+  <h2>Hinweis zu den Regeln:</h2>
+  <ul>
+    <li>Eine Netzberührung führt zu einem Punkt für das gegnerische Team.</li>
+    <li>Ein Übertritt der Mittellinie oder Aufschlaglinie führt zu einem Punkt für das gegnerische Team.</li>
+    <li>Der Aufschlag darf nicht direkt oberhalb der Netzkante zurückgespielt werden. Ein Verstoß führt zu einem Punkt für das gegnerische Team.</li>
+    <li>Auffälliges Zeitspiel sowie unnötige Diskussionsversuche führen zu einem Punkt für das gegnerische Team.</li>
+    <li>Wird der Anpfiff zum Aufschlag nicht abgewartet, kann dies zu einem Punkt für das gegnerische Team führen.</li>
+    <li>Die Rotationsfolge ist einzuhalten und kann bei Nichteinhaltung auch zur Aberkennung mehrerer Punkte führen!</li>
+    <li>Übermäßiges Führen oder Halten des Balls führt zu einem Punkt für das gegnerische Team.</li>
+    <li>Nach Ablauf der offiziellen Spielzeit wird der aktuelle Ballwechsel zu Ende gespielt und gewertet.</li>
+    <li>Bei Gleichstand gibt es einen Entscheidungsball (im Anschluss das Feld zügig verlassen).</li>
+    <li>Teams müssen pünktlich zum Anpfiff auf dem Spielfeld sein und dieses unmittelbar nach dem Spiel verlassen. Bei Verspätung erfolgt Punkteabzug entsprechend der Dauer der Verzögerung.</li>
+  </ul>
+</div>
+    <h2>Gruppenphase (08:20 - 10:50 Uhr)</h2>
     <div class="container" id="gruppen-container"></div>
     <div class="button-container">
       <button id="gruppenphase-auswertung-button">Auswertung Gruppenphase</button>
@@ -244,16 +284,15 @@
               <th>Zeit</th>
               <th>Spiel</th>
             </tr>
-            <tr data-time="10:50"><td>10:50</td><td><input type="text" placeholder="1. Gruppe A" data-user-override="false" /> vs <input type="text" placeholder="1. Gruppe B" data-user-override="false"/></td></tr>
-	    <tr data-time="10:50"><td>11:00</td><td><input type="text" placeholder="1. Gruppe A" data-user-override="false"/> vs <input type="text" placeholder="1. Gruppe C" data-user-override="false"/></td></tr>
-            <tr data-time="10:50"><td>11:10</td><td><input type="text" placeholder="1. Gruppe C" data-user-override="false"/> vs <input type="text" placeholder="1. Gruppe B" data-user-override="false"/></td></tr>
-            <tr data-time="10:50"><td>11:20</td><td><input type="text" placeholder="2. Gruppe A" data-user-override="false"/> vs <input type="text" placeholder="2. Gruppe B" data-user-override="false"/></td></tr>
-            <tr data-time="10:50"><td>11:30</td><td><input type="text" placeholder="2. Gruppe A" data-user-override="false"/> vs <input type="text" placeholder="2. Gruppe C" data-user-override="false"/></td></tr>
-            <tr data-time="10:50"><td>11:40</td><td><input type="text" placeholder="2. Gruppe C" data-user-override="false"/> vs <input type="text" placeholder="2. Gruppe B" data-user-override="false"/></td></tr>
+          <tr data-time="10:50"><td>10:50</td><td><input type="text" placeholder="3. Gruppe A" data-user-override="false"/> vs <input type="text" placeholder="3. Gruppe B" data-user-override="false"/></td></tr>
+          <tr data-time="10:50"><td>11:00</td><td><input type="text" placeholder="4. Gruppe A" data-user-override="false"/> vs <input type="text" placeholder="4. Gruppe B" data-user-override="false"/></td></tr>
+          <tr data-time="10:50"><td>11:10</td><td><input type="text" placeholder="3. Gruppe A" data-user-override="false"/> vs <input type="text" placeholder="3. Gruppe C" data-user-override="false"/></td></tr>
+          <tr data-time="10:50"><td>11:20</td><td><input type="text" placeholder="4. Gruppe A" data-user-override="false"/> vs <input type="text" placeholder="4. Gruppe C" data-user-override="false"/></td></tr>
+          <tr data-time="10:50"><td>11:30</td><td><input type="text" placeholder="4. Gruppe C" data-user-override="false"/> vs <input type="text" placeholder="4. Gruppe B" data-user-override="false"/></td></tr>
+          <tr data-time="10:50"><td>11:40</td><td><input type="text" placeholder="3. Gruppe C" data-user-override="false"/> vs <input type="text" placeholder="3. Gruppe B" data-user-override="false"/></td></tr>
           </table>
         </div>
       </div>
-    
       <div class="field">
         <h3>Feld 2</h3>
         <div class="table-responsive">
@@ -262,12 +301,12 @@
               <th>Zeit</th>
               <th>Spiel</th>
             </tr>
-          <tr data-time="10:50"><td>10:50</td><td><input type="text" placeholder="3. Gruppe A" data-user-override="false"/> vs <input type="text" placeholder="3. Gruppe B" data-user-override="false"/></td></tr>
-          <tr data-time="10:50"><td>11:00</td><td><input type="text" placeholder="3. Gruppe A" data-user-override="false"/> vs <input type="text" placeholder="3. Gruppe C" data-user-override="false"/></td></tr>
-          <tr data-time="10:50"><td>11:10</td><td><input type="text" placeholder="3. Gruppe C" data-user-override="false"/> vs <input type="text" placeholder="3. Gruppe B" data-user-override="false"/></td></tr>
-          <tr data-time="10:50"><td>11:20</td><td><input type="text" placeholder="4. Gruppe A" data-user-override="false"/> vs <input type="text" placeholder="4. Gruppe B" data-user-override="false"/></td></tr>
-          <tr data-time="10:50"><td>11:30</td><td><input type="text" placeholder="4. Gruppe A" data-user-override="false"/> vs <input type="text" placeholder="4. Gruppe C" data-user-override="false"/></td></tr>
-          <tr data-time="10:50"><td>11:40</td><td><input type="text" placeholder="4. Gruppe C" data-user-override="false"/> vs <input type="text" placeholder="4. Gruppe B" data-user-override="false"/></td></tr>
+            <tr data-time="10:50"><td>10:50</td><td><input type="text" placeholder="1. Gruppe A" data-user-override="false" /> vs <input type="text" placeholder="1. Gruppe B" data-user-override="false"/></td></tr>
+            <tr data-time="10:50"><td>11:00</td><td><input type="text" placeholder="2. Gruppe A" data-user-override="false"/> vs <input type="text" placeholder="2. Gruppe B" data-user-override="false"/></td></tr>
+	    <tr data-time="10:50"><td>11:10</td><td><input type="text" placeholder="1. Gruppe A" data-user-override="false"/> vs <input type="text" placeholder="1. Gruppe C" data-user-override="false"/></td></tr>
+            <tr data-time="10:50"><td>11:20</td><td><input type="text" placeholder="2. Gruppe A" data-user-override="false"/> vs <input type="text" placeholder="2. Gruppe C" data-user-override="false"/></td></tr>
+            <tr data-time="10:50"><td>11:30</td><td><input type="text" placeholder="2. Gruppe C" data-user-override="false"/> vs <input type="text" placeholder="2. Gruppe B" data-user-override="false"/></td></tr>
+            <tr data-time="10:50"><td>11:40</td><td><input type="text" placeholder="1. Gruppe C" data-user-override="false"/> vs <input type="text" placeholder="1. Gruppe B" data-user-override="false"/></td></tr>
           </table>
         </div>
       </div>
@@ -281,11 +320,11 @@
               <th>Spiel</th>
             </tr>
           <tr data-time="10:50"><td>10:50</td><td><input type="text" placeholder="5. Gruppe A" data-user-override="false"/> vs <input type="text" placeholder="5. Gruppe B" data-user-override="false"/></td></tr>
-          <tr data-time="10:50"><td>11:00</td><td><input type="text" placeholder="5. Gruppe A" data-user-override="false"/> vs <input type="text" placeholder="5. Gruppe C" data-user-override="false"/></td></tr>
-          <tr data-time="10:50"><td>11:10</td><td><input type="text" placeholder="5. Gruppe C" data-user-override="false"/> vs <input type="text" placeholder="5. Gruppe B" data-user-override="false"/></td></tr>
-          <tr data-time="10:50"><td>11:20</td><td><input type="text" placeholder="6. Gruppe A" data-user-override="false"/> vs <input type="text" placeholder="6. Gruppe B" data-user-override="false"/></td></tr>
-          <tr data-time="10:50"><td>11:30</td><td><input type="text" placeholder="6. Gruppe A" data-user-override="false"/> vs <input type="text" placeholder="6. Gruppe C" data-user-override="false"/></td></tr>
-          <tr data-time="10:50"><td>11:40</td><td><input type="text" placeholder="6. Gruppe C" data-user-override="false"/> vs <input type="text" placeholder="6. Gruppe B" data-user-override="false"/></td></tr>
+          <tr data-time="10:50"><td>11:00</td><td><input type="text" placeholder="6. Gruppe A" data-user-override="false"/> vs <input type="text" placeholder="6. Gruppe B" data-user-override="false"/></td></tr>
+          <tr data-time="10:50"><td>11:10</td><td><input type="text" placeholder="5. Gruppe A" data-user-override="false"/> vs <input type="text" placeholder="5. Gruppe C" data-user-override="false"/></td></tr>
+          <tr data-time="10:50"><td>11:20</td><td><input type="text" placeholder="6. Gruppe A" data-user-override="false"/> vs <input type="text" placeholder="6. Gruppe C" data-user-override="false"/></td></tr>
+          <tr data-time="10:50"><td>11:30</td><td><input type="text" placeholder="6. Gruppe C" data-user-override="false"/> vs <input type="text" placeholder="6. Gruppe B" data-user-override="false"/></td></tr>
+          <tr data-time="10:50"><td>11:40</td><td><input type="text" placeholder="5. Gruppe C" data-user-override="false"/> vs <input type="text" placeholder="5. Gruppe B" data-user-override="false"/></td></tr>
         </table>
       </div>
     </div>
@@ -317,8 +356,8 @@
         a: "Pritsch Perfect",
         b: "Gladiators",
         c: "Juventus Urin",
-        d: "Tassive Mitten",
-        e: "Hört man mich überhaupt",
+        d: "Snooze",
+        e: "Hört man mich überhaupt?",
         f: "Passt scho",
         g: "Knockout",
         h: "Die AufReißer",
@@ -333,60 +372,58 @@
         q: "Soooo isch",
         r: "VABO2"
       };
-
-      const scheduleA = [
-        { time: "8:10", match: [team.a, team.b], score: [13, 2] },
-        { time: "8:20", match: [team.a, team.c], score: [1, 2] },
-        { time: "8:30", match: [team.a, team.d], score: [3, 0] },
-        { time: "8:40", match: [team.a, team.e], score: [2, 1] },
-        { time: "8:50", match: [team.a, team.f], score: [4, 1] },
-        { time: "9:00", match: [team.b, team.c], score: [0, 3] },
-        { time: "9:10", match: [team.b, team.d], score: [2, 2] },
-        { time: "9:20", match: [team.b, team.e], score: [1, 1] },
-        { time: "9:30", match: [team.b, team.f], score: [0, 2] },
-        { time: "9:40", match: [team.c, team.d], score: [3, 4] },
-        { time: "9:50", match: [team.c, team.e], score: [1, 0] },
-        { time: "10:00", match: [team.c, team.f], score: [2, 3] },
-        { time: "10:10", match: [team.d, team.e], score: [1, 4] },
-        { time: "10:20", match: [team.d, team.f], score: [2, 0] },
-        { time: "10:30", match: [team.e, team.f], score: [3, 3] },
-      ];
-
-      const scheduleB = [
-        { time: "8:10", match: [team.g, team.h], score: [1, 2] },
-        { time: "8:20", match: [team.g, team.i], score: [3, 0] },
-        { time: "8:30", match: [team.g, team.j], score: [2, 1] },
-        { time: "8:40", match: [team.g, team.k], score: [4, 1] },
-        { time: "8:50", match: [team.g, team.l], score: [0, 3] },
-        { time: "9:00", match: [team.h, team.i], score: [2, 2] },
-        { time: "9:10", match: [team.h, team.j], score: [1, 1] },
-        { time: "9:20", match: [team.h, team.k], score: [0, 2] },
-        { time: "9:30", match: [team.h, team.l], score: [3, 4] },
-        { time: "9:40", match: [team.i, team.j], score: [1, 0] },
-        { time: "9:50", match: [team.i, team.k], score: [2, 3] },
-        { time: "10:00", match: [team.i, team.l], score: [1, 4] },
-        { time: "10:10", match: [team.j, team.k], score: [2, 0] },
-        { time: "10:20", match: [team.j, team.l], score: [3, 3] },
-        { time: "10:30", match: [team.k, team.l], score: [0, 3] },
-      ];
-
-      const scheduleC = [
-        { time: "8:10", match: [team.m, team.n], score: [1, 22] },
-        { time: "8:20", match: [team.m, team.o], score: [3, 0] },
-        { time: "8:30", match: [team.m, team.p], score: [2, 1] },
-        { time: "8:40", match: [team.m, team.q], score: [4, 1] },
-        { time: "8:50", match: [team.m, team.r], score: [0, 3] },
-        { time: "9:00", match: [team.n, team.o], score: [2, 2] },
-        { time: "9:10", match: [team.n, team.p], score: [1, 1] },
-        { time: "9:20", match: [team.n, team.q], score: [0, 2] },
-        { time: "9:30", match: [team.n, team.r], score: [3, 4] },
-        { time: "9:40", match: [team.o, team.p], score: [1, 0] },
-        { time: "9:50", match: [team.o, team.q], score: [2, 3] },
-        { time: "10:00", match: [team.o, team.r], score: [1, 4] },
-        { time: "10:10", match: [team.p, team.q], score: [2, 0] },
-        { time: "10:20", match: [team.p, team.r], score: [3, 3] },
-        { time: "10:30", match: [team.q, team.r], score: [0, 3] },
-      ];
+  
+const scheduleA = [
+  { time: "8:20",  match: [team.a, team.f], score: [0, 0] },
+  { time: "8:30",  match: [team.b, team.e], score: [0, 0] },
+  { time: "8:40",  match: [team.c, team.d], score: [0, 0] },
+  { time: "8:50",  match: [team.a, team.e], score: [0, 0] },
+  { time: "9:00",  match: [team.b, team.c], score: [0, 0] },
+  { time: "9:10",  match: [team.d, team.f], score: [0, 0] },
+  { time: "9:20",  match: [team.a, team.d], score: [0, 0] },
+  { time: "9:30",  match: [team.b, team.f], score: [0, 0] },
+  { time: "9:40",  match: [team.c, team.e], score: [0, 0] },
+  { time: "9:50",  match: [team.a, team.c], score: [0, 0] },
+  { time: "10:00", match: [team.b, team.d], score: [0, 0] },
+  { time: "10:10", match: [team.e, team.f], score: [0, 0] },
+  { time: "10:20", match: [team.a, team.b], score: [0, 0] },
+  { time: "10:30", match: [team.c, team.f], score: [0, 0] },
+  { time: "10:40", match: [team.d, team.e], score: [0, 0] },
+];
+const scheduleB = [
+  { time: "8:20",  match: [team.g, team.l], score: [0, 0] },
+  { time: "8:30",  match: [team.h, team.i], score: [0, 0] },
+  { time: "8:40",  match: [team.j, team.k], score: [0, 0] },
+  { time: "8:50",  match: [team.g, team.h], score: [0, 0] },
+  { time: "9:00",  match: [team.i, team.j], score: [0, 0] },
+  { time: "9:10",  match: [team.k, team.l], score: [0, 0] },
+  { time: "9:20",  match: [team.g, team.i], score: [0, 0] },
+  { time: "9:30",  match: [team.h, team.k], score: [0, 0] },
+  { time: "9:40",  match: [team.j, team.l], score: [0, 0] },
+  { time: "9:50",  match: [team.g, team.j], score: [0, 0] },
+  { time: "10:00", match: [team.h, team.l], score: [0, 0] },
+  { time: "10:10", match: [team.i, team.k], score: [0, 0] },
+  { time: "10:20", match: [team.g, team.k], score: [0, 0] },
+  { time: "10:30", match: [team.h, team.j], score: [0, 0] },
+  { time: "10:40", match: [team.i, team.l], score: [0, 0] },
+];
+const scheduleC = [
+  { time: "8:20",  match: [team.m, team.r], score: [0, 0] },
+  { time: "8:30",  match: [team.n, team.o], score: [0, 0] },
+  { time: "8:40",  match: [team.p, team.q], score: [0, 0] },
+  { time: "8:50",  match: [team.m, team.n], score: [0, 0] },
+  { time: "9:00",  match: [team.o, team.p], score: [0, 0] },
+  { time: "9:10",  match: [team.q, team.r], score: [0, 0] },
+  { time: "9:20",  match: [team.m, team.o], score: [0, 0] },
+  { time: "9:30",  match: [team.n, team.q], score: [0, 0] },
+  { time: "9:40",  match: [team.p, team.r], score: [0, 0] },
+  { time: "9:50",  match: [team.m, team.p], score: [0, 0] },
+  { time: "10:00", match: [team.n, team.r], score: [0, 0] },
+  { time: "10:10", match: [team.o, team.r], score: [0, 0] },
+  { time: "10:20", match: [team.m, team.q], score: [0, 0] },
+  { time: "10:30", match: [team.n, team.p], score: [0, 0] },
+  { time: "10:40", match: [team.o, team.q], score: [0, 0] },
+];
 
       const groups = {
         "Feld 1: Gruppe A": scheduleA,
@@ -432,43 +469,52 @@
         document.getElementById('finale-auswertung-button').addEventListener('click', evaluateFinalPhase);
       });
 
-      function generateTable(schedule, groupName) {
-        const tableContainer = document.createElement("div");
-        const heading = document.createElement("h3");
-        heading.innerText = groupName;  
-        tableContainer.appendChild(heading);  
-        const table = document.createElement("table");
-        table.innerHTML = `
-          <tr>
-            <th>Zeit</th>
-            <th>Spiel</th>
-          </tr>
-        `;
-        schedule.forEach(({ time, match, score }, index) => {
-          const row = document.createElement("tr");
-          row.dataset.time = time;
-          row.innerHTML = `
-            <td>${time}</td>
-            <td class="match">
-              <div class="team-container">
-                <span class="team-name">${match[0]}</span>
-              </div>
-              :
-              <div class="team-container">
-                <span class="team-name">${match[1]}</span>
-              </div>
-              <div class="score-container">
-                <input class="score-input" type="number" min="0" value="${score[0]}" data-team="${match[0]}" data-group="${groupName}" data-match-index="${index}" />
-                <span>:</span>
-                <input class="score-input" type="number" min="0" value="${score[1]}" data-team="${match[1]}" data-group="${groupName}" data-match-index="${index}" />
-              </div>
-            </td>
-          `;
-          table.appendChild(row);
-        });
-        tableContainer.appendChild(table);
-        return tableContainer;
-      }
+function generateTable(schedule, groupName) {
+  const fieldDiv = document.createElement("div");
+  fieldDiv.className = "field";
+
+  const heading = document.createElement("h3");
+  heading.innerText = groupName;  
+  fieldDiv.appendChild(heading);
+
+  const tableResponsive = document.createElement("div");
+  tableResponsive.className = "table-responsive";
+  fieldDiv.appendChild(tableResponsive);
+
+  const table = document.createElement("table");
+  table.innerHTML = `
+    <tr>
+      <th>Zeit</th>
+      <th>Spiel</th>
+    </tr>
+  `;
+  schedule.forEach(({ time, match, score }, index) => {
+    const row = document.createElement("tr");
+    row.dataset.time = time;
+    row.innerHTML = `
+      <td>${time}</td>
+      <td class="match">
+        <div class="team-container">
+          <span class="team-name">${match[0]}</span>
+        </div>
+        :
+        <div class="team-container">
+          <span class="team-name">${match[1]}</span>
+        </div>
+        <div class="score-container">
+          <input class="score-input" type="number" min="0" value="${score[0]}" data-team="${match[0]}" data-group="${groupName}" data-match-index="${index}" />
+          <span>:</span>
+          <input class="score-input" type="number" min="0" value="${score[1]}" data-team="${match[1]}" data-group="${groupName}" data-match-index="${index}" />
+        </div>
+      </td>
+    `;
+    table.appendChild(row);
+  });
+
+  tableResponsive.appendChild(table);
+  return fieldDiv;
+}
+
 
       function handleScoreInputChange(e) {
         let val = e.target.value;
@@ -480,6 +526,12 @@
         }
         saveScoresToLocalStorage();
       }
+
+function getFinalScores() {
+  const score1 = parseInt(document.getElementById('final-score1').value,10) || 0;
+  const score2 = parseInt(document.getElementById('final-score2').value,10) || 0;
+  return { score1, score2 };
+}
 
       function saveScoresToLocalStorage() {
         const data = { groups: {}, placement: [], final: {} };
@@ -530,24 +582,35 @@
           document.getElementById('final-score2').value = data.final.score2 || 0;
         }
       }
+	      
+function updateColors() {
+  const now = new Date();
+  const currentTime = now.getHours() * 60 + now.getMinutes();
 
-      function updateColors() {
-        const now = new Date();
-        const currentTime = now.getHours() * 60 + now.getMinutes();
-        document.querySelectorAll("table tr[data-time]").forEach(row => {
-          const [hours, minutes] = row.dataset.time.split(":").map(Number);
-          const rowTime = hours * 60 + minutes;
-          const endTime = rowTime + 10; 
-          row.classList.remove("past", "current", "next");
-          if (rowTime + 10 < currentTime) { 
-            row.classList.add("past"); 
-          } else if (rowTime <= currentTime && endTime >= currentTime) { 
-            row.classList.add("current"); 
-          } else if (rowTime - currentTime < 11) { 
-            row.classList.add("next"); 
-          }
-        });
-      }
+  // Ab 13:00 Uhr alle Farben zurücksetzen
+  if (currentTime >= 13 * 60) {
+    document.querySelectorAll("table tr[data-time]").forEach(row => {
+      row.classList.remove("past", "current", "next");
+    });
+    return;
+  }
+
+  document.querySelectorAll("table tr[data-time]").forEach(row => {
+    const [hours, minutes] = row.dataset.time.split(":").map(Number);
+    const rowTime = hours * 60 + minutes;
+    const endTime = rowTime + 10;
+
+    row.classList.remove("past", "current", "next");
+
+    if (rowTime + 10 < currentTime) {
+      row.classList.add("past");
+    } else if (rowTime <= currentTime && endTime >= currentTime) {
+      row.classList.add("current");
+    } else if (rowTime - currentTime < 11) {
+      row.classList.add("next");
+    }
+  });
+}
 
       function evaluateGroupPhase() {
         let allResults = [];
@@ -582,16 +645,36 @@
         saveScoresToLocalStorage();
       }
 
-      function evaluateFinalPhase() {
-        const finalResult = evaluateFinal();
-        if (finalResult) {
-          finalWinner = finalResult.winner;
-          finalLoser = (finalResult.winner === finalResult.team1) ? finalResult.team2 : finalResult.team1;
-          displayFinalResult(finalResult);
-          displayFinalOverview();
-        }
-        saveScoresToLocalStorage();
-      }
+function evaluateFinal() {
+  const team1 = document.getElementById('final-team1').textContent;
+  const team2 = document.getElementById('final-team2').textContent;
+
+  const val1 = parseInt(document.getElementById('final-score1').value,10);
+  const val2 = parseInt(document.getElementById('final-score2').value,10);
+
+  const score1 = isNaN(val1)?0:val1;
+  const score2 = isNaN(val2)?0:val2;
+
+  const incompleteData = (isNaN(val1) || isNaN(val2));
+
+  let winner = null;
+  if (score1 > score2) {
+    winner = team1;
+  } else if (score2 > score1) {
+    winner = team2;
+  }
+
+  return {team1, team2, score1, score2, winner, incompleteData};
+}
+function evaluateFinalPhase() {
+  const finalResult = evaluateFinal();
+  if (finalResult) {
+    finalWinner = finalResult.winner;
+    finalLoser = (finalResult.winner === finalResult.team1) ? finalResult.team2 : finalResult.team1;
+    displayFinalSummary(finalResult); 
+  }
+  saveScoresToLocalStorage();
+}
 
       function evaluateScoresForGroup(groupName) {
         const results = {};
@@ -770,69 +853,81 @@
         });
       }
 
-      function setTeamNameFromPlaceholder(input) {
-        const placeholder = input.getAttribute('placeholder');
-        // Nur aktualisieren, wenn der Nutzer nicht manuell geändert hat
-        if (input.getAttribute('data-user-override') === 'true') return;
+function getBracketFromPlaceholder(placeholder) {
+  const match = placeholder.match(/^(\d+)\. Gruppe ([ABC])$/);
+  if (!match) return null;
+  const rank = parseInt(match[1], 10);
+  return rank; // Rank entspricht dem Bracket: 1 = Plätze 1-3, 2 = Plätze 4-6, ...
+}
 
-        const match = placeholder.match(/^(\d+)\. Gruppe ([ABC])$/);
-        if (match) {
-          const rank = parseInt(match[1], 10);
-          const groupLetter = match[2];
-          const fullGroupName = groupNameMap["Gruppe " + groupLetter];
-          if (placements[fullGroupName] && placements[fullGroupName][rank - 1]) {
-            const teamName = placements[fullGroupName][rank - 1].team;
-            input.value = teamName;
-            input.readOnly = false; 
-          } else {
-            input.value = "N/A";
-            input.readOnly = false; 
-          }
-        }
-      }
+// Erweitere setTeamNameFromPlaceholder, um den Teams zusätzlich ein data-bracket zu geben
+function setTeamNameFromPlaceholder(input) {
+  const placeholder = input.getAttribute('placeholder');
+  if (input.getAttribute('data-user-override') === 'true') return;
 
-      function convertPlacementInputsToMatches() {
-        const placementRows = document.querySelectorAll('#platzierungsspiele-container .field table tr[data-time]');
-        placementRows.forEach(row => {
-          const cell = row.querySelector('td:nth-child(2)');
-          const txtInputs = cell.querySelectorAll('input[type="text"]');
-          if (txtInputs.length === 2) {
-            const team1 = txtInputs[0].value;
-            const team2 = txtInputs[1].value;
+  const bracket = getBracketFromPlaceholder(placeholder);
+  if (bracket) {
+    input.setAttribute('data-bracket', bracket);
+  }
 
-            // Behalte data-user-override bei, falls vorhanden
-            const override1 = txtInputs[0].getAttribute('data-user-override');
-            const override2 = txtInputs[1].getAttribute('data-user-override');
+  const match = placeholder.match(/^(\d+)\. Gruppe ([ABC])$/);
+  if (match) {
+    const rank = parseInt(match[1], 10);
+    const groupLetter = match[2];
+    const fullGroupName = groupNameMap["Gruppe " + groupLetter];
+    if (placements[fullGroupName] && placements[fullGroupName][rank - 1]) {
+      const teamName = placements[fullGroupName][rank - 1].team;
+      input.value = teamName;
+      input.readOnly = false; 
+    } else {
+      input.value = "N/A";
+      input.readOnly = false; 
+    }
+  }
+}
+function convertPlacementInputsToMatches() {
+  const placementRows = document.querySelectorAll('#platzierungsspiele-container .field table tr[data-time]');
+  placementRows.forEach(row => {
+    const cell = row.querySelector('td:nth-child(2)');
+    const txtInputs = cell.querySelectorAll('input[type="text"]');
+    if (txtInputs.length === 2) {
+      const team1 = txtInputs[0].value;
+      const team2 = txtInputs[1].value;
 
-            cell.innerHTML = `
-              <div class="match">
-                <div class="team-container">
-                  <input type="text" value="${team1}" data-user-override="${override1}" />
-                </div>
-                :
-                <div class="team-container">
-                  <input type="text" value="${team2}" data-user-override="${override2}" />
-                </div>
-                <div class="score-container">
-                  <input class="score-input placement-score" type="number" min="0" value="0" data-team="${team1}"/>
-                  <span>:</span>
-                  <input class="score-input placement-score" type="number" min="0" value="0" data-team="${team2}"/>
-                </div>
-              </div>
-            `;
+      const override1 = txtInputs[0].getAttribute('data-user-override');
+      const override2 = txtInputs[1].getAttribute('data-user-override');
 
-            // Neu hinzugefügte Inputs wieder mit Listenern versehen
-            const newInputs = cell.querySelectorAll('input[type="text"]');
-            newInputs.forEach(inp => {
-              inp.addEventListener('input', (e) => {
-                e.target.setAttribute('data-user-override', 'true');
-                saveScoresToLocalStorage();
-              });
-            });
-          }
+      // Bracket-Infos übernehmen
+      const bracket1 = txtInputs[0].getAttribute('data-bracket') || "";
+      const bracket2 = txtInputs[1].getAttribute('data-bracket') || "";
+
+      cell.innerHTML = `
+        <div class="match">
+          <div class="team-container">
+            <input type="text" value="${team1}" data-user-override="${override1}" data-bracket="${bracket1}" />
+          </div>
+          :
+          <div class="team-container">
+            <input type="text" value="${team2}" data-user-override="${override2}" data-bracket="${bracket2}" />
+          </div>
+          <div class="score-container">
+            <input class="score-input placement-score" type="number" min="0" value="0" data-team="${team1}" data-bracket="${bracket1}"/>
+            <span>:</span>
+            <input class="score-input placement-score" type="number" min="0" value="0" data-team="${team2}" data-bracket="${bracket2}"/>
+          </div>
+        </div>
+      `;
+
+      const newInputs = cell.querySelectorAll('input[type="text"]');
+      newInputs.forEach(inp => {
+        inp.addEventListener('input', (e) => {
+          e.target.setAttribute('data-user-override', 'true');
+          saveScoresToLocalStorage();
         });
-      }
-
+      });
+    }
+  });
+}
       function fillPlacementMatches() {
         const placementRows = document.querySelectorAll('#platzierungsspiele-container .field table tr[data-time]');
         placementRows.forEach(row => {
@@ -927,187 +1022,198 @@
           }
         });
       }
+function evaluatePlacementMatches() {
+  const rows = document.querySelectorAll('#platzierungsspiele-container .field table tr[data-time]');
+  const results = [];
+  const teamData = {};
+  let incompleteData = false;
 
-      function evaluatePlacementMatches() {
-        const rows = document.querySelectorAll('#platzierungsspiele-container .field table tr[data-time]');
-        const results = {};
-        let incompleteData = false;
+  rows.forEach(row => {
+    const scoreInputs = row.querySelectorAll('.placement-score');
+    if (scoreInputs.length === 2) {
+      const team1 = scoreInputs[0].dataset.team;
+      const team2 = scoreInputs[1].dataset.team;
+      const bracket1 = parseInt(scoreInputs[0].dataset.bracket, 10) || null;
+      const bracket2 = parseInt(scoreInputs[1].dataset.bracket, 10) || null;
 
-        rows.forEach(row => {
-          const scoreInputs = row.querySelectorAll('.placement-score');
-          if (scoreInputs.length === 2) {
-            const team1 = scoreInputs[0].dataset.team;
-            const team2 = scoreInputs[1].dataset.team;
+      const val1 = parseInt(scoreInputs[0].value,10);
+      const val2 = parseInt(scoreInputs[1].value,10);
 
-            const val1 = parseInt(scoreInputs[0].value,10);
-            const val2 = parseInt(scoreInputs[1].value,10);
-
-            if (isNaN(val1) || isNaN(val2)) {
-              incompleteData = true;
-            }
-
-            const score1 = isNaN(val1)?0:val1;
-            const score2 = isNaN(val2)?0:val2;
-
-            if (!team1 || !team2) {
-              return;
-            }
-
-            if (!results[team1]) results[team1] = { wins: 0, scored: 0, allowed: 0 };
-            if (!results[team2]) results[team2] = { wins: 0, scored: 0, allowed: 0 };
-
-            results[team1].scored += score1;
-            results[team1].allowed += score2;
-            results[team2].scored += score2;
-            results[team2].allowed += score1;
-
-            if (score1 > score2) {
-              results[team1].wins += 1;
-            } else if (score2 > score1) {
-              results[team2].wins += 1;
-            }
-          }
-        });
-
-        const sortedResults = Object.keys(results).map(teamName => {
-          return {
-            team: teamName,
-            wins: results[teamName].wins,
-            diff: results[teamName].scored - results[teamName].allowed,
-            scored: results[teamName].scored
-          };
-        }).sort((a, b) => {
-          if (b.wins !== a.wins) return b.wins - a.wins;
-          if (b.diff !== a.diff) return b.diff - a.diff;
-          if (b.scored !== a.scored) return b.scored - a.scored;
-          return a.team.localeCompare(b.team);
-        });
-
-        return {results:sortedResults, incompleteData};
+      if (isNaN(val1) || isNaN(val2)) {
+        incompleteData = true;
       }
 
-      function evaluateFinal() {
-        const team1 = document.getElementById('final-team1').textContent;
-        const team2 = document.getElementById('final-team2').textContent;
+      const score1 = isNaN(val1)?0:val1;
+      const score2 = isNaN(val2)?0:val2;
 
-        if (team1 === "Turniersieger" || team1 === "Noch kein Sieger") {
-          return null;
-        }
-
-        const val1 = parseInt(document.getElementById('final-score1').value,10);
-        const val2 = parseInt(document.getElementById('final-score2').value,10);
-
-        const score1 = isNaN(val1)?0:val1;
-        const score2 = isNaN(val2)?0:val2;
-
-        let incompleteData = (isNaN(val1) || isNaN(val2));
-        let winner = null;
-        if (score1 > score2) winner = team1;
-        else if (score2 > score1) winner = team2;
-
-        return {team1, team2, score1, score2, winner, incompleteData};
+      // Falls keine Teams gesetzt sind, überspringen
+      if (!team1 || !team2) {
+        return;
       }
 
-      function displayFinalResult(finalRes) {
-        const oldFinal = document.getElementById("Final-Ergebnis");
-        if (oldFinal) oldFinal.remove();
+      // Team-Daten initialisieren falls nötig
+      if (!teamData[team1]) teamData[team1] = { wins: 0, scored: 0, allowed: 0, bracket: bracket1 };
+      if (!teamData[team2]) teamData[team2] = { wins: 0, scored: 0, allowed: 0, bracket: bracket2 };
 
-        const resultContainer = document.createElement("div");
-        resultContainer.id = "Final-Ergebnis";
-        resultContainer.className = "result-container";
+      teamData[team1].scored += score1;
+      teamData[team1].allowed += score2;
+      teamData[team2].scored += score2;
+      teamData[team2].allowed += score1;
 
-        const heading = document.createElement("h3");
-        heading.innerText = "Final-Ergebnis";
-        resultContainer.appendChild(heading);
-
-        if (finalRes.incompleteData) {
-          const warningEl = document.createElement('p');
-          warningEl.className = 'warning';
-          warningEl.innerText = "Finale hatte unvollständige Punktedaten. Es wurden 0 Punkte angenommen.";
-          resultContainer.appendChild(warningEl);
-        }
-
-        const table = document.createElement("table");
-        table.className = "result-table";
-        table.innerHTML = `
-          <thead>
-            <tr>
-              <th>Team 1</th>
-              <th>Team 2</th>
-              <th>Ergebnis</th>
-              <th>Sieger</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        `;
-
-        const tbody = table.querySelector("tbody");
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td>${finalRes.team1}</td>
-          <td>${finalRes.team2}</td>
-          <td>${finalRes.score1} : ${finalRes.score2}</td>
-          <td>${finalRes.winner ? finalRes.winner : "Unentschieden"}</td>
-        `;
-        tbody.appendChild(tr);
-        resultContainer.appendChild(table);
-
-        document.body.appendChild(resultContainer);
+      if (score1 > score2) {
+        teamData[team1].wins += 1;
+      } else if (score2 > score1) {
+        teamData[team2].wins += 1;
       }
+    }
+  });
 
-      function displayFinalOverview() {
-        const oldOverview = document.getElementById("Gesamt-Übersicht");
-        if (oldOverview) oldOverview.remove();
+  // Nach Brackets gruppieren
+  const bracketGroups = {};
+  for (const t in teamData) {
+    const bd = teamData[t];
+    if (!bd.bracket) continue; // Falls aus irgendeinem Grund kein Bracket vorhanden ist
+    if (!bracketGroups[bd.bracket]) bracketGroups[bd.bracket] = [];
+    bracketGroups[bd.bracket].push({
+      team: t,
+      wins: bd.wins,
+      diff: bd.scored - bd.allowed,
+      scored: bd.scored
+    });
+  }
 
-        const overviewContainer = document.createElement("div");
-        overviewContainer.id = "Gesamt-Übersicht";
-        overviewContainer.className = "result-container";
+  // Jedes Bracket intern sortieren
+  for (const br in bracketGroups) {
+    bracketGroups[br].sort((a, b) => {
+      if (b.wins !== a.wins) return b.wins - a.wins;
+      if (b.diff !== a.diff) return b.diff - a.diff;
+      if (b.scored !== a.scored) return b.scored - a.scored;
+      return a.team.localeCompare(b.team);
+    });
+  }
 
-        const heading = document.createElement("h3");
-        heading.innerText = "Übersicht aller Teams mit ihrer Platzierung";
-        overviewContainer.appendChild(heading);
+  // Jetzt die Brackets in der korrekten Reihenfolge platzieren:
+  // Bracket 1: Plätze 1-3
+  // Bracket 2: Plätze 4-6
+  // Bracket 3: Plätze 7-9
+  // usw.
+  // Wir setzen voraus, dass jedes Bracket genau 3 Teams hat.
+  // Falls weniger, muss man entsprechend anpassen.
+  const sortedBrackets = Object.keys(bracketGroups).map(b => parseInt(b)).sort((a,b)=>a-b);
+  
+  let currentStartPlace = 1;
+  sortedBrackets.forEach(br => {
+    const group = bracketGroups[br];
+    group.forEach((res, idx) => {
+      results.push({
+        team: res.team,
+        wins: res.wins,
+        diff: res.diff,
+        scored: res.scored,
+        finalPlace: currentStartPlace + idx
+      });
+    });
+    currentStartPlace += group.length; // normal 3 Teams pro Bracket
+  });
 
-        const allTeamsRanked = [];
-        if (finalWinner) {
-          allTeamsRanked.push({team: finalWinner, place: 1});
-        }
-        if (finalLoser && finalLoser !== finalWinner) {
-          allTeamsRanked.push({team: finalLoser, place: 2});
-        }
+  // finalPlace ist nun die endgültige Platzierung. Wir sortieren results nach finalPlace:
+  results.sort((a,b) => a.finalPlace - b.finalPlace);
 
-        let startPlace = allTeamsRanked.length + 1;
-        placementResultsGlobal.forEach((res, i) => {
-          const thisPlace = startPlace + i;
-          if (res.team !== finalWinner && res.team !== finalLoser) {
-            allTeamsRanked.push({team: res.team, place: thisPlace});
-          }
-        });
+  return {results, incompleteData};
+}
 
-        const table = document.createElement("table");
-        table.className = "result-table";
-        table.innerHTML = `
-          <thead>
-            <tr>
-              <th>Platz</th>
-              <th>Team</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        `;
+function displayFinalSummary(finalRes) {
+  const oldFinal = document.getElementById("Final-Ergebnis");
+  if (oldFinal) oldFinal.remove();
+  const oldOverview = document.getElementById("Gesamt-Übersicht");
+  if (oldOverview) oldOverview.remove();
 
-        const tbody = table.querySelector("tbody");
-        allTeamsRanked.forEach(r => {
-          const tr = document.createElement("tr");
-          tr.innerHTML = `
-            <td>${r.place}</td>
-            <td>${r.team}</td>
-          `;
-          tbody.appendChild(tr);
-        });
+  // Container für Zusammenfassung
+  const summaryContainer = document.createElement("div");
+  summaryContainer.id = "Final-Übersicht";
+  summaryContainer.className = "result-container";
 
-        overviewContainer.appendChild(table);
-        document.body.appendChild(overviewContainer);
-      }
+  const heading = document.createElement("h3");
+  heading.innerText = "Finale und Gesamtübersicht";
+  summaryContainer.appendChild(heading);
+
+  // Hinweis bei unvollständigen Daten
+  if (finalRes.incompleteData) {
+    const warningEl = document.createElement('p');
+    warningEl.className = 'warning';
+    warningEl.innerText = "Finale hatte unvollständige Punktedaten. Es wurden 0 Punkte angenommen.";
+    summaryContainer.appendChild(warningEl);
+  }
+
+  // Tabelle mit Finalergebnis
+  const finalTable = document.createElement("table");
+  finalTable.className = "result-table";
+  finalTable.innerHTML = `
+    <thead>
+      <tr>
+        <th>Team 1</th>
+        <th>Team 2</th>
+        <th>Ergebnis</th>
+        <th>Sieger</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>${finalRes.team1}</td>
+        <td>${finalRes.team2}</td>
+        <td>${finalRes.score1} : ${finalRes.score2}</td>
+        <td>${finalRes.winner ? finalRes.winner : "Unentschieden"}</td>
+      </tr>
+    </tbody>
+  `;
+  summaryContainer.appendChild(finalTable);
+
+  // Gesamtübersicht aller Teams
+  const allTeamsRanked = [];
+  if (finalWinner) {
+    allTeamsRanked.push({team: finalWinner, place: 1});
+  }
+  if (finalLoser && finalLoser !== finalWinner) {
+    allTeamsRanked.push({team: finalLoser, place: 2});
+  }
+
+  let startPlace = allTeamsRanked.length + 1;
+  placementResultsGlobal.forEach((res, i) => {
+    const thisPlace = startPlace + i;
+    if (res.team !== finalWinner && res.team !== finalLoser) {
+      allTeamsRanked.push({team: res.team, place: thisPlace});
+    }
+  });
+
+  const overviewHeading = document.createElement("h4");
+  overviewHeading.innerText = "Endgültige Platzierungen aller Teams:";
+  overviewHeading.style.marginTop = "30px";
+  summaryContainer.appendChild(overviewHeading);
+
+  const overviewTable = document.createElement("table");
+  overviewTable.className = "result-table";
+  overviewTable.innerHTML = `
+    <thead>
+      <tr>
+        <th>Platz</th>
+        <th>Team</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  `;
+  const tbody = overviewTable.querySelector("tbody");
+  allTeamsRanked.forEach(r => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${r.place}</td>
+      <td>${r.team}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+  summaryContainer.appendChild(overviewTable);
+
+  document.body.appendChild(summaryContainer);
+}
     </script>
 </body>
 </html>
