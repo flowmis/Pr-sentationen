@@ -72,51 +72,24 @@
             background-color: #d4edda;
             color: #155724;
         }
-        /* Switch Styling */
-        .switch {
-            position: relative;
-            display: inline-block;
-            width: 60px;
-            height: 34px;
-            margin-left: 10px;
-        }
-        
-        .switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-        
-        .switch label {
-            position: absolute;
+        /* Button Styling für Punkteanpassung */
+        .adjust-button {
+            padding: 4px 8px;
+            background-color: #007bff;
+            border: none;
+            color: white;
             cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #ccc;
-            transition: .4s;
-            border-radius: 34px;
+            font-size: 12px;
+            border-radius: 4px;
+            margin-left: 5px;
         }
-        
-        .switch label:before {
-            position: absolute;
-            content: "";
-            height: 26px;
-            width: 26px;
-            left: 4px;
-            bottom: 4px;
-            background-color: white;
-            transition: .4s;
-            border-radius: 50%;
+        .adjust-button:hover {
+            background-color: #0069d9;
         }
-        
-        .switch input:checked + label {
-            background-color: #28a745;
-        }
-        
-        .switch input:checked + label:before {
-            transform: translateX(26px);
+        /* Disable Button Styling */
+        .button:disabled, .adjust-button:disabled {
+            background-color: #6c757d;
+            cursor: not-allowed;
         }
     </style>
 </head>
@@ -170,7 +143,7 @@
     <div class="section">
         <h2>Teams Losen</h2>
         
-        <!-- Neue Eingabefelder für Teamgrößen -->
+        <!-- Eingabefelder für Teamgrößen -->
         <div style="margin-bottom: 20px;">
             <label for="adultTeamSize">Erwachsene pro Erwachsenen-Team:</label>
             <input type="number" id="adultTeamSize" value="6" min="1" style="width: 50px; margin-left: 10px;">
@@ -225,6 +198,7 @@
                     <th>Name</th>
                     <th>Spiele</th>
                     <th>Punkte</th>
+                    <th>Aktionen</th>
                 </tr>
             </thead>
             <tbody></tbody>
@@ -262,7 +236,6 @@
             { Name: "Fabian D.", Position: "MB", Leistung: "1", Spiele: 0, Punkte: 0 },
             { Name: "Felina S.", Position: "AA", Leistung: "1", Spiele: 0, Punkte: 0 },
             { Name: "Felix K.", Position: "AA", Leistung: "3", Spiele: 0, Punkte: 0 },
-            { Name: "Felix L.", Position: "AA", Leistung: "1", Spiele: 0, Punkte: 0 },
             { Name: "Felix L.", Position: "AA", Leistung: "1", Spiele: 0, Punkte: 0 },
             { Name: "Florian B.", Position: "AA", Leistung: "1", Spiele: 0, Punkte: 0 },
             { Name: "Hannes G.", Position: "MB", Leistung: "2", Spiele: 0, Punkte: 0 },
@@ -329,7 +302,7 @@
         const adultMessageDiv = document.getElementById('adultMessage');
         const youthMessageDiv = document.getElementById('youthMessage');
 
-        // Neue DOM Elemente für Teamgrößen
+        // Eingabefelder für Teamgrößen
         const adultTeamSizeInput = document.getElementById('adultTeamSize');
         const adultPerMixedTeamInput = document.getElementById('adultPerMixedTeam');
         const youthPerMixedTeamInput = document.getElementById('youthPerMixedTeam');
@@ -490,10 +463,10 @@
             mixedTeams = [];
             for(let i=0; i<numberOfTeams; i++){
                 const startAdultIndex = numberOfTeams * adultTeamSize;
-                const adult = shuffledAdults[startAdultIndex + i];
+                const adultStart = startAdultIndex + (i * adultPerMixedTeam);
+                const adultEnd = adultStart + adultPerMixedTeam;
+                const adults = shuffledAdults.slice(adultStart, adultEnd);
                 const youths = shuffledYouth.slice(i * youthPerMixedTeam, (i +1) * youthPerMixedTeam);
-                // Fügen Sie die angegebenen Anzahl von Erwachsenen hinzu
-                const adults = shuffledAdults.slice(startAdultIndex + i, startAdultIndex + i + adultPerMixedTeam);
                 mixedTeams.push([...adults, ...youths]);
             }
 
@@ -575,6 +548,9 @@
 
             // Paarungen erstellen
             createMatches(adultTeams, mixedTeams);
+
+            // Punkte Tabelle aktualisieren
+            updatePointsTable();
         }
 
         // Funktion zum Erstellen der Paarungen mit Gewinner-Buttons
@@ -705,26 +681,62 @@
             pointsTableBody.innerHTML = '';
 
             // Erwachsene Spieler
-            adultPlayers.forEach(player => {
+            adultPlayers.forEach((player, index) => {
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
                     <td>${player.Name}</td>
                     <td>${player.Spiele}</td>
                     <td>${player.Punkte}</td>
+                    <td>
+                        <button class="adjust-button" onclick="adjustPoints('adult', ${index}, 1)">+</button>
+                        <button class="adjust-button" onclick="adjustPoints('adult', ${index}, -1)">-</button>
+                    </td>
                 `;
                 pointsTableBody.appendChild(tr);
             });
 
             // Jugendspieler
-            youthPlayers.forEach(player => {
+            youthPlayers.forEach((player, index) => {
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
                     <td>${player.Name}</td>
                     <td>${player.Spiele}</td>
                     <td>${player.Punkte}</td>
+                    <td>
+                        <button class="adjust-button" onclick="adjustPoints('youth', ${index}, 1)">+</button>
+                        <button class="adjust-button" onclick="adjustPoints('youth', ${index}, -1)">-</button>
+                    </td>
                 `;
                 pointsTableBody.appendChild(tr);
             });
+        }
+
+        // Funktion zur Anpassung der Punkte
+        function adjustPoints(playerType, index, delta){
+            if(playerType === 'adult'){
+                if(index >= adultPlayers.length || index < 0){
+                    alert("Ungültiger Spielerindex.");
+                    return;
+                }
+                const player = adultPlayers[index];
+                if(delta === -1 && player.Punkte <= 0){
+                    alert("Punkte können nicht negativ sein.");
+                    return;
+                }
+                player.Punkte += delta;
+            } else if(playerType === 'youth'){
+                if(index >= youthPlayers.length || index < 0){
+                    alert("Ungültiger Spielerindex.");
+                    return;
+                }
+                const player = youthPlayers[index];
+                if(delta === -1 && player.Punkte <= 0){
+                    alert("Punkte können nicht negativ sein.");
+                    return;
+                }
+                player.Punkte += delta;
+            }
+            updatePointsTable();
         }
 
     </script>
