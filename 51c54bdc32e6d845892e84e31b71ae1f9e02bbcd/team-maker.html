@@ -176,6 +176,10 @@
             <input type="number" id="adultTeamSize" value="6" min="1" style="width: 50px; margin-left: 10px;">
         </div>
         <div style="margin-bottom: 20px;">
+            <label for="adultPerMixedTeam">Erwachsene pro gemischtem Team:</label>
+            <input type="number" id="adultPerMixedTeam" value="1" min="1" style="width: 50px; margin-left: 10px;">
+        </div>
+        <div style="margin-bottom: 20px;">
             <label for="youthPerMixedTeam">Jugendspieler pro gemischtem Team:</label>
             <input type="number" id="youthPerMixedTeam" value="2" min="1" style="width: 50px; margin-left: 10px;">
         </div>
@@ -327,6 +331,7 @@
 
         // Neue DOM Elemente für Teamgrößen
         const adultTeamSizeInput = document.getElementById('adultTeamSize');
+        const adultPerMixedTeamInput = document.getElementById('adultPerMixedTeam');
         const youthPerMixedTeamInput = document.getElementById('youthPerMixedTeam');
 
         // Arrays zur Speicherung der Teams
@@ -436,11 +441,16 @@
         drawButton.addEventListener('click', function() {
             // Lesen der Teamgrößen
             const adultTeamSize = parseInt(adultTeamSizeInput.value);
+            const adultPerMixedTeam = parseInt(adultPerMixedTeamInput.value);
             const youthPerMixedTeam = parseInt(youthPerMixedTeamInput.value);
 
             // Validieren der Eingaben
             if(isNaN(adultTeamSize) || adultTeamSize < 1){
-                alert("Bitte geben Sie eine gültige Anzahl für Erwachsene pro Team ein.");
+                alert("Bitte geben Sie eine gültige Anzahl für Erwachsene pro Erwachsenen-Team ein.");
+                return;
+            }
+            if(isNaN(adultPerMixedTeam) || adultPerMixedTeam < 1){
+                alert("Bitte geben Sie eine gültige Anzahl für Erwachsene pro gemischtem Team ein.");
                 return;
             }
             if(isNaN(youthPerMixedTeam) || youthPerMixedTeam < 1){
@@ -452,12 +462,12 @@
             const numberOfTeams = 6;
 
             // Berechnung der erforderlichen Spieler
-            const requiredAdults = numberOfTeams * adultTeamSize + numberOfTeams; // Erwachsene für 6 Erwachsene-Teams + 6 Erwachsene für gemischte Teams
+            const requiredAdults = (numberOfTeams * adultTeamSize) + (numberOfTeams * adultPerMixedTeam);
             const requiredYouth = numberOfTeams * youthPerMixedTeam;
 
             // Überprüfen der Mindestanzahl von Spielern
             if(adultPlayers.length < requiredAdults){
-                alert(`Es müssen mindestens ${requiredAdults} Erwachsene Teilnehmer vorhanden sein (für ${numberOfTeams} Erwachsene Teams mit je ${adultTeamSize} Spielern und ${numberOfTeams} Erwachsene für gemischte Teams).`);
+                alert(`Es müssen mindestens ${requiredAdults} Erwachsene Teilnehmer vorhanden sein (für ${numberOfTeams} Erwachsene Teams mit je ${adultTeamSize} Spielern und ${numberOfTeams} Erwachsene für gemischte Teams mit je ${adultPerMixedTeam} Erwachsenen).`);
                 return;
             }
             if(youthPlayers.length < requiredYouth){
@@ -479,9 +489,12 @@
             // Erstellen der gemischten Teams
             mixedTeams = [];
             for(let i=0; i<numberOfTeams; i++){
-                const adult = shuffledAdults[numberOfTeams * adultTeamSize + i];
+                const startAdultIndex = numberOfTeams * adultTeamSize;
+                const adult = shuffledAdults[startAdultIndex + i];
                 const youths = shuffledYouth.slice(i * youthPerMixedTeam, (i +1) * youthPerMixedTeam);
-                mixedTeams.push([adult, ...youths]);
+                // Fügen Sie die angegebenen Anzahl von Erwachsenen hinzu
+                const adults = shuffledAdults.slice(startAdultIndex + i, startAdultIndex + i + adultPerMixedTeam);
+                mixedTeams.push([...adults, ...youths]);
             }
 
             // Anzeigen der Ergebnisse
@@ -490,7 +503,7 @@
             console.log("Gemischte Teams:", mixedTeams);
 
             // Ermitteln der nicht zugeteilten Erwachsenen Spieler
-            const unassignedAdults = shuffledAdults.slice(numberOfTeams * adultTeamSize + numberOfTeams);
+            const unassignedAdults = shuffledAdults.slice((numberOfTeams * adultTeamSize) + (numberOfTeams * adultPerMixedTeam));
 
             // Ermitteln der nicht zugeteilten Jugendspieler
             const unassignedYouth = shuffledYouth.slice(numberOfTeams * youthPerMixedTeam);
