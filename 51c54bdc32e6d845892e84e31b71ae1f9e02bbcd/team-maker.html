@@ -1,778 +1,683 @@
+
 <!DOCTYPE html>
 <html lang="de">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>TSV Weihnachtsturnier - Team Maker</title>
-<style>
-  body {
-    font-family: Arial, sans-serif;
-    background: #fff;
-    margin: 0;
-    padding: 0;
-    color: #000;
-  }
-
-  header, .content, footer {
-    max-width: 900px;
-    margin: auto;
-    padding: 20px;
-  }
-
-  header {
-    background: #ffffff;
-    color: #ff0000; 
-    margin-bottom: 20px;
-  }
-
-  header h1 {
-    margin: 0;
-    padding: 10px 0;
-    text-align: center;
-    color: #ff0000; 
-  }
-
-  .section {
-    background: #fff;
-    padding: 20px;
-    border-radius: 5px;
-    margin-bottom: 20px;
-    border: 2px solid #ff0000; 
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-  }
-
-  .section h2 {
-    margin-top: 0;
-    color: #ff0000; 
-  }
-
-  label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: bold;
-    color: #000;
-  }
-
-  input[type="text"], input[type="file"], input[type="number"], select {
-    padding: 5px;
-    margin-right: 10px;
-    border: 1px solid #ccc;
-    border-radius: 3px;
-    margin-bottom: 5px;
-  }
-
-  button {
-    padding: 7px 15px;
-    cursor: pointer;
-    background: #0033cc; 
-    color: #fff;
-    border: none;
-    border-radius: 3px;
-    margin-top: 5px;
-  }
-
-  button:hover {
-    background: #002699;
-  }
-
-  #playerList {
-    list-style: none;
-    padding: 0;
-  }
-
-  #playerList li {
-    margin: 5px 0;
-    padding: 5px;
-    background: #eee;
-    border-radius: 3px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  #playerList li span {
-    flex: 1;
-  }
-
-  .teams {
-    margin-top: 20px;
-  }
-
-  .team {
-    margin-bottom: 20px;
-    background: #fff;
-    border: 2px solid #ff0000; 
-    padding: 10px;
-    border-radius: 5px;
-  }
-
-  .team-title {
-    font-weight: bold;
-    margin-bottom: 5px;
-    color: #ff0000;
-    display: flex;
-    align-items: center;
-  }
-
-  .team-title input[type="text"] {
-    border: none;
-    border-bottom: 1px solid #ccc;
-    margin-left: 10px;
-    flex: 1;
-    font-weight: bold;
-    color: #000;
-    font-size: 1em;
-  }
-
-  .team ul {
-    list-style: none;
-    padding: 0;
-  }
-
-  .team li {
-    margin: 5px 0;
-    background: #f0f0f0;
-    padding: 5px;
-    border-radius: 3px;
-    color: #000;
-  }
-
-  footer {
-    text-align: center;
-    color: #888;
-    margin-top: 20px;
-  }
-
-  .positions-container {
-    margin: 0 0 5px 0;
-  }
-
-  .positions-container label {
-    display: inline-block;
-    margin-right: 10px;
-    font-weight: normal;
-  }
-
-  .option-buttons {
-    display: flex;
-    gap: 10px;
-    margin: 10px 0;
-    flex-wrap: wrap;
-  }
-
-  .option-button {
-    background: #eee;
-    color: #000;
-    padding: 10px 15px;
-    border-radius: 5px;
-    border: 2px solid #ccc;
-    cursor: pointer;
-    user-select: none;
-    font-weight: bold;
-    text-align: center;
-    min-width: 200px;
-  }
-
-  .option-button.active {
-    border-color: #0033cc;
-    background: #cce;
-  }
-
-  .player-input-row {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-
-  .hint {
-    font-size: 0.9em;
-    color: #555;
-  }
-
-  .skill-3 {
-    font-weight: bold;
-    color: #000;
-  }
-</style>
+    <meta charset="UTF-8">
+    <title>Volleyball Turnier Losgenerator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1, h2, h3, h4 {
+            margin-top: 40px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid #aaa;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #ddd;
+        }
+        .player-list, .team-list, .matches-list {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #aaa;
+            padding: 10px;
+            margin-top: 10px;
+        }
+        .player-item, .team-item, .match-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+        .add-player-form input, .add-player-form select, .add-player-form button {
+            margin-right: 10px;
+            padding: 5px;
+            font-size: 14px;
+        }
+        .section {
+            margin-bottom: 40px;
+        }
+        .button {
+            padding: 8px 16px;
+            background-color: #28a745;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+            border-radius: 4px;
+            margin-left: 5px;
+        }
+        .button:hover {
+            background-color: #218838;
+        }
+        .message {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        /* Switch Styling */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+            margin-left: 10px;
+        }
+        
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .switch label {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        
+        .switch label:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        .switch input:checked + label {
+            background-color: #28a745;
+        }
+        
+        .switch input:checked + label:before {
+            transform: translateX(26px);
+        }
+    </style>
 </head>
 <body>
 
-<header>
-  <h1>TSV Weihnachtsturnier - Team Maker</h1>
-</header>
+    <h1>Volleyball Turnier Losgenerator</h1>
 
-<div class="content">
-
-  <div class="section">
-    <h2>Spieler hinzufügen</h2>
-    <div class="player-input-row">
-      <input type="text" id="playerName" placeholder="Name" />
-      <input type="number" id="playerSkill" min="1" max="3" value="2" title="1 = schwach, 2 = mittel, 3 = stark" />
-      <select id="playerGender">
-        <option value="m">m</option>
-        <option value="w">w</option>
-      </select>
-      <div class="positions-container">
-        Positionen:
-        <label><input type="checkbox" name="position" value="AA" />AA</label>
-        <label><input type="checkbox" name="position" value="MB" />MB</label>
-        <label><input type="checkbox" name="position" value="D" />D</label>
-        <label><input type="checkbox" name="position" value="Z" />Z</label>
-        <label><input type="checkbox" name="position" value="L" />L</label>
-      </div>
-      <button id="addPlayerBtn">Hinzufügen</button>
-    </div>
-    <p class="hint">Leistungsklasse: 1 = schwach, 2 = mittel, 3 = stark</p>
-  </div>
-
-  <div class="section">
-    <h2>CSV Import</h2>
-    <p>CSV-Format: <code>Name,Leistungsklasse,Geschlecht,Position(en)...</code><br>
-    Beispiel:<br>Max,3,m,AA,MB<br>Anna,1,w<br>Lukas,2,m,D,Z</p>
-    <input type="file" id="uploadCsv" accept=".csv" />
-    <button id="importCsvBtn">Importieren</button>
-    <p class="hint">Keine Positionsangabe = AA,MB,Z. Positionen per Komma trennen. Ungültige Klassen/Geschlechter = Standard (2, m).</p>
-  </div>
-
-  <div class="section">
-    <h2>Spielerliste verwalten</h2>
-    <button id="savePlayersBtn">Liste speichern</button>
-    <button id="loadPlayersBtn">Liste laden</button>
-    <button id="sortPlayersBtn">Spieler nach Name sortieren</button>
-    <ul id="playerList"></ul>
-  </div>
-
-  <div class="section">
-    <h2>Teams erstellen</h2>
-    <label>Anzahl der Teams:</label>
-    <input type="number" id="teamCount" value="2" min="1" />
-
-    <div class="option-buttons">
-      <div class="option-button active" id="performanceOption">Leistungsverteilung: Heterogen</div>
-      <div class="option-button active" id="genderOption">Geschlechter: Mischen</div>
-      <div class="option-button active" id="positionOption">Positionen: Ausbalancieren</div>
+    <!-- Erwachsene Spieler Verwaltung -->
+    <div class="section">
+        <h2>Erwachsene Spieler</h2>
+        <div id="adultList" class="player-list"></div>
+        <h3>Erwachsene Spieler Hinzufügen</h3>
+        <form id="addAdultForm" class="add-player-form">
+            <input type="text" id="adultName" placeholder="Name" required>
+            <select id="adultPosition" required>
+                <option value="" disabled selected>Position</option>
+                <option value="MB">MB</option>
+                <option value="AA">AA</option>
+                <option value="Z">Z</option>
+            </select>
+            <select id="adultLeistung" required>
+                <option value="" disabled selected>Leistung</option>
+                <option value="1">1 - Sehr gut</option>
+                <option value="2">2 - Gut</option>
+                <option value="3">3 - Weniger gut</option>
+            </select>
+            <button type="submit" class="button">Hinzufügen</button>
+        </form>
+        <div id="adultMessage" class="message"></div>
     </div>
 
-    <button id="createTeamsBtn">Teams erstellen</button>
-    <p class="hint">Auf mobilen Geräten: Zweimal schnell mit einem Finger tippen, um neu zu mischen.</p>
-  </div>
+    <!-- Jugendspieler Verwaltung -->
+    <div class="section">
+        <h2>Jugendspieler</h2>
+        <div id="youthList" class="player-list"></div>
+        <h3>Jugendspieler Hinzufügen</h3>
+        <form id="addYouthForm" class="add-player-form">
+            <input type="text" id="youthName" placeholder="Name" required>
+            <select id="youthLeistung" required>
+                <option value="" disabled selected>Leistung</option>
+                <option value="1">1 - Sehr gut</option>
+                <option value="2">2 - Gut</option>
+                <option value="3">3 - Weniger gut</option>
+            </select>
+            <button type="submit" class="button">Hinzufügen</button>
+        </form>
+        <div id="youthMessage" class="message"></div>
+    </div>
 
-  <div class="section">
-    <h2>Konfiguration exportieren/importieren</h2>
-    <button id="exportConfigBtn">Konfiguration exportieren (CSV)</button>
-    <p class="hint">Die Konfiguration enthält Optionen und Spieler. Beim Import werden Optionen und Spieler angepasst.</p>
-  </div>
+    <!-- Teams Losen -->
+    <div class="section">
+        <h2>Teams Losen</h2>
+        <button id="drawButton" class="button">Jetzt Losen</button>
 
-  <div class="teams" id="teamsContainer"></div>
+        <!-- Abschnitt für nicht zugeteilte Spieler -->
+        <div id="unassignedPlayersSection" class="section" style="display:none;">
+            <h3>Nicht zugeteilte Spieler</h3>
+            <div id="unassignedAdults" class="player-list">
+                <h4>Erwachsene</h4>
+                <!-- Nicht zugeteilte Erwachsene Spieler werden hier angezeigt -->
+            </div>
+            <div id="unassignedYouth" class="player-list">
+                <h4>Jugendspieler</h4>
+                <!-- Nicht zugeteilte Jugendspieler werden hier angezeigt -->
+            </div>
+        </div>
+    </div>
 
-  <button id="reshuffleBtn" style="display:none;">Neu Mischen</button>
+    <!-- Ergebnisse -->
+    <div class="section" id="resultsSection" style="display:none;">
+        <h2>Ergebnisse</h2>
 
-</div>
+        <h3>Erwachsenenteams (6er Teams)</h3>
+        <div id="adultTeamsList" class="team-list"></div>
 
-<footer>
-  <p>&copy; Wenn dir die Seite gefällt, spendier Mane ein Bier!</p>
-</footer>
+        <h3>Gemischte Teams (1 Erwachsener + 2 Jugendspieler)</h3>
+        <div id="mixedTeamsList" class="team-list"></div>
 
-<script>
-let players = [];
-let currentTeams = [];
-let currentTeamNames = [];
+        <h3>Paarungen</h3>
+        <div id="matchesList" class="team-list">
+            <h4>Erwachsenen Matches</h4>
+            <div id="adultMatches"></div>
+            <h4>Gemischte Matches</h4>
+            <div id="mixedMatches"></div>
+        </div>
 
-// Standardwerte für Optionen
-let isHeterogen = true;
-let genderSeparated = false;
-let positionsBalanced = true;
+        <h3>Spielergebnisse und Punkte</h3>
+        <table id="pointsTable">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Spiele</th>
+                    <th>Punkte</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
 
-const playerNameInput = document.getElementById('playerName');
-const playerSkillInput = document.getElementById('playerSkill');
-const playerGenderInput = document.getElementById('playerGender');
-const addPlayerBtn = document.getElementById('addPlayerBtn');
-const uploadCsv = document.getElementById('uploadCsv');
-const importCsvBtn = document.getElementById('importCsvBtn');
-const playerList = document.getElementById('playerList');
-const teamCountInput = document.getElementById('teamCount');
-const createTeamsBtn = document.getElementById('createTeamsBtn');
-const teamsContainer = document.getElementById('teamsContainer');
-const savePlayersBtn = document.getElementById('savePlayersBtn');
-const loadPlayersBtn = document.getElementById('loadPlayersBtn');
-const reshuffleBtn = document.getElementById('reshuffleBtn');
-const exportConfigBtn = document.getElementById('exportConfigBtn');
-const sortPlayersBtn = document.getElementById('sortPlayersBtn');
+    <script>
+        // Datenstrukturen zum Speichern der Spieler
+        let youthPlayers = [
+	    { Name: "Frieda Müller", Leistung: "2", Spiele: 0, Punkte: 0 },
+	    { Name: "Julia Einsiedler", Leistung: "2", Spiele: 0, Punkte: 0 },
+	    { Name: "Elena Clourido", Leistung: "3", Spiele: 0, Punkte: 0 },
+	    { Name: "Noemi Ratgeb", Leistung: "2", Spiele: 0, Punkte: 0 },
+	    { Name: "Mirjam Kempen", Leistung: "2", Spiele: 0, Punkte: 0 },
+	    { Name: "Jakob Kempen", Leistung: "3", Spiele: 0, Punkte: 0 },
+	    { Name: "Bennett Glaubitz", Leistung: "2", Spiele: 0, Punkte: 0 },
+	    { Name: "Annelie Müller", Leistung: "3", Spiele: 0, Punkte: 0 },
+	    { Name: "Alex Zeberer", Leistung: "2", Spiele: 0, Punkte: 0 },
+	    { Name: "Laurenz Jäckel", Leistung: "2", Spiele: 0, Punkte: 0 },
+	    { Name: "David Schlageter", Leistung: "1", Spiele: 0, Punkte: 0 },
+	    { Name: "Elya Matz", Leistung: "3", Spiele: 0, Punkte: 0 }
+        ];
 
-const performanceOption = document.getElementById('performanceOption');
-const genderOption = document.getElementById('genderOption');
-const positionOption = document.getElementById('positionOption');
+        let adultPlayers = [
+	{ Name: "Alex Knoor", Position: "MB", Leistung: "3", Spiele: 0, Punkte: 0 },
+	{ Name: "Ali Krämer", Position: "Z", Leistung: "1", Spiele: 0, Punkte: 0 },
+	{ Name: "Anna Ringle", Position: "AA", Leistung: "2", Spiele: 0, Punkte: 0 },
+	{ Name: "Ben Bohner", Position: "MB", Leistung: "1", Spiele: 0, Punkte: 0 },
+	{ Name: "Caro Stade", Position: "MB", Leistung: "1", Spiele: 0, Punkte: 0 },
+	{ Name: "Daniel Egetemeyer", Position: "AA", Leistung: "2", Spiele: 0, Punkte: 0 },
+	{ Name: "Daria Avram", Position: "AA", Leistung: "1", Spiele: 0, Punkte: 0 },
+	{ Name: "Elias Krämer", Position: "AA", Leistung: "1", Spiele: 0, Punkte: 0 },
+	{ Name: "Emilia Hauf", Position: "AA", Leistung: "3", Spiele: 0, Punkte: 0 },
+	{ Name: "Emily Köhle", Position: "AA", Leistung: "1", Spiele: 0, Punkte: 0 },
+	{ Name: "Fabian Diener", Position: "MB", Leistung: "1", Spiele: 0, Punkte: 0 },
+	{ Name: "Felina Schaller", Position: "AA", Leistung: "1", Spiele: 0, Punkte: 0 },
+	{ Name: "Felix Krämer", Position: "AA", Leistung: "3", Spiele: 0, Punkte: 0 },
+	{ Name: "Felix Leicht", Position: "AA", Leistung: "1", Spiele: 0, Punkte: 0 },
+	{ Name: "Felix Lingel", Position: "AA", Leistung: "1", Spiele: 0, Punkte: 0 },
+	{ Name: "Florian Bruckmüller", Position: "AA", Leistung: "1", Spiele: 0, Punkte: 0 },
+	{ Name: "Hannes Grimm", Position: "MB", Leistung: "2", Spiele: 0, Punkte: 0 },
+	{ Name: "Helene Maneth", Position: "AA", Leistung: "3", Spiele: 0, Punkte: 0 },
+	{ Name: "Ida Bohner", Position: "MB", Leistung: "2", Spiele: 0, Punkte: 0 },
+	{ Name: "Jan Knoor", Position: "MB", Leistung: "2", Spiele: 0, Punkte: 0 },
+	{ Name: "Jannis Erlmann", Position: "AA", Leistung: "1", Spiele: 0, Punkte: 0 },
+	{ Name: "Jannis Hirschmiller", Position: "AA", Leistung: "1", Spiele: 0, Punkte: 0 },
+	{ Name: "Jannis Weidenbacher", Position: "MB", Leistung: "2", Spiele: 0, Punkte: 0 },
+	{ Name: "Janos Schaller", Position: "AA", Leistung: "1", Spiele: 0, Punkte: 0 },
+	{ Name: "Joel Dieterle", Position: "AA", Leistung: "2", Spiele: 0, Punkte: 0 },
+	{ Name: "Johanna Schlosser", Position: "MB", Leistung: "1", Spiele: 0, Punkte: 0 },
+	{ Name: "Jonas Gaugler", Position: "AA", Leistung: "2", Spiele: 0, Punkte: 0 },
+	{ Name: "Jonas Lingel", Position: "Z", Leistung: "1", Spiele: 0, Punkte: 0 },
+	{ Name: "Julian Salat", Position: "AA", Leistung: "3", Spiele: 0, Punkte: 0 },
+	{ Name: "Katharina Bruch", Position: "AA", Leistung: "2", Spiele: 0, Punkte: 0 },
+	{ Name: "Katja Hahn", Position: "Z", Leistung: "2", Spiele: 0, Punkte: 0 },
+	{ Name: "Lara Kuhn", Position: "MB", Leistung: "1", Spiele: 0, Punkte: 0 },
+	{ Name: "Leah Blatt", Position: "AA", Leistung: "3", Spiele: 0, Punkte: 0 },
+	{ Name: "Leah Rommel", Position: "AA", Leistung: "3", Spiele: 0, Punkte: 0 },
+	{ Name: "Lenard Schwenk", Position: "Z", Leistung: "1", Spiele: 0, Punkte: 0 },
+	{ Name: "Leni Jäckl", Position: "AA", Leistung: "2", Spiele: 0, Punkte: 0 },
+	{ Name: "Leo Berhalter", Position: "AA", Leistung: "3", Spiele: 0, Punkte: 0 },
+	{ Name: "Leonhard Seitz", Position: "AA", Leistung: "3", Spiele: 0, Punkte: 0 },
+	{ Name: "Lilli Baumann", Position: "Z", Leistung: "2", Spiele: 0, Punkte: 0 },
+	{ Name: "Lina Maile", Position: "AA", Leistung: "2", Spiele: 0, Punkte: 0 },
+	{ Name: "Linus Wagner", Position: "AA", Leistung: "1", Spiele: 0, Punkte: 0 },
+	{ Name: "Lucie Neckermann", Position: "AA", Leistung: "3", Spiele: 0, Punkte: 0 },
+	{ Name: "Martin Ungerer", Position: "Z", Leistung: "2", Spiele: 0, Punkte: 0 },
+	{ Name: "Max Drexel", Position: "AA", Leistung: "3", Spiele: 0, Punkte: 0 },
+	{ Name: "Michi Hirschmiller", Position: "AA", Leistung: "1", Spiele: 0, Punkte: 0 },
+	{ Name: "Mieke Kirsch", Position: "AA", Leistung: "1", Spiele: 0, Punkte: 0 },
+	{ Name: "Nelly Agathangelidis", Position: "MB", Leistung: "1", Spiele: 0, Punkte: 0 },
+	{ Name: "Nicklas Kuhn", Position: "MB", Leistung: "1", Spiele: 0, Punkte: 0 },
+	{ Name: "Nikita Schütz", Position: "AA", Leistung: "3", Spiele: 0, Punkte: 0 },
+	{ Name: "Patrick Syrowatka", Position: "AA", Leistung: "1", Spiele: 0, Punkte: 0 },
+	{ Name: "Paul Lindner", Position: "AA", Leistung: "3", Spiele: 0, Punkte: 0 },
+	{ Name: "Philipp Knoor", Position: "Z", Leistung: "3", Spiele: 0, Punkte: 0 },
+	{ Name: "Pius Maier", Position: "Z", Leistung: "1", Spiele: 0, Punkte: 0 },
+	{ Name: "Robin Wurst", Position: "Z", Leistung: "3", Spiele: 0, Punkte: 0 },
+	{ Name: "Ronja Baumann", Position: "AA", Leistung: "1", Spiele: 0, Punkte: 0 },
+	{ Name: "Rune Drenzcek", Position: "Z", Leistung: "1", Spiele: 0, Punkte: 0 },
+	{ Name: "Sara Tafrali", Position: "Z", Leistung: "1", Spiele: 0, Punkte: 0 },
+	{ Name: "Sebastian Mack", Position: "AA", Leistung: "3", Spiele: 0, Punkte: 0 },
+	{ Name: "Steffi Gruber", Position: "Z", Leistung: "1", Spiele: 0, Punkte: 0 },
+	{ Name: "Tom Wenczel", Position: "AA", Leistung: "1", Spiele: 0, Punkte: 0 },
+	{ Name: "Vica Mai", Position: "Z", Leistung: "2", Spiele: 0, Punkte: 0 }
+        ];
 
-performanceOption.addEventListener('click', () => {
-  isHeterogen = !isHeterogen;
-  performanceOption.textContent = isHeterogen ? "Leistungsverteilung: Heterogen" : "Leistungsverteilung: Homogen";
-  performanceOption.classList.toggle('active', isHeterogen);
-});
+        // DOM Elemente
+        const adultListDiv = document.getElementById('adultList');
+        const youthListDiv = document.getElementById('youthList');
+        const addAdultForm = document.getElementById('addAdultForm');
+        const addYouthForm = document.getElementById('addYouthForm');
+        const drawButton = document.getElementById('drawButton');
+        const resultsSection = document.getElementById('resultsSection');
+        const adultTeamsListDiv = document.getElementById('adultTeamsList');
+        const mixedTeamsListDiv = document.getElementById('mixedTeamsList');
+        const matchesListDiv = document.getElementById('matchesList');
+        const adultMatchesDiv = document.getElementById('adultMatches');
+        const mixedMatchesDiv = document.getElementById('mixedMatches');
+        const pointsTableBody = document.querySelector('#pointsTable tbody');
+        const adultMessageDiv = document.getElementById('adultMessage');
+        const youthMessageDiv = document.getElementById('youthMessage');
 
-genderOption.addEventListener('click', () => {
-  genderSeparated = !genderSeparated;
-  genderOption.textContent = genderSeparated ? "Geschlechter: Trennen" : "Geschlechter: Mischen";
-  genderOption.classList.toggle('active', genderSeparated);
-});
+        // Arrays zur Speicherung der Teams
+        let adultTeams = [];   // 6er Teams
+        let mixedTeams = [];   // 6 gemischte Teams (1 Erwachsener + 2 Jugendspieler)
 
-positionOption.addEventListener('click', () => {
-  positionsBalanced = !positionsBalanced;
-  positionOption.textContent = positionsBalanced ? "Positionen: Ausbalancieren" : "Positionen: Normal";
-  positionOption.classList.toggle('active', positionsBalanced);
-});
+        // Funktionen zum Rendern der Spielerlisten
+        function renderAdultList() {
+            adultListDiv.innerHTML = '';
+            adultPlayers.forEach((player, index) => {
+                const div = document.createElement('div');
+                div.className = 'player-item';
+                div.innerHTML = `
+                    <span>${player.Name} (${player.Position}, Leistung: ${player.Leistung})</span>
+                    <button class="button" onclick="deleteAdultPlayer(${index})">Löschen</button>
+                `;
+                adultListDiv.appendChild(div);
+            });
+        }
 
-addPlayerBtn.addEventListener('click', () => {
-  const name = playerNameInput.value.trim();
-  let skill = parseInt(playerSkillInput.value, 10);
-  if (isNaN(skill) || skill < 1 || skill > 3) {
-    skill = 2;
-  }
-  let gender = playerGenderInput.value.toLowerCase();
-  if (!['m','w'].includes(gender)) gender = 'm';
+        function renderYouthList() {
+            youthListDiv.innerHTML = '';
+            youthPlayers.forEach((player, index) => {
+                const div = document.createElement('div');
+                div.className = 'player-item';
+                div.innerHTML = `
+                    <span>${player.Name} (Leistung: ${player.Leistung})</span>
+                    <button class="button" onclick="deleteYouthPlayer(${index})">Löschen</button>
+                `;
+                youthListDiv.appendChild(div);
+            });
+        }
 
-  const checkedPositions = Array.from(document.querySelectorAll('input[name="position"]:checked'))
-    .map(el => el.value);
-  let positions = checkedPositions;
-  if (positions.length < 1 || positions.length > 3) {
-    positions = ['AA','MB','Z'];
-  }
+        // Initiales Rendern der Listen beim Laden der Seite
+        window.onload = function() {
+            renderAdultList();
+            renderYouthList();
+        }
 
-  if (name) {
-    players.push({ name, skill, gender, positions });
-    updatePlayerList();
-    playerNameInput.value = '';
-    playerNameInput.focus();
-    document.querySelectorAll('input[name="position"]:checked').forEach(cb => cb.checked = false);
-  }
-});
-
-function updatePlayerList() {
-  playerList.innerHTML = '';
-  players.forEach((player, index) => {
-    const li = document.createElement('li');
-    const span = document.createElement('span');
-    const playerText = `${player.name} (K:${player.skill}, G:${player.gender}, Pos:${player.positions.join('/')})`;
-    span.innerHTML = (player.skill === 3) ? `<span class="skill-3">${playerText}</span>` : playerText;
-    li.appendChild(span);
-
-    const removeBtn = document.createElement('button');
-    removeBtn.textContent = 'Entfernen';
-    removeBtn.style.marginLeft = '10px';
-    removeBtn.addEventListener('click', () => {
-      players.splice(index, 1);
-      updatePlayerList();
-    });
-    li.appendChild(removeBtn);
-    playerList.appendChild(li);
-  });
-}
-
-sortPlayersBtn.addEventListener('click', () => {
-  players.sort((a,b) => a.name.localeCompare(b.name));
-  updatePlayerList();
-});
-
-importCsvBtn.addEventListener('click', () => {
-  const file = uploadCsv.files[0];
-  if (file) {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const lines = e.target.result.split(/\r?\n/).map(l => l.trim()).filter(l => l);
-
-      players = [];
-      let teamNamesFromConfig = [];
-      let configRead = false;
-
-      // Optionen auf Standard zurücksetzen
-      isHeterogen = true;
-      genderSeparated = false;
-      positionsBalanced = true;
-      updateOptionsUI();
-
-      for (const line of lines) {
-        if (line.startsWith('#')) {
-          // Konfigurationszeile
-          const part = line.substring(1).split('=');
-          if (part.length === 2) {
-            const key = part[0].trim().toUpperCase();
-            const val = part[1].trim();
-
-            switch(key) {
-              case 'TEAM_COUNT':
-                teamCountInput.value = val;
-                break;
-              case 'IS_HETEROGEN':
-                isHeterogen = (val === 'true');
-                break;
-              case 'GENDER_SEPARATED':
-                genderSeparated = (val === 'true');
-                break;
-              case 'POSITIONS_BALANCED':
-                positionsBalanced = (val === 'true');
-                break;
-              case 'TEAMNAMES':
-                teamNamesFromConfig = val.split('|').map(t=>t.trim());
-                break;
+        // Funktionen zum Löschen von Spielern
+        window.deleteAdultPlayer = function(index) {
+            if(confirm(`Möchten Sie ${adultPlayers[index].Name} wirklich löschen?`)){
+                adultPlayers.splice(index, 1);
+                renderAdultList();
+                updatePointsTable();
             }
-          }
-        } else if (line.startsWith('---')) {
-          configRead = true;
-        } else {
-          // Spielerzeile
-          if (configRead || !line.startsWith('#')) {
-            const parts = line.split(',').map(p=>p.trim()).filter(p=>p!=='');
-            if (parts.length >= 1) {
-              const name = parts[0] || '';
-              let skill = 2; 
-              let gender = 'm'; 
-              let positions = [];
+        }
 
-              if (parts.length > 1) {
-                const skillVal = parseInt(parts[1], 10);
-                if (!isNaN(skillVal) && skillVal >= 1 && skillVal <= 3) {
-                  skill = skillVal;
-                }
-              }
-
-              if (parts.length > 2) {
-                const gVal = parts[2].toLowerCase();
-                if (['m','w'].includes(gVal)) {
-                  gender = gVal;
-                }
-              }
-
-              if (parts.length > 3) {
-                positions = parts.slice(3);
-                const validPositions = ['AA','MB','D','Z','L'];
-                positions = positions.filter(pos => validPositions.includes(pos));
-                if (positions.length < 1 || positions.length > 3) {
-                  positions = ['AA','MB','Z'];
-                }
-              } else {
-                positions = ['AA','MB','Z'];
-              }
-
-              if (name) {
-                players.push({ name, skill, gender, positions });
-              }
+        window.deleteYouthPlayer = function(index) {
+            if(confirm(`Möchten Sie ${youthPlayers[index].Name} wirklich löschen?`)){
+                youthPlayers.splice(index, 1);
+                renderYouthList();
+                updatePointsTable();
             }
-          }
         }
-      }
 
-      if (teamNamesFromConfig.length > 0) {
-        currentTeamNames = teamNamesFromConfig;
-      }
+        // Event Listener für Erwachsene Spieler Hinzufügen
+        addAdultForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('adultName').value.trim();
+            const position = document.getElementById('adultPosition').value;
+            const leistung = document.getElementById('adultLeistung').value;
+            if(name && position && leistung){
+                adultPlayers.push({ Name: name, Position: position, Leistung: leistung, Spiele: 0, Punkte: 0 });
+                renderAdultList();
+                addAdultForm.reset();
+                adultMessageDiv.textContent = `${name} erfolgreich hinzugefügt.`;
+                adultMessageDiv.className = 'message success';
+                console.log("Erwachsene Spieler nach Hinzufügen:", adultPlayers);
+                updatePointsTable();
+            } else {
+                adultMessageDiv.textContent = "Bitte füllen Sie alle Felder im Erwachsenen-Formular aus.";
+                adultMessageDiv.className = 'message error';
+            }
+        });
 
-      updateOptionsUI();
-      updatePlayerList();
-    };
-    reader.readAsText(file);
-  } else {
-    alert('Bitte eine gültige CSV-Datei auswählen.');
-  }
-});
+        // Event Listener für Jugendspieler Hinzufügen
+        addYouthForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('youthName').value.trim();
+            const leistung = document.getElementById('youthLeistung').value;
+            if(name && leistung){
+                youthPlayers.push({ Name: name, Leistung: leistung, Spiele: 0, Punkte: 0 });
+                renderYouthList();
+                addYouthForm.reset();
+                youthMessageDiv.textContent = `${name} erfolgreich hinzugefügt.`;
+                youthMessageDiv.className = 'message success';
+                console.log("Jugendspieler nach Hinzufügen:", youthPlayers);
+                updatePointsTable();
+            } else {
+                youthMessageDiv.textContent = "Bitte füllen Sie alle Felder im Jugendspieler-Formular aus.";
+                youthMessageDiv.className = 'message error';
+            }
+        });
 
-function updateOptionsUI() {
-  performanceOption.textContent = isHeterogen ? "Leistungsverteilung: Heterogen" : "Leistungsverteilung: Homogen";
-  performanceOption.classList.toggle('active', isHeterogen);
-
-  genderOption.textContent = genderSeparated ? "Geschlechter: Trennen" : "Geschlechter: Mischen";
-  genderOption.classList.toggle('active', genderSeparated);
-
-  positionOption.textContent = positionsBalanced ? "Positionen: Ausbalancieren" : "Positionen: Normal";
-  positionOption.classList.toggle('active', positionsBalanced);
-}
-
-savePlayersBtn.addEventListener('click', () => {
-  localStorage.setItem('players', JSON.stringify(players));
-  alert('Spielerliste wurde gespeichert.');
-});
-
-loadPlayersBtn.addEventListener('click', () => {
-  const stored = localStorage.getItem('players');
-  if (stored) {
-    players = JSON.parse(stored);
-    updatePlayerList();
-    alert('Spielerliste wurde geladen.');
-  } else {
-    alert('Keine gespeicherte Liste gefunden.');
-  }
-});
-
-createTeamsBtn.addEventListener('click', () => {
-  createOrShuffleTeams();
-});
-
-reshuffleBtn.addEventListener('click', () => {
-  createOrShuffleTeams();
-});
-
-function createOrShuffleTeams() {
-  const teamCount = parseInt(teamCountInput.value, 10);
-  if (teamCount < 1 || players.length === 0) {
-    alert('Bitte gültige Anzahl Teams eingeben und sicherstellen, dass mindestens ein Spieler vorhanden ist.');
-    return;
-  }
-
-  let teams;
-  if (genderSeparated) {
-    teams = createGenderSeparatedTeams(players, teamCount);
-  } else {
-    if (isHeterogen) {
-      teams = createHeterogeneousTeams(players, teamCount);
-    } else {
-      teams = createHomogeneousTeams(players, teamCount);
-    }
-  }
-
-  if (positionsBalanced) {
-    teams = balancePositions(teams);
-  }
-
-  // Versuche, Teams auszugleichen, falls möglich
-  teams = balanceTeamSizes(teams);
-
-  currentTeams = teams;
-  currentTeamNames = teams.map((_, i) => currentTeamNames[i] || `Team ${i+1}`);
-  
-  displayTeams(teams);
-  reshuffleBtn.style.display = 'inline-block';
-}
-
-// Versucht, Teams möglichst gleich groß zu machen
-function balanceTeamSizes(teams) {
-  // Solange der Größenunterschied größer als 1 ist, versuche auszugleichen
-  // Einfache Heuristik: Sortiere Teams nach Größe, verschiebe Spieler vom größten zum kleinsten Team
-  let changed = true;
-  while(changed) {
-    changed = false;
-    teams.sort((a,b) => a.length - b.length);
-    const smallest = teams[0];
-    const largest = teams[teams.length-1];
-    if (largest.length - smallest.length > 1) {
-      // Verschiebe einen Spieler vom largest zu smallest
-      const playerToMove = largest.pop();
-      smallest.push(playerToMove);
-      changed = true;
-    }
-  }
-  return teams;
-}
-
-function createHomogeneousTeams(players, teamCount) {
-  let sorted = [...players].sort((a, b) => a.skill - b.skill);
-  const teams = Array.from({ length: teamCount }, () => []);
-  let currentTeam = 0;
-  for (const player of sorted) {
-    teams[currentTeam].push(player);
-    currentTeam = (currentTeam + 1) % teamCount;
-  }
-  return teams;
-}
-
-function createHeterogeneousTeams(players, teamCount) {
-  const skillGroups = {
-    1: players.filter(p => p.skill === 1),
-    2: players.filter(p => p.skill === 2),
-    3: players.filter(p => p.skill === 3)
-  };
-
-  shuffle(skillGroups[1]);
-  shuffle(skillGroups[2]);
-  shuffle(skillGroups[3]);
-
-  const teams = Array.from({ length: teamCount }, () => []);
-
-  distributeGroup(skillGroups[1], teams);
-  distributeGroup(skillGroups[2], teams);
-  distributeGroup(skillGroups[3], teams);
-
-  return teams;
-}
-
-function createGenderSeparatedTeams(players, teamCount) {
-  const genders = {};
-  for (const p of players) {
-    if (!genders[p.gender]) genders[p.gender] = [];
-    genders[p.gender].push(p);
-  }
-
-  for (const g in genders) {
-    shuffle(genders[g]);
-  }
-
-  const genderKeys = Object.keys(genders);
-  const teams = Array.from({ length: teamCount }, () => []);
-
-  let currentTeam = 0;
-  for (const g of genderKeys) {
-    for (const player of genders[g]) {
-      teams[currentTeam].push(player);
-      currentTeam = (currentTeam + 1) % teamCount;
-    }
-  }
-
-  return teams;
-}
-
-function distributeGroup(group, teams) {
-  let index = 0;
-  for (const player of group) {
-    teams[index].push(player);
-    index = (index + 1) % teams.length;
-  }
-}
-
-function shuffle(array) {
-  for (let i = array.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random()*(i+1));
-    [array[i], array[j]] = [array[j], array[i]];
-  }
-  return array;
-}
-
-function balancePositions(teams) {
-  const MAX_ATTEMPTS = 200; 
-  for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
-    const improvements = tryToImprovePositions(teams);
-    if (!improvements) break;
-  }
-  return teams;
-}
-
-function tryToImprovePositions(teams) {
-  const teamCount = teams.length;
-  let bestTeams = copyTeams(teams);
-  let bestViolations = countPositionViolations(bestTeams);
-
-  for (let t1 = 0; t1 < teamCount; t1++) {
-    for (let t2 = t1+1; t2 < teamCount; t2++) {
-      for (let i = 0; i < teams[t1].length; i++) {
-        for (let j = 0; j < teams[t2].length; j++) {
-          const newTeams = copyTeams(teams);
-          const temp = newTeams[t1][i];
-          newTeams[t1][i] = newTeams[t2][j];
-          newTeams[t2][j] = temp;
-
-          const v = countPositionViolations(newTeams);
-          if (v < bestViolations) {
-            bestViolations = v;
-            bestTeams = newTeams;
-          }
+        // Funktion zum Zufälligen Mischen eines Arrays
+        function shuffle(array) {
+            for (let i = array.length -1; i >0; i--){
+                const j = Math.floor(Math.random() * (i +1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
         }
-      }
-    }
-  }
 
-  if (bestViolations < countPositionViolations(teams)) {
-    for (let k = 0; k < teams.length; k++) {
-      teams[k] = bestTeams[k];
-    }
-    return true;
-  }
-  return false;
-}
+        // Funktion zum Losen der Teams
+        drawButton.addEventListener('click', function() {
+            // Überprüfen der Mindestanzahl von Spielern
+            if(adultPlayers.length < 42){
+                alert("Es müssen mindestens 42 Erwachsene Teilnehmer vorhanden sein (6 Teams mit je 6 Spielern + 6 Erwachsene für gemischte Teams).");
+                return;
+            }
+            if(youthPlayers.length < 12){
+                alert("Es müssen mindestens 12 Jugendspieler vorhanden sein (für 6 gemischte Teams mit je 2 Jugendspielern).");
+                return;
+            }
 
-function countPositionViolations(teams) {
-  let violations = 0;
-  for (const team of teams) {
-    const countPos = {AA:0,MB:0,D:0,Z:0,L:0};
-    for (const p of team) {
-      for (const pos of p.positions) {
-        if (countPos[pos] !== undefined) countPos[pos]++;
-      }
-    }
-    if (countPos['AA'] > 2) violations += (countPos['AA'] - 2);
-    if (countPos['MB'] > 2) violations += (countPos['MB'] - 2);
-    if (countPos['Z'] > 1) violations += (countPos['Z'] - 1);
-    if (countPos['D'] > 1) violations += (countPos['D'] - 1);
-  }
-  return violations;
-}
+            // Shuffle die Spieler
+            const shuffledAdults = shuffle([...adultPlayers]);
+            const shuffledYouth = shuffle([...youthPlayers]);
 
-function copyTeams(teams) {
-  return teams.map(t => t.slice());
-}
+            // Erstellen der Erwachsenen 6er Teams (6 Teams mit je 6 Spielern)
+            adultTeams = [];
+            for(let i=0; i<6; i++){
+                adultTeams.push(shuffledAdults.slice(i*6, i*6+6));
+            }
 
-// Teams anzeigen
-function displayTeams(teams) {
-  teamsContainer.innerHTML = '';
-  teams.forEach((team, i) => {
-    const teamDiv = document.createElement('div');
-    teamDiv.className = 'team';
+            // Erstellen der gemischten Teams (6 Teams mit je 1 Erwachsener + 2 Jugendspielern)
+            mixedTeams = [];
+            for(let i=0; i<6; i++){
+                const adult = shuffledAdults[36 + i]; // Erwachsene ab Index 36 für gemischte Teams
+                const youth1 = shuffledYouth[i*2];
+                const youth2 = shuffledYouth[i*2 +1];
+                mixedTeams.push([adult, youth1, youth2]);
+            }
 
-    const titleDiv = document.createElement('div');
-    titleDiv.className = 'team-title';
-    titleDiv.textContent = `Team ${i + 1}: `;
-    const titleInput = document.createElement('input');
-    titleInput.type = 'text';
-    titleInput.value = currentTeamNames[i] || `Team ${i+1}`;
-    titleInput.addEventListener('input', () => {
-      currentTeamNames[i] = titleInput.value;
-    });
-    titleDiv.appendChild(titleInput);
-    teamDiv.appendChild(titleDiv);
+            // Anzeigen der Ergebnisse
+            displayResults(adultTeams, mixedTeams);
+            console.log("Erwachsene 6er Teams:", adultTeams);
+            console.log("Gemischte Teams:", mixedTeams);
 
-    const ul = document.createElement('ul');
-    team.forEach(member => {
-      const li = document.createElement('li');
-      li.textContent = member.name; 
-      ul.appendChild(li);
-    });
+            // Ermitteln der nicht zugeteilten Erwachsenen Spieler (ab Index 42)
+            const unassignedAdults = shuffledAdults.slice(42);
 
-    teamDiv.appendChild(ul);
-    teamsContainer.appendChild(teamDiv);
-  });
-}
+            // Ermitteln der nicht zugeteilten Jugendspieler (ab Index 12)
+            const unassignedYouth = shuffledYouth.slice(12);
 
-// Konfiguration exportieren
-exportConfigBtn.addEventListener('click', () => {
-  let csv = '';
-  csv += `#TEAM_COUNT=${teamCountInput.value}\n`;
-  csv += `#IS_HETEROGEN=${isHeterogen}\n`;
-  csv += `#GENDER_SEPARATED=${genderSeparated}\n`;
-  csv += `#POSITIONS_BALANCED=${positionsBalanced}\n`;
-  csv += `#TEAMNAMES=${currentTeamNames.join('|')}\n`;
-  csv += `---\n`;
+            // Referenzen zu den HTML-Elementen für unzugewiesene Spieler
+            const unassignedAdultsDiv = document.getElementById('unassignedAdults');
+            const unassignedYouthDiv = document.getElementById('unassignedYouth');
+            const unassignedPlayersSection = document.getElementById('unassignedPlayersSection');
 
-  players.forEach(p => {
-    csv += [p.name, p.skill, p.gender, ...p.positions].join(',') + '\n';
-  });
+            // Rendern der nicht zugeteilten Erwachsenen Spieler
+            unassignedAdultsDiv.innerHTML = '';
+            if(unassignedAdults.length > 0){
+                unassignedAdults.forEach(player => {
+                    const div = document.createElement('div');
+                    div.className = 'player-item';
+                    div.textContent = player.Name;
+                    unassignedAdultsDiv.appendChild(div);
+                });
+            } else{
+                unassignedAdultsDiv.innerHTML = '<p>Keine nicht zugeteilten Erwachsenen Spieler.</p>';
+            }
 
-  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = 'konfiguration.csv';
-  a.click();
-  URL.revokeObjectURL(url);
-});
+            // Rendern der nicht zugeteilten Jugendspieler
+            unassignedYouthDiv.innerHTML = '';
+            if(unassignedYouth.length > 0){
+                unassignedYouth.forEach(player => {
+                    const div = document.createElement('div');
+                    div.className = 'player-item';
+                    div.textContent = player.Name;
+                    unassignedYouthDiv.appendChild(div);
+                });
+            } else{
+                unassignedYouthDiv.innerHTML = '<p>Keine nicht zugeteilten Jugendspieler.</p>';
+            }
 
-// Double-Tap mit einem Finger zum Neu-Mischen
-let lastTapTime = 0;
-let tapCount = 0;
-document.addEventListener('touchstart', (e) => {
-  if (e.touches.length === 1) {
-    const currentTime = Date.now();
-    if (currentTime - lastTapTime < 300) {
-      tapCount++;
-      if (tapCount === 2) {
-        tapCount = 0;
-        if (currentTeams.length > 0) {
-          createOrShuffleTeams();
+            // Anzeigen des Abschnitts, wenn es unzugewiesene Spieler gibt
+            if(unassignedAdults.length > 0 || unassignedYouth.length > 0){
+                unassignedPlayersSection.style.display = 'block';
+            } else{
+                unassignedPlayersSection.style.display = 'none';
+            }
+
+        });
+
+        // Funktion zum Anzeigen der Ergebnisse
+        function displayResults(adultTeams, mixedTeams){
+            // Ergebnisse Sektion anzeigen
+            resultsSection.style.display = 'block';
+
+            // Erwachsene 6er Teams anzeigen
+            adultTeamsListDiv.innerHTML = '';
+            adultTeams.forEach((team, index) => {
+                const div = document.createElement('div');
+                div.className = 'team-item';
+                const names = team.map(p => `${p.Name}`).join(', ');
+                div.innerHTML = `<strong>Erwachsenenteam ${index +1}:</strong> ${names}`;
+                adultTeamsListDiv.appendChild(div);
+            });
+
+            // Gemischte Teams anzeigen
+            mixedTeamsListDiv.innerHTML = '';
+            mixedTeams.forEach((team, index) => {
+                const div = document.createElement('div');
+                div.className = 'team-item';
+                const names = team.map(p => `${p.Name}`).join(', ');
+                div.innerHTML = `<strong>Gemischtes Team ${index +1}:</strong> ${names}`;
+                mixedTeamsListDiv.appendChild(div);
+            });
+
+            // Paarungen erstellen
+            createMatches(adultTeams, mixedTeams);
         }
-      }
-    } else {
-      tapCount = 1; 
-      lastTapTime = currentTime;
-    }
-  }
-}, {passive: true});
 
-</script>
+        // Funktion zum Erstellen der Paarungen mit Gewinner-Buttons
+        function createMatches(adultTeams, mixedTeams){
+            // Erwachsenen Matches
+            adultMatchesDiv.innerHTML = '';
+            for(let i=0; i<adultTeams.length; i+=2){
+                if(i+1 < adultTeams.length){
+                    const matchDiv = document.createElement('div');
+                    matchDiv.className = 'match-item';
+                    matchDiv.innerHTML = `
+                        <strong>Feld ${Math.floor(i/2)+1}:</strong> Erwachsenenteam ${i+1} gegen Erwachsenenteam ${i+2}
+                        <button class="button" data-match-type="adult" data-winning-team="${i}">Gewinner: Team ${i+1}</button>
+                        <button class="button" data-match-type="adult" data-winning-team="${i+1}">Gewinner: Team ${i+2}</button>
+                    `;
+                    adultMatchesDiv.appendChild(matchDiv);
+                }
+            }
+
+            // Gemischte Matches
+            mixedMatchesDiv.innerHTML = '';
+            for(let i=0; i<mixedTeams.length; i+=2){
+                if(i+1 < mixedTeams.length){
+                    const matchDiv = document.createElement('div');
+                    matchDiv.className = 'match-item';
+                    matchDiv.innerHTML = `
+                        <strong>Gemischtes Feld ${Math.floor(i/2)+1}:</strong> Gemischtes Team ${i+1} gegen Gemischtes Team ${i+2}
+                        <button class="button" data-match-type="mixed" data-winning-team="${i}">Gewinner: Team ${i+1}</button>
+                        <button class="button" data-match-type="mixed" data-winning-team="${i+1}">Gewinner: Team ${i+2}</button>
+                    `;
+                    mixedMatchesDiv.appendChild(matchDiv);
+                }
+            }
+
+            // Event Listener für alle Buttons hinzufügen
+            const resultButtons = document.querySelectorAll('.match-item .button');
+            resultButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const matchType = this.getAttribute('data-match-type');
+                    const winningTeamIndex = parseInt(this.getAttribute('data-winning-team'));
+                    recordMatchResult(matchType, winningTeamIndex);
+                    // Buttons für dieses Match deaktivieren nach der Auswahl
+                    this.parentNode.querySelectorAll('.button').forEach(btn => btn.disabled = true);
+                });
+            });
+        }
+
+        // Funktion zur Verarbeitung des Match-Ergebnisses
+        function recordMatchResult(matchType, winningTeamIndex) {
+            let winningTeam = [];
+            let losingTeam = [];
+
+            if(matchType === 'adult'){
+                // Gewinnerteam ermitteln
+                winningTeam = adultTeams[winningTeamIndex];
+                // Verliererteam ermitteln
+                const opponentIndex = (winningTeamIndex % 2 === 0) ? winningTeamIndex + 1 : winningTeamIndex - 1;
+                losingTeam = adultTeams[opponentIndex];
+            } else if(matchType === 'mixed'){
+                // Gewinnerteam ermitteln
+                winningTeam = mixedTeams[winningTeamIndex];
+                // Verliererteam ermitteln
+                const opponentIndex = (winningTeamIndex % 2 === 0) ? winningTeamIndex + 1 : winningTeamIndex - 1;
+                losingTeam = mixedTeams[opponentIndex];
+            } else {
+                alert("Unbekannter Match-Typ.");
+                return;
+            }
+
+            // Punkte zuweisen
+            assignPoints(winningTeam, losingTeam);
+
+            // Aktualisieren der Punkte Tabelle
+            updatePointsTable();
+
+            // Optional: Benachrichtigung anzeigen
+            alert(`${formatTeamName(matchType, winningTeamIndex)} hat gewonnen.`);
+        }
+
+        // Funktion zur Formatierung der Team-Namen für die Anzeige
+        function formatTeamName(matchType, teamIndex){
+            if(matchType === 'adult'){
+                return `Erwachsenenteam ${teamIndex +1}`;
+            } else if(matchType === 'mixed'){
+                return `Gemischtes Team ${teamIndex +1}`;
+            }
+            return '';
+        }
+
+        // Funktion zur Zuweisung von Punkten
+        function assignPoints(winningTeam, losingTeam){
+            // Punkte und Spiele für Gewinnerteam erhöhen
+            winningTeam.forEach(player => {
+                const existingPlayer = findPlayerByName(player.Name);
+                if(existingPlayer){
+                    existingPlayer.Punkte +=1;
+                    existingPlayer.Spiele +=1;
+                } else {
+                    console.error(`Gewinner Spieler "${player.Name}" nicht gefunden.`);
+                }
+            });
+
+            // Spiele für Verliererteam erhöhen
+            losingTeam.forEach(player => {
+                const existingPlayer = findPlayerByName(player.Name);
+                if(existingPlayer){
+                    existingPlayer.Spiele +=1;
+                } else {
+                    console.error(`Verlierer Spieler "${player.Name}" nicht gefunden.`);
+                }
+            });
+        }
+
+        // Funktion zur Suche eines Spielers anhand des Namens
+        function findPlayerByName(name){
+            // Suche in Erwachsenen
+            let player = adultPlayers.find(p => p.Name === name);
+            if(player){
+                return player;
+            }
+            // Suche in Jugendlichen
+            player = youthPlayers.find(p => p.Name === name);
+            return player;
+        }
+
+        // Funktion zur Aktualisierung der Punkte Tabelle
+        function updatePointsTable() {
+            pointsTableBody.innerHTML = '';
+
+            // Erwachsene Spieler
+            adultPlayers.forEach(player => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${player.Name}</td>
+                    <td>${player.Spiele}</td>
+                    <td>${player.Punkte}</td>
+                `;
+                pointsTableBody.appendChild(tr);
+            });
+
+            // Jugendspieler
+            youthPlayers.forEach(player => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${player.Name}</td>
+                    <td>${player.Spiele}</td>
+                    <td>${player.Punkte}</td>
+                `;
+                pointsTableBody.appendChild(tr);
+            });
+        }
+
+    </script>
 
 </body>
 </html>
