@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -170,6 +169,17 @@
     <!-- Teams Losen -->
     <div class="section">
         <h2>Teams Losen</h2>
+        
+        <!-- Neue Eingabefelder für Teamgrößen -->
+        <div style="margin-bottom: 20px;">
+            <label for="adultTeamSize">Erwachsene pro Erwachsenen-Team:</label>
+            <input type="number" id="adultTeamSize" value="6" min="1" style="width: 50px; margin-left: 10px;">
+        </div>
+        <div style="margin-bottom: 20px;">
+            <label for="youthPerMixedTeam">Jugendspieler pro gemischtem Team:</label>
+            <input type="number" id="youthPerMixedTeam" value="2" min="1" style="width: 50px; margin-left: 10px;">
+        </div>
+        
         <button id="drawButton" class="button">Jetzt Losen</button>
 
         <!-- Abschnitt für nicht zugeteilte Spieler -->
@@ -190,10 +200,10 @@
     <div class="section" id="resultsSection" style="display:none;">
         <h2>Ergebnisse</h2>
 
-        <h3>Erwachsenenteams (6er Teams)</h3>
+        <h3>Erwachsenenteams</h3>
         <div id="adultTeamsList" class="team-list"></div>
 
-        <h3>Gemischte Teams (1 Erwachsener + 2 Jugendspieler)</h3>
+        <h3>Gemischte Teams</h3>
         <div id="mixedTeamsList" class="team-list"></div>
 
         <h3>Paarungen</h3>
@@ -220,82 +230,83 @@
     <script>
         // Datenstrukturen zum Speichern der Spieler
         let youthPlayers = [
-	    { Name: "Frieda Müller", Leistung: "2", Spiele: 0, Punkte: 0 },
-	    { Name: "Julia Einsiedler", Leistung: "2", Spiele: 0, Punkte: 0 },
-	    { Name: "Elena Clourido", Leistung: "3", Spiele: 0, Punkte: 0 },
-	    { Name: "Noemi Ratgeb", Leistung: "2", Spiele: 0, Punkte: 0 },
-	    { Name: "Mirjam Kempen", Leistung: "2", Spiele: 0, Punkte: 0 },
-	    { Name: "Jakob Kempen", Leistung: "3", Spiele: 0, Punkte: 0 },
-	    { Name: "Bennett Glaubitz", Leistung: "2", Spiele: 0, Punkte: 0 },
-	    { Name: "Annelie Müller", Leistung: "3", Spiele: 0, Punkte: 0 },
-	    { Name: "Alex Zeberer", Leistung: "2", Spiele: 0, Punkte: 0 },
-	    { Name: "Laurenz Jäckel", Leistung: "2", Spiele: 0, Punkte: 0 },
-	    { Name: "David Schlageter", Leistung: "1", Spiele: 0, Punkte: 0 },
-	    { Name: "Elya Matz", Leistung: "3", Spiele: 0, Punkte: 0 }
+            { Name: "Frieda M.", Leistung: "2", Spiele: 0, Punkte: 0 },
+            { Name: "Julia E.", Leistung: "2", Spiele: 0, Punkte: 0 },
+            { Name: "Elena C.", Leistung: "3", Spiele: 0, Punkte: 0 },
+            { Name: "Noemi R.", Leistung: "2", Spiele: 0, Punkte: 0 },
+            { Name: "Mirjam K.", Leistung: "2", Spiele: 0, Punkte: 0 },
+            { Name: "Jakob K.", Leistung: "3", Spiele: 0, Punkte: 0 },
+            { Name: "Bennett G.", Leistung: "2", Spiele: 0, Punkte: 0 },
+            { Name: "Annelie M.", Leistung: "3", Spiele: 0, Punkte: 0 },
+            { Name: "Alex Z.", Leistung: "2", Spiele: 0, Punkte: 0 },
+            { Name: "Laurenz J.", Leistung: "2", Spiele: 0, Punkte: 0 },
+            { Name: "David S.", Leistung: "1", Spiele: 0, Punkte: 0 },
+            { Name: "Elya M.", Leistung: "3", Spiele: 0, Punkte: 0 }
         ];
 
         let adultPlayers = [
-	{ Name: "Alex Knoor", Position: "MB", Leistung: "3", Spiele: 0, Punkte: 0 },
-	{ Name: "Ali Krämer", Position: "Z", Leistung: "1", Spiele: 0, Punkte: 0 },
-	{ Name: "Anna Ringle", Position: "AA", Leistung: "2", Spiele: 0, Punkte: 0 },
-	{ Name: "Ben Bohner", Position: "MB", Leistung: "1", Spiele: 0, Punkte: 0 },
-	{ Name: "Caro Stade", Position: "MB", Leistung: "1", Spiele: 0, Punkte: 0 },
-	{ Name: "Daniel Egetemeyer", Position: "AA", Leistung: "2", Spiele: 0, Punkte: 0 },
-	{ Name: "Daria Avram", Position: "AA", Leistung: "1", Spiele: 0, Punkte: 0 },
-	{ Name: "Elias Krämer", Position: "AA", Leistung: "1", Spiele: 0, Punkte: 0 },
-	{ Name: "Emilia Hauf", Position: "AA", Leistung: "3", Spiele: 0, Punkte: 0 },
-	{ Name: "Emily Köhle", Position: "AA", Leistung: "1", Spiele: 0, Punkte: 0 },
-	{ Name: "Fabian Diener", Position: "MB", Leistung: "1", Spiele: 0, Punkte: 0 },
-	{ Name: "Felina Schaller", Position: "AA", Leistung: "1", Spiele: 0, Punkte: 0 },
-	{ Name: "Felix Krämer", Position: "AA", Leistung: "3", Spiele: 0, Punkte: 0 },
-	{ Name: "Felix Leicht", Position: "AA", Leistung: "1", Spiele: 0, Punkte: 0 },
-	{ Name: "Felix Lingel", Position: "AA", Leistung: "1", Spiele: 0, Punkte: 0 },
-	{ Name: "Florian Bruckmüller", Position: "AA", Leistung: "1", Spiele: 0, Punkte: 0 },
-	{ Name: "Hannes Grimm", Position: "MB", Leistung: "2", Spiele: 0, Punkte: 0 },
-	{ Name: "Helene Maneth", Position: "AA", Leistung: "3", Spiele: 0, Punkte: 0 },
-	{ Name: "Ida Bohner", Position: "MB", Leistung: "2", Spiele: 0, Punkte: 0 },
-	{ Name: "Jan Knoor", Position: "MB", Leistung: "2", Spiele: 0, Punkte: 0 },
-	{ Name: "Jannis Erlmann", Position: "AA", Leistung: "1", Spiele: 0, Punkte: 0 },
-	{ Name: "Jannis Hirschmiller", Position: "AA", Leistung: "1", Spiele: 0, Punkte: 0 },
-	{ Name: "Jannis Weidenbacher", Position: "MB", Leistung: "2", Spiele: 0, Punkte: 0 },
-	{ Name: "Janos Schaller", Position: "AA", Leistung: "1", Spiele: 0, Punkte: 0 },
-	{ Name: "Joel Dieterle", Position: "AA", Leistung: "2", Spiele: 0, Punkte: 0 },
-	{ Name: "Johanna Schlosser", Position: "MB", Leistung: "1", Spiele: 0, Punkte: 0 },
-	{ Name: "Jonas Gaugler", Position: "AA", Leistung: "2", Spiele: 0, Punkte: 0 },
-	{ Name: "Jonas Lingel", Position: "Z", Leistung: "1", Spiele: 0, Punkte: 0 },
-	{ Name: "Julian Salat", Position: "AA", Leistung: "3", Spiele: 0, Punkte: 0 },
-	{ Name: "Katharina Bruch", Position: "AA", Leistung: "2", Spiele: 0, Punkte: 0 },
-	{ Name: "Katja Hahn", Position: "Z", Leistung: "2", Spiele: 0, Punkte: 0 },
-	{ Name: "Lara Kuhn", Position: "MB", Leistung: "1", Spiele: 0, Punkte: 0 },
-	{ Name: "Leah Blatt", Position: "AA", Leistung: "3", Spiele: 0, Punkte: 0 },
-	{ Name: "Leah Rommel", Position: "AA", Leistung: "3", Spiele: 0, Punkte: 0 },
-	{ Name: "Lenard Schwenk", Position: "Z", Leistung: "1", Spiele: 0, Punkte: 0 },
-	{ Name: "Leni Jäckl", Position: "AA", Leistung: "2", Spiele: 0, Punkte: 0 },
-	{ Name: "Leo Berhalter", Position: "AA", Leistung: "3", Spiele: 0, Punkte: 0 },
-	{ Name: "Leonhard Seitz", Position: "AA", Leistung: "3", Spiele: 0, Punkte: 0 },
-	{ Name: "Lilli Baumann", Position: "Z", Leistung: "2", Spiele: 0, Punkte: 0 },
-	{ Name: "Lina Maile", Position: "AA", Leistung: "2", Spiele: 0, Punkte: 0 },
-	{ Name: "Linus Wagner", Position: "AA", Leistung: "1", Spiele: 0, Punkte: 0 },
-	{ Name: "Lucie Neckermann", Position: "AA", Leistung: "3", Spiele: 0, Punkte: 0 },
-	{ Name: "Martin Ungerer", Position: "Z", Leistung: "2", Spiele: 0, Punkte: 0 },
-	{ Name: "Max Drexel", Position: "AA", Leistung: "3", Spiele: 0, Punkte: 0 },
-	{ Name: "Michi Hirschmiller", Position: "AA", Leistung: "1", Spiele: 0, Punkte: 0 },
-	{ Name: "Mieke Kirsch", Position: "AA", Leistung: "1", Spiele: 0, Punkte: 0 },
-	{ Name: "Nelly Agathangelidis", Position: "MB", Leistung: "1", Spiele: 0, Punkte: 0 },
-	{ Name: "Nicklas Kuhn", Position: "MB", Leistung: "1", Spiele: 0, Punkte: 0 },
-	{ Name: "Nikita Schütz", Position: "AA", Leistung: "3", Spiele: 0, Punkte: 0 },
-	{ Name: "Patrick Syrowatka", Position: "AA", Leistung: "1", Spiele: 0, Punkte: 0 },
-	{ Name: "Paul Lindner", Position: "AA", Leistung: "3", Spiele: 0, Punkte: 0 },
-	{ Name: "Philipp Knoor", Position: "Z", Leistung: "3", Spiele: 0, Punkte: 0 },
-	{ Name: "Pius Maier", Position: "Z", Leistung: "1", Spiele: 0, Punkte: 0 },
-	{ Name: "Robin Wurst", Position: "Z", Leistung: "3", Spiele: 0, Punkte: 0 },
-	{ Name: "Ronja Baumann", Position: "AA", Leistung: "1", Spiele: 0, Punkte: 0 },
-	{ Name: "Rune Drenzcek", Position: "Z", Leistung: "1", Spiele: 0, Punkte: 0 },
-	{ Name: "Sara Tafrali", Position: "Z", Leistung: "1", Spiele: 0, Punkte: 0 },
-	{ Name: "Sebastian Mack", Position: "AA", Leistung: "3", Spiele: 0, Punkte: 0 },
-	{ Name: "Steffi Gruber", Position: "Z", Leistung: "1", Spiele: 0, Punkte: 0 },
-	{ Name: "Tom Wenczel", Position: "AA", Leistung: "1", Spiele: 0, Punkte: 0 },
-	{ Name: "Vica Mai", Position: "Z", Leistung: "2", Spiele: 0, Punkte: 0 }
+            { Name: "Alex K.", Position: "MB", Leistung: "3", Spiele: 0, Punkte: 0 },
+            { Name: "Ali K.", Position: "Z", Leistung: "1", Spiele: 0, Punkte: 0 },
+            { Name: "Anna R.", Position: "AA", Leistung: "2", Spiele: 0, Punkte: 0 },
+            { Name: "Ben B.", Position: "MB", Leistung: "1", Spiele: 0, Punkte: 0 },
+            { Name: "Caro S.", Position: "MB", Leistung: "1", Spiele: 0, Punkte: 0 },
+            { Name: "Daniel E.", Position: "AA", Leistung: "2", Spiele: 0, Punkte: 0 },
+            { Name: "Daria A.", Position: "AA", Leistung: "1", Spiele: 0, Punkte: 0 },
+            { Name: "Elias K.", Position: "AA", Leistung: "1", Spiele: 0, Punkte: 0 },
+            { Name: "Emilia H.", Position: "AA", Leistung: "3", Spiele: 0, Punkte: 0 },
+            { Name: "Emily K.", Position: "AA", Leistung: "1", Spiele: 0, Punkte: 0 },
+            { Name: "Fabian D.", Position: "MB", Leistung: "1", Spiele: 0, Punkte: 0 },
+            { Name: "Felina S.", Position: "AA", Leistung: "1", Spiele: 0, Punkte: 0 },
+            { Name: "Felix K.", Position: "AA", Leistung: "3", Spiele: 0, Punkte: 0 },
+            { Name: "Felix L.", Position: "AA", Leistung: "1", Spiele: 0, Punkte: 0 },
+            { Name: "Felix L.", Position: "AA", Leistung: "1", Spiele: 0, Punkte: 0 },
+            { Name: "Florian B.", Position: "AA", Leistung: "1", Spiele: 0, Punkte: 0 },
+            { Name: "Hannes G.", Position: "MB", Leistung: "2", Spiele: 0, Punkte: 0 },
+            { Name: "Helene M.", Position: "AA", Leistung: "3", Spiele: 0, Punkte: 0 },
+            { Name: "Ida B.", Position: "MB", Leistung: "2", Spiele: 0, Punkte: 0 },
+            { Name: "Jan K.", Position: "MB", Leistung: "2", Spiele: 0, Punkte: 0 },
+            { Name: "Jannis E.", Position: "AA", Leistung: "1", Spiele: 0, Punkte: 0 },
+            { Name: "Jannis H.", Position: "AA", Leistung: "1", Spiele: 0, Punkte: 0 },
+            { Name: "Jannis W.", Position: "MB", Leistung: "2", Spiele: 0, Punkte: 0 },
+            { Name: "Janos S.", Position: "AA", Leistung: "1", Spiele: 0, Punkte: 0 },
+            { Name: "Joel D.", Position: "AA", Leistung: "2", Spiele: 0, Punkte: 0 },
+            { Name: "Johanna S.", Position: "MB", Leistung: "1", Spiele: 0, Punkte: 0 },
+            { Name: "Jonas G.", Position: "AA", Leistung: "2", Spiele: 0, Punkte: 0 },
+            { Name: "Jonas L.", Position: "Z", Leistung: "1", Spiele: 0, Punkte: 0 },
+            { Name: "Julian S.", Position: "AA", Leistung: "3", Spiele: 0, Punkte: 0 },
+            { Name: "Katharina B.", Position: "AA", Leistung: "2", Spiele: 0, Punkte: 0 },
+            { Name: "Katja H.", Position: "Z", Leistung: "2", Spiele: 0, Punkte: 0 },
+            { Name: "Lara K.", Position: "MB", Leistung: "1", Spiele: 0, Punkte: 0 },
+            { Name: "Leah B.", Position: "AA", Leistung: "3", Spiele: 0, Punkte: 0 },
+            { Name: "Leah R.", Position: "AA", Leistung: "3", Spiele: 0, Punkte: 0 },
+            { Name: "Lenard S.", Position: "Z", Leistung: "1", Spiele: 0, Punkte: 0 },
+            { Name: "Leni J.", Position: "AA", Leistung: "2", Spiele: 0, Punkte: 0 },
+            { Name: "Leo B.", Position: "AA", Leistung: "3", Spiele: 0, Punkte: 0 },
+            { Name: "Leonhard S.", Position: "AA", Leistung: "3", Spiele: 0, Punkte: 0 },
+            { Name: "Lilli B.", Position: "Z", Leistung: "2", Spiele: 0, Punkte: 0 },
+            { Name: "Lina M.", Position: "AA", Leistung: "2", Spiele: 0, Punkte: 0 },
+            { Name: "Linus W.", Position: "AA", Leistung: "1", Spiele: 0, Punkte: 0 },
+            { Name: "Lucie N.", Position: "AA", Leistung: "3", Spiele: 0, Punkte: 0 },
+            { Name: "Markus H.", Position: "AA", Leistung: "1", Spiele: 0, Punkte: 0 },
+            { Name: "Martin U.", Position: "Z", Leistung: "2", Spiele: 0, Punkte: 0 },
+            { Name: "Max D.", Position: "AA", Leistung: "3", Spiele: 0, Punkte: 0 },
+            { Name: "Michi H.", Position: "AA", Leistung: "1", Spiele: 0, Punkte: 0 },
+            { Name: "Mieke K.", Position: "AA", Leistung: "1", Spiele: 0, Punkte: 0 },
+            { Name: "Nelly A.", Position: "MB", Leistung: "1", Spiele: 0, Punkte: 0 },
+            { Name: "Nicklas K.", Position: "MB", Leistung: "1", Spiele: 0, Punkte: 0 },
+            { Name: "Nikita S.", Position: "AA", Leistung: "3", Spiele: 0, Punkte: 0 },
+            { Name: "Patrick S.", Position: "AA", Leistung: "1", Spiele: 0, Punkte: 0 },
+            { Name: "Paul L.", Position: "AA", Leistung: "3", Spiele: 0, Punkte: 0 },
+            { Name: "Philipp K.", Position: "Z", Leistung: "3", Spiele: 0, Punkte: 0 },
+            { Name: "Pius M.", Position: "Z", Leistung: "1", Spiele: 0, Punkte: 0 },
+            { Name: "Robin W.", Position: "Z", Leistung: "3", Spiele: 0, Punkte: 0 },
+            { Name: "Ronja B.", Position: "AA", Leistung: "1", Spiele: 0, Punkte: 0 },
+            { Name: "Rune D.", Position: "Z", Leistung: "1", Spiele: 0, Punkte: 0 },
+            { Name: "Sara T.", Position: "Z", Leistung: "1", Spiele: 0, Punkte: 0 },
+            { Name: "Sebastian M.", Position: "AA", Leistung: "3", Spiele: 0, Punkte: 0 },
+            { Name: "Steffi G.", Position: "Z", Leistung: "1", Spiele: 0, Punkte: 0 },
+            { Name: "Tom W.", Position: "AA", Leistung: "1", Spiele: 0, Punkte: 0 },
+            { Name: "Vica M.", Position: "Z", Leistung: "2", Spiele: 0, Punkte: 0 }
         ];
 
         // DOM Elemente
@@ -314,9 +325,13 @@
         const adultMessageDiv = document.getElementById('adultMessage');
         const youthMessageDiv = document.getElementById('youthMessage');
 
+        // Neue DOM Elemente für Teamgrößen
+        const adultTeamSizeInput = document.getElementById('adultTeamSize');
+        const youthPerMixedTeamInput = document.getElementById('youthPerMixedTeam');
+
         // Arrays zur Speicherung der Teams
-        let adultTeams = [];   // 6er Teams
-        let mixedTeams = [];   // 6 gemischte Teams (1 Erwachsener + 2 Jugendspieler)
+        let adultTeams = [];   // Erwachsene Teams
+        let mixedTeams = [];   // Gemischte Teams
 
         // Funktionen zum Rendern der Spielerlisten
         function renderAdultList() {
@@ -349,6 +364,7 @@
         window.onload = function() {
             renderAdultList();
             renderYouthList();
+            updatePointsTable();
         }
 
         // Funktionen zum Löschen von Spielern
@@ -418,13 +434,34 @@
 
         // Funktion zum Losen der Teams
         drawButton.addEventListener('click', function() {
-            // Überprüfen der Mindestanzahl von Spielern
-            if(adultPlayers.length < 42){
-                alert("Es müssen mindestens 42 Erwachsene Teilnehmer vorhanden sein (6 Teams mit je 6 Spielern + 6 Erwachsene für gemischte Teams).");
+            // Lesen der Teamgrößen
+            const adultTeamSize = parseInt(adultTeamSizeInput.value);
+            const youthPerMixedTeam = parseInt(youthPerMixedTeamInput.value);
+
+            // Validieren der Eingaben
+            if(isNaN(adultTeamSize) || adultTeamSize < 1){
+                alert("Bitte geben Sie eine gültige Anzahl für Erwachsene pro Team ein.");
                 return;
             }
-            if(youthPlayers.length < 12){
-                alert("Es müssen mindestens 12 Jugendspieler vorhanden sein (für 6 gemischte Teams mit je 2 Jugendspielern).");
+            if(isNaN(youthPerMixedTeam) || youthPerMixedTeam < 1){
+                alert("Bitte geben Sie eine gültige Anzahl für Jugendspieler pro gemischtem Team ein.");
+                return;
+            }
+
+            // Anzahl der Teams (hier fest auf 6 gesetzt, kann auch dynamisch gemacht werden)
+            const numberOfTeams = 6;
+
+            // Berechnung der erforderlichen Spieler
+            const requiredAdults = numberOfTeams * adultTeamSize + numberOfTeams; // Erwachsene für 6 Erwachsene-Teams + 6 Erwachsene für gemischte Teams
+            const requiredYouth = numberOfTeams * youthPerMixedTeam;
+
+            // Überprüfen der Mindestanzahl von Spielern
+            if(adultPlayers.length < requiredAdults){
+                alert(`Es müssen mindestens ${requiredAdults} Erwachsene Teilnehmer vorhanden sein (für ${numberOfTeams} Erwachsene Teams mit je ${adultTeamSize} Spielern und ${numberOfTeams} Erwachsene für gemischte Teams).`);
+                return;
+            }
+            if(youthPlayers.length < requiredYouth){
+                alert(`Es müssen mindestens ${requiredYouth} Jugendspieler vorhanden sein (für ${numberOfTeams} gemischte Teams mit je ${youthPerMixedTeam} Jugendspielern).`);
                 return;
             }
 
@@ -432,31 +469,31 @@
             const shuffledAdults = shuffle([...adultPlayers]);
             const shuffledYouth = shuffle([...youthPlayers]);
 
-            // Erstellen der Erwachsenen 6er Teams (6 Teams mit je 6 Spielern)
+            // Erstellen der Erwachsenen Teams
             adultTeams = [];
-            for(let i=0; i<6; i++){
-                adultTeams.push(shuffledAdults.slice(i*6, i*6+6));
+            for(let i=0; i<numberOfTeams; i++){
+                const team = shuffledAdults.slice(i * adultTeamSize, (i +1) * adultTeamSize);
+                adultTeams.push(team);
             }
 
-            // Erstellen der gemischten Teams (6 Teams mit je 1 Erwachsener + 2 Jugendspielern)
+            // Erstellen der gemischten Teams
             mixedTeams = [];
-            for(let i=0; i<6; i++){
-                const adult = shuffledAdults[36 + i]; // Erwachsene ab Index 36 für gemischte Teams
-                const youth1 = shuffledYouth[i*2];
-                const youth2 = shuffledYouth[i*2 +1];
-                mixedTeams.push([adult, youth1, youth2]);
+            for(let i=0; i<numberOfTeams; i++){
+                const adult = shuffledAdults[numberOfTeams * adultTeamSize + i];
+                const youths = shuffledYouth.slice(i * youthPerMixedTeam, (i +1) * youthPerMixedTeam);
+                mixedTeams.push([adult, ...youths]);
             }
 
             // Anzeigen der Ergebnisse
             displayResults(adultTeams, mixedTeams);
-            console.log("Erwachsene 6er Teams:", adultTeams);
+            console.log("Erwachsene Teams:", adultTeams);
             console.log("Gemischte Teams:", mixedTeams);
 
-            // Ermitteln der nicht zugeteilten Erwachsenen Spieler (ab Index 42)
-            const unassignedAdults = shuffledAdults.slice(42);
+            // Ermitteln der nicht zugeteilten Erwachsenen Spieler
+            const unassignedAdults = shuffledAdults.slice(numberOfTeams * adultTeamSize + numberOfTeams);
 
-            // Ermitteln der nicht zugeteilten Jugendspieler (ab Index 12)
-            const unassignedYouth = shuffledYouth.slice(12);
+            // Ermitteln der nicht zugeteilten Jugendspieler
+            const unassignedYouth = shuffledYouth.slice(numberOfTeams * youthPerMixedTeam);
 
             // Referenzen zu den HTML-Elementen für unzugewiesene Spieler
             const unassignedAdultsDiv = document.getElementById('unassignedAdults');
@@ -503,7 +540,7 @@
             // Ergebnisse Sektion anzeigen
             resultsSection.style.display = 'block';
 
-            // Erwachsene 6er Teams anzeigen
+            // Erwachsene Teams anzeigen
             adultTeamsListDiv.innerHTML = '';
             adultTeams.forEach((team, index) => {
                 const div = document.createElement('div');
