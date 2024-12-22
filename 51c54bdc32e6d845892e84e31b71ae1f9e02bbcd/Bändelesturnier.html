@@ -8,7 +8,7 @@
     body {
       font-family: Arial, sans-serif;
       margin: 20px;
-      background-color: #f4f4f4;
+      background-color: #F5F5DC;
     }
     h1, h2, h3, h4 {
       margin-top: 40px;
@@ -16,16 +16,16 @@
     }
     .section {
       margin-bottom: 40px;
-      background-color: #fff;
+      background-color: #E5E5CC;
       padding: 20px;
       border-radius: 8px;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
     .button, .adjust-button {
       padding: 6px 12px;
-      background-color: #28a745;
+      background-color: #8B7355;
       border: none;
-      color: white;
+      color: black;
       cursor: pointer;
       font-size: 14px;
       border-radius: 4px;
@@ -33,17 +33,11 @@
       transition: background-color 0.3s;
     }
     .button:hover, .adjust-button:hover {
-      background-color: #218838;
+      background-color: #FFD39B;
     }
     .button:disabled, .adjust-button:disabled {
-      background-color: #6c757d;
+      background-color:#838B83;
       cursor: not-allowed;
-    }
-    .export-button {
-      background-color: #17a2b8;
-    }
-    .export-button:hover {
-      background-color: #138496;
     }
     .message {
       margin-top: 10px;
@@ -71,19 +65,19 @@
 
     /* FARBKENNUNG */
     .adult-player {
-      background-color:#ffe8e8; /* Rot */
+      background-color:#CDAF95; 
     }
     .youth-player {
-      background-color:#e8f7ff; /* Blau */
+      background-color:#EED5B7; 
     }
     .adult-team {
-      background-color:#ffe8e8;
+      background-color:#CDAF95;
       margin-bottom:5px;
       padding:5px;
       border-radius:4px;
     }
     .mixed-team {
-      background-color:#e8f7ff;
+      background-color:#EED5B7;
       margin-bottom:5px;
       padding:5px;
       border-radius:4px;
@@ -102,7 +96,7 @@
       text-align:left;
     }
     th {
-      background-color:#4CAF50;
+      background-color:#8B4513;
       color:white;
       cursor:pointer; /* Sortierung */
     }
@@ -147,7 +141,7 @@
 </head>
 <body>
 
-<h1>Volleyball Turnier Losgenerator</h1>
+<h1>Bändelesturnier</h1>
 
 <label style="display:block; margin-bottom:20px;">
   <input type="checkbox" id="toggleDetails" />
@@ -156,7 +150,7 @@
 
 <!-- SPIELER HINZUFÜGEN -->
 <div class="section">
-  <h2>Spieler Hinzufügen</h2>
+  <h2>Spieler Hinzufügen:</h2>
   <form id="addPlayerForm">
     <input type="text" id="playerName" placeholder="Name" required />
     <select id="playerType" required>
@@ -184,10 +178,10 @@
     <button type="submit" class="button">Hinzufügen</button>
   </form>
 <div class="section">
-  <h2>CSV-Datei hochladen</h2>
+  <h2>Spielerliste hochladen:</h2>
   <p>Format wie folgt in Spalten: Vorname,Nachname,Geschlecht(M oder F),Jugend(j oder n),Position(AA,MB oder Z),Leistungsniveau(1,2 oder 3 - 1 = sehr gut),Spiele(1-...),Punkte(1-...) -> Beispielzeile: Vica,M.,F,n,Z,2,, oder: Noah,E.,M,j,,2,,</p>
   <input type="file" id="csvFileInput" accept=".csv" />
-  <button id="uploadCSVButton" class="button">CSV importieren</button>
+  <button id="uploadCSVButton" class="button">Import CSV</button>
   <div id="uploadMessage" class="message"></div>
 </div>
 
@@ -196,7 +190,7 @@
 
 <!-- SPIELER-TABELLE -->
 <div class="section">
-  <h2>Spielerliste / Punktetabelle</h2>
+  <h2>Spielerliste/Punktetabelle:</h2>
   <table id="playerTable">
     <thead>
       <tr>
@@ -215,7 +209,7 @@
 
 <!-- TEAMS LOSEN -->
 <div class="section">
-  <h2>Teams Losen</h2>
+  <h2>Losen:</h2>
 
   <label>Anzahl Teams:</label>
   <input type="number" id="numberOfTeams" value="6" min="1" style="width:50px;" /><br><br>
@@ -226,9 +220,9 @@
   <label>Jugend pro Mixed-Team:</label>
   <input type="number" id="youthPerMixedTeam" value="2" min="1" style="width:50px;" /><br><br>
 
-  <button id="previewButton" class="button">Vorschau Losen</button>
-  <button id="applyPreviewButton" class="button" disabled>Anwenden</button>
-  <button id="exportButton" class="button export-button">Ergebnisse Exportieren</button>
+  <button id="previewButton" class="button">Losen (Vorschau)</button>
+  <button id="applyPreviewButton" class="button" disabled>Losen (Anwenden)</button>
+  <button id="Button" class="button">Export CSV</button>
 
   <div id="unassignedPlayersSection" class="section" style="display:none;">
     <h3>Nicht zugeteilte Spieler</h3>
@@ -239,7 +233,7 @@
 
 <!-- ERGEBNISSE-BLOCK -->
 <div class="section" id="resultsSection" style="display:none;">
-  <h2>Ergebnisse</h2>
+  <h2>Ergebnisse:</h2>
 
   <h3>Erwachsenenteams</h3>
   <div id="adultTeamsList" class="team-list"></div>
@@ -263,7 +257,7 @@
 <div id="feedbackModal" class="modal">
   <div class="modal-content">
     <span class="close">&times;</span>
-    <h2>Vorschau der Teams</h2>
+    <h2>Vorschau der Teams:</h2>
     <div id="feedbackContent"></div>
   </div>
 </div>
@@ -444,12 +438,12 @@ function createPlayerRow(playerObj, type, idx, showDetails){
     <td>${playerObj.Spiele}</td>
     <td>${playerObj.Punkte}</td>
     <td>
-      <button class="adjust-button" onclick="adjustPoints('${type}', ${idx}, 1)">+Punkt</button>
-      <button class="adjust-button" onclick="adjustPoints('${type}', ${idx}, -1)">-Punkt</button>
-      <button class="adjust-button" onclick="adjustGames('${type}', ${idx}, 1)">+Spiel</button>
-      <button class="adjust-button" onclick="adjustGames('${type}', ${idx}, -1)">-Spiel</button>
+      <button class="adjust-button" onclick="adjustPoints('${type}', ${idx}, 1)">+ P</button>
+      <button class="adjust-button" onclick="adjustPoints('${type}', ${idx}, -1)">- P</button>
+      <button class="adjust-button" onclick="adjustGames('${type}', ${idx}, 1)">+ S</button>
+      <button class="adjust-button" onclick="adjustGames('${type}', ${idx}, -1)">- S</button>
       <button class="adjust-button" onclick="editPlayer('${type}', ${idx})">Bearbeiten</button>
-      <button class="adjust-button" onclick="deletePlayer('${type}', ${idx})">Löschen</button>
+      <button class="adjust-button" onclick="deletePlayer('${type}', ${idx})">X</button>
     </td>
   `;
   return tr;
