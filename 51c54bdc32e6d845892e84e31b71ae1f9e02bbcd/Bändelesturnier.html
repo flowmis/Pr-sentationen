@@ -185,7 +185,7 @@
   </form>
 <div class="section">
   <h2>CSV-Datei hochladen</h2>
-  <p>Format wie folgt in Spalten: Vorname,Nachname,Geschlecht(M oder F),Jugend(j oder n),Position(AA,MB oder Z),Leistungsniveau(1,2 oder 3 - 1 = sehr gut)</p>
+  <p>Format wie folgt in Spalten: Vorname,Nachname,Geschlecht(M oder F),Jugend(j oder n),Position(AA,MB oder Z),Leistungsniveau(1,2 oder 3 - 1 = sehr gut),Spiele(1-...),Punkte(1-...) -> Beispielzeile: Vica,M.,F,n,Z,2,, oder: Noah,E.,M,j,,2,,</p>
   <input type="file" id="csvFileInput" accept=".csv" />
   <button id="uploadCSVButton" class="button">CSV importieren</button>
   <div id="uploadMessage" class="message"></div>
@@ -873,9 +873,9 @@ exportButton.addEventListener('click', ()=>{
   let csv = generateCSV();
   downloadCSV(csv,'spielergebnisse.csv');
 });
-
 function generateCSV(){
-  let csv = 'Vorname,Nachname,Geschlecht,Jugend,Position,Leistungsniveau\n';
+  // Aktualisierter Header mit Spiele und Punkte
+  let csv = 'Vorname,Nachname,Geschlecht,Jugend,Position,Leistungsniveau,Spiele,Punkte\n';
   
   // Erwachsene Spieler
   adultPlayers.forEach(p => {
@@ -884,7 +884,9 @@ function generateCSV(){
     const jugend = 'n'; // 'n' für Erwachsene
     const position = p.Position || '';
     const leistungsniveau = p.Leistung || '';
-    csv += `${vorname},${nachname},${geschlecht},${jugend},${position},${leistungsniveau}\n`;
+    const spiele = p.Spiele || 0;
+    const punkte = p.Punkte || 0;
+    csv += `${vorname},${nachname},${geschlecht},${jugend},${position},${leistungsniveau},${spiele},${punkte}\n`;
   });
 
   // Jugend Spieler
@@ -894,7 +896,9 @@ function generateCSV(){
     const jugend = 'j'; // 'j' für Jugend
     const position = ''; // leer für Jugendspieler
     const leistungsniveau = p.Leistung || '';
-    csv += `${vorname},${nachname},${geschlecht},${jugend},${position},${leistungsniveau}\n`;
+    const spiele = p.Spiele || 0;
+    const punkte = p.Punkte || 0;
+    csv += `${vorname},${nachname},${geschlecht},${jugend},${position},${leistungsniveau},${spiele},${punkte}\n`;
   });
 
   return csv;
@@ -1011,9 +1015,9 @@ function importPlayersFromCSV(csvText) {
     // => Spalten aufsplitten
     const parts = line.split(',');
 
-    // Wir erwarten 6 Spalten:
-    // (0) Vorname, (1) Nachname, (2) Geschlecht, (3) Jugend, (4) Position, (5) Leistungsniveau
-    if (parts.length < 6) {
+    // Wir erwarten 8 Spalten:
+    // (0) Vorname, (1) Nachname, (2) Geschlecht, (3) Jugend, (4) Position, (5) Leistungsniveau, (6) Spiele, (7) Punkte
+    if (parts.length < 8) {
       console.warn("Unvollständige Zeile:", line);
       continue;
     }
@@ -1024,6 +1028,8 @@ function importPlayersFromCSV(csvText) {
     let csvJugend          = parts[3].trim(); // "j" oder "n"
     let csvPosition        = parts[4].trim(); // "MB", "AA", ... oder leer
     let csvLeistungsniveau = parts[5].trim(); // "1", "2", "3"
+    let csvSpiele          = parseInt(parts[6].trim()) || 0; // "Spiele" als Zahl
+    let csvPunkte          = parseInt(parts[7].trim()) || 0; // "Punkte" als Zahl
 
     // => Vorname + Nachname => Name
     let fullName = csvVorname + " " + csvNachname;
@@ -1050,8 +1056,8 @@ function importPlayersFromCSV(csvText) {
       Position: isYouth ? '' : (csvPosition || ''), // Nur bei Erwachsenen relevant
       Leistung: csvLeistungsniveau,
       Geschlecht: csvGeschlecht,
-      Spiele: 0,
-      Punkte: 0
+      Spiele: csvSpiele, // Spiele aus CSV zuweisen
+      Punkte: csvPunkte  // Punkte aus CSV zuweisen
     };
 
     // => Ins Array packen
