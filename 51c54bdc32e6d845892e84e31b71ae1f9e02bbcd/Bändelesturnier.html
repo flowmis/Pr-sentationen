@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>TSV Ellwangen Volleyball: Bändeles-Turnier</title>
+  <style>
+    /* === GRUNDLAGEN === */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background-color: #f4f4f4;
+    }
+    h1, h2, h3, h4 {
+      margin-top: 40px;
+      color: #333;
+    }
+    .section {
+      margin-bottom: 40px;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .button, .adjust-button {
+      padding: 6px 12px;
+      background-color: #28a745;
+      border: none;
+      color: white;
+      cursor: pointer;
+      font-size: 14px;
+      border-radius: 4px;
+      margin-left: 5px;
+      transition: background-color 0.3s;
+    }
+    .button:hover, .adjust-button:hover {
+      background-color: #218838;
+    }
+    .button:disabled, .adjust-button:disabled {
+      background-color: #6c757d;
+      cursor: not-allowed;
+    }
+    .export-button {
+      background-color: #17a2b8;
+    }
+    .export-button:hover {
+      background-color: #138496;
+    }
+    .message {
+      margin-top: 10px;
+      padding:10px;
+      border-radius:5px;
+    }
+    .error {
+      background-color: #f8d7da;
+      color:#721c24;
+    }
+    .success {
+      background-color:#d4edda;
+      color:#155724;
+    }
+
+    /* PLAYER-LIST / TEAM-LIST */
+    .player-list, .team-list, .matches-list {
+      max-height:300px;
+      overflow-y:auto;
+      border:1px solid #aaa;
+      padding:10px;
+      margin-top:10px;
+      background-color:#fff;
+    }
+
+    /* FARBKENNUNG */
+    .adult-player {
+      background-color:#ffe8e8; /* Rot */
+    }
+    .youth-player {
+      background-color:#e8f7ff; /* Blau */
+    }
+    .adult-team {
+      background-color:#ffe8e8;
+      margin-bottom:5px;
+      padding:5px;
+      border-radius:4px;
+    }
+    .mixed-team {
+      background-color:#e8f7ff;
+      margin-bottom:5px;
+      padding:5px;
+      border-radius:4px;
+    }
+
+    /* TABELLEN */
+    table {
+      width:100%;
+      border-collapse:collapse;
+      margin-top:10px;
+      background-color:#fff;
+    }
+    th, td {
+      border:1px solid #aaa;
+      padding:8px;
+      text-align:left;
+    }
+    th {
+      background-color:#4CAF50;
+      color:white;
+      cursor:pointer; /* Sortierung */
+    }
+
+    /* DETAILS-SPALTEN */
+    .pos-col, .leist-col, .gesch-col {
+      /* => per JS .style.display=none */
+    }
+
+    /* MODAL */
+    .modal {
+      display:none;
+      position:fixed;
+      z-index:999;
+      padding-top:100px;
+      left:0; top:0;
+      width:100%;
+      height:100%;
+      overflow:auto;
+      background-color:rgba(0,0,0,0.4);
+    }
+    .modal-content {
+      background-color:#fefefe;
+      margin:auto;
+      padding:20px;
+      border:1px solid #888;
+      width:80%;
+      border-radius:8px;
+    }
+    .close {
+      color:#aaa;
+      float:right;
+      font-size:24px;
+      font-weight:bold;
+      cursor:pointer;
+      margin-bottom:10px;
+    }
+    .close:hover, .close:focus {
+      color:black;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Volleyball Turnier Losgenerator</h1>
+
+<label style="display:block; margin-bottom:20px;">
+  <input type="checkbox" id="toggleDetails" />
+  Details anzeigen
+</label>
+
+<!-- SPIELER HINZUFÜGEN -->
+<div class="section">
+  <h2>Spieler Hinzufügen</h2>
+  <form id="addPlayerForm">
+    <input type="text" id="playerName" placeholder="Name" required />
+    <select id="playerType" required>
+      <option value="" disabled selected>Erwachsen/Jugend</option>
+      <option value="adult">Erwachsene/r</option>
+      <option value="youth">Jugend</option>
+    </select>
+    <select id="playerPosition">
+      <option value="" disabled selected>Position (nur Erw.)</option>
+      <option value="MB">MB</option>
+      <option value="AA">AA</option>
+      <option value="Z">Z</option>
+    </select>
+    <select id="playerLeistung" required>
+      <option value="" disabled selected>Leistung</option>
+      <option value="1">1 - Sehr gut</option>
+      <option value="2">2 - Gut</option>
+      <option value="3">3 - Weniger gut</option>
+    </select>
+    <select id="playerGeschlecht" required>
+      <option value="" disabled selected>Geschlecht</option>
+      <option value="M">Männlich</option>
+      <option value="F">Weiblich</option>
+    </select>
+    <button type="submit" class="button">Hinzufügen</button>
+  </form>
+  <div id="playerMessage" class="message"></div>
+</div>
+
+<!-- SPIELER-TABELLE -->
+<div class="section">
+  <h2>Spielerliste / Punktetabelle</h2>
+  <table id="playerTable">
+    <thead>
+      <tr>
+        <th data-sort="name">Name</th>
+        <th class="pos-col"   data-sort="position">Position</th>
+        <th class="leist-col" data-sort="leistung">Leistung</th>
+        <th class="gesch-col" data-sort="geschlecht">Geschlecht</th>
+        <th data-sort="spiele">Spiele</th>
+        <th data-sort="punkte">Punkte</th>
+        <th>Aktionen</th>
+      </tr>
+    </thead>
+    <tbody id="playerTableBody"></tbody>
+  </table>
+</div>
+
+<!-- TEAMS LOSEN -->
+<div class="section">
+  <h2>Teams Losen</h2>
+
+  <label>Anzahl Teams:</label>
+  <input type="number" id="numberOfTeams" value="6" min="1" style="width:50px;" /><br><br>
+  <label>Erwachsene pro Erw.Team:</label>
+  <input type="number" id="adultTeamSize" value="6" min="1" style="width:50px;" /><br><br>
+  <label>Erwachsene pro Mixed-Team:</label>
+  <input type="number" id="adultPerMixedTeam" value="1" min="1" style="width:50px;" /><br><br>
+  <label>Jugend pro Mixed-Team:</label>
+  <input type="number" id="youthPerMixedTeam" value="2" min="1" style="width:50px;" /><br><br>
+
+  <button id="previewButton" class="button">Vorschau Losen</button>
+  <button id="applyPreviewButton" class="button" disabled>Anwenden</button>
+  <button id="exportButton" class="button export-button">Ergebnisse Exportieren</button>
+
+  <div id="unassignedPlayersSection" class="section" style="display:none;">
+    <h3>Nicht zugeteilte Spieler</h3>
+    <div id="unassignedAdults" class="player-list"></div>
+    <div id="unassignedYouth" class="player-list"></div>
+  </div>
+</div>
+
+<!-- ERGEBNISSE-BLOCK -->
+<div class="section" id="resultsSection" style="display:none;">
+  <h2>Ergebnisse</h2>
+
+  <h3>Erwachsenenteams</h3>
+  <div id="adultTeamsList" class="team-list"></div>
+  <h3>Gemischte Teams</h3>
+  <div id="mixedTeamsList" class="team-list"></div>
+
+  <h3>Paarungen</h3>
+  <div class="team-list">
+    <h4>Erwachsenen Matches</h4>
+    <div id="adultMatches"></div>
+    <h4>Gemischte Matches</h4>
+    <div id="mixedMatches"></div>
+
+    <button id="undoLastMatchButton" class="button" style="background-color:#6c757d; margin-top:10px;">
+      Letztes Match rückgängig
+    </button>
+  </div>
+</div>
+
+<!-- VORSCHAU-MODAL -->
+<div id="feedbackModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h2>Vorschau der Teams</h2>
+    <div id="feedbackContent"></div>
+  </div>
+</div>
+<script>
+/* ========== NEU HINZUGEFÜGT ========== 
+   => Erzeugt eindeutige Kurz-Namen (ShortName) 
+======================================= */
+function generateUniqueShortNames() {
+  // 1) Alle Spieler in ein gemeinsames Array packen
+  const allPlayers = [...adultPlayers, ...youthPlayers];
+
+  // 2) Set für bereits vergebene Abkürzungen
+  const usedShortNames = new Set();
+
+  // 3) Durch alle Spieler gehen und ShortName berechnen
+  allPlayers.forEach(player => {
+    player.ShortName = createShortName(player.Name, usedShortNames);
+  });
+}
+
+function createShortName(fullName, usedSet) {
+  // Name in Teile zerlegen
+  const parts = fullName.trim().split(/\s+/);
+  // Vorname ist das erste Wort, Nachname das letzte Wort (vereinfacht)
+  const firstName = parts[0];
+  const lastName  = parts[parts.length - 1];
+
+  // Wir starten mit 2 Buchstaben vom Nachnamen
+  let shortName = '';
+  for (let i = 2; i <= lastName.length; i++) {
+    const snippet = lastName.substring(0, i);
+    shortName = firstName + ' ' + snippet + '.';
+    if (!usedSet.has(shortName)) {
+      usedSet.add(shortName);
+      return shortName;
+    }
+  }
+
+  // Fallback, wenn das obige nicht ausreicht
+  shortName = firstName + ' ' + lastName + '.';
+  usedSet.add(shortName);
+  return shortName;
+}
+
+/* ========================================
+   1) GLOBALE ARRAYS
+======================================== */
+let adultPlayers = [
+  { Name: "Alex K.", Position: "MB", Leistung: "3", Geschlecht: "M", Spiele: 0, Punkte: 0 },
+  { Name: "Leon K.", Position: "MB", Leistung: "1", Geschlecht: "M", Spiele: 0, Punkte: 0 },
+  { Name: "Franzi K.", Position: "AA", Leistung: "1", Geschlecht: "F", Spiele: 0, Punkte: 0 },
+  { Name: "Monja B.", Position: "MB", Leistung: "2", Geschlecht: "F", Spiele: 0, Punkte: 0 },
+  { Name: "Ali K.", Position: "Z", Leistung: "1", Geschlecht: "M", Spiele: 0, Punkte: 0 },
+  { Name: "Anna R.", Position: "AA", Leistung: "2", Geschlecht: "F", Spiele: 0, Punkte: 0 },
+  { Name: "Ben B.", Position: "MB", Leistung: "1", Geschlecht: "M", Spiele: 0, Punkte: 0 },
+  { Name: "Caro S.", Position: "MB", Leistung: "1", Geschlecht: "F", Spiele: 0, Punkte: 0 },
+  { Name: "Daniel E.", Position: "AA", Leistung: "2", Geschlecht: "M", Spiele: 0, Punkte: 0 },
+  { Name: "Daria A.", Position: "AA", Leistung: "1", Geschlecht: "F", Spiele: 0, Punkte: 0 },
+  { Name: "Elias K.", Position: "AA", Leistung: "1", Geschlecht: "M", Spiele: 0, Punkte: 0 },
+  { Name: "Elias S.", Position: "AA", Leistung: "1", Geschlecht: "M", Spiele: 0, Punkte: 0 },
+  { Name: "Emily K.", Position: "AA", Leistung: "1", Geschlecht: "F", Spiele: 0, Punkte: 0 },
+  { Name: "Fabian D.", Position: "MB", Leistung: "1", Geschlecht: "M", Spiele: 0, Punkte: 0 },
+  { Name: "Felina S.", Position: "AA", Leistung: "1", Geschlecht: "F", Spiele: 0, Punkte: 0 },
+  { Name: "Felix K.", Position: "AA", Leistung: "3", Geschlecht: "M", Spiele: 0, Punkte: 0 },
+  { Name: "Karrrrle", Position: "AA", Leistung: "1", Geschlecht: "M", Spiele: 0, Punkte: 0 },
+  { Name: "Florian B.", Position: "AA", Leistung: "1", Geschlecht: "M", Spiele: 0, Punkte: 0 },
+  { Name: "Helene M.", Position: "AA", Leistung: "3", Geschlecht: "F", Spiele: 0, Punkte: 0 },
+  { Name: "Helene Maneth", Position: "AA", Leistung: "3", Geschlecht: "F", Spiele: 0, Punkte: 0 },
+  { Name: "Ida B.", Position: "MB", Leistung: "2", Geschlecht: "F", Spiele: 0, Punkte: 0 },
+  { Name: "Jan K.", Position: "MB", Leistung: "2", Geschlecht: "M", Spiele: 0, Punkte: 0 },
+  { Name: "Jannis E.", Position: "AA", Leistung: "1", Geschlecht: "M", Spiele: 0, Punkte: 0 },
+  { Name: "Jannis H.", Position: "AA", Leistung: "1", Geschlecht: "M", Spiele: 0, Punkte: 0 },
+  { Name: "Jannis W.", Position: "MB", Leistung: "2", Geschlecht: "M", Spiele: 0, Punkte: 0 },
+  { Name: "Joel D.", Position: "AA", Leistung: "2", Geschlecht: "M", Spiele: 0, Punkte: 0 },
+  { Name: "Johanna S.", Position: "MB", Leistung: "1", Geschlecht: "F", Spiele: 0, Punkte: 0 },
+  { Name: "Flo R.", Position: "AA", Leistung: "1", Geschlecht: "M", Spiele: 0, Punkte: 0 },
+  { Name: "Chris K.", Position: "AA", Leistung: "1", Geschlecht: "M", Spiele: 0, Punkte: 0 },
+  { Name: "Lauresa O.", Position: "AA", Leistung: "1", Geschlecht: "F", Spiele: 0, Punkte: 0 },
+  { Name: "Hannah B.", Position: "AA", Leistung: "2", Geschlecht: "F", Spiele: 0, Punkte: 0 },
+
+  { Name: "Jonas Labisch", Position: "Z", Leistung: "1", Geschlecht: "M", Spiele: 0, Punkte: 0 },
+  { Name: "Paul L.", Position: "Z", Leistung: "1", Geschlecht: "M", Spiele: 0, Punkte: 0 },
+  { Name: "Jonas Lingel.", Position: "Z", Leistung: "1", Geschlecht: "M", Spiele: 0, Punkte: 0 },
+  { Name: "Julian S.", Position: "AA", Leistung: "3", Geschlecht: "M", Spiele: 0, Punkte: 0 },
+  { Name: "Katharina B.", Position: "AA", Leistung: "2", Geschlecht: "F", Spiele: 0, Punkte: 0 },
+  { Name: "Katja H.", Position: "Z", Leistung: "2", Geschlecht: "F", Spiele: 0, Punkte: 0 },
+  { Name: "Lara K.", Position: "MB", Leistung: "1", Geschlecht: "F", Spiele: 0, Punkte: 0 },
+  { Name: "Leah B.", Position: "AA", Leistung: "3", Geschlecht: "F", Spiele: 0, Punkte: 0 },
+  { Name: "Marus H.", Position: "AA", Leistung: "1", Geschlecht: "M", Spiele: 0, Punkte: 0 },
+  { Name: "Lenard S.", Position: "Z", Leistung: "1", Geschlecht: "M", Spiele: 0, Punkte: 0 },
+  { Name: "Leni J.", Position: "AA", Leistung: "2", Geschlecht: "F", Spiele: 0, Punkte: 0 },
+  { Name: "Leo B.", Position: "AA", Leistung: "3", Geschlecht: "M", Spiele: 0, Punkte: 0 },
+  { Name: "Lina M.", Position: "AA", Leistung: "2", Geschlecht: "F", Spiele: 0, Punkte: 0 },
+  { Name: "Linus W.", Position: "AA", Leistung: "1", Geschlecht: "M", Spiele: 0, Punkte: 0 },
+  { Name: "Lucie N.", Position: "AA", Leistung: "3", Geschlecht: "F", Spiele: 0, Punkte: 0 },
+  { Name: "Martin U.", Position: "Z", Leistung: "2", Geschlecht: "M", Spiele: 0, Punkte: 0 },
+  { Name: "Max D.", Position: "AA", Leistung: "3", Geschlecht: "M", Spiele: 0, Punkte: 0 },
+  { Name: "Michi H.", Position: "AA", Leistung: "1", Geschlecht: "M", Spiele: 0, Punkte: 0 },
+  { Name: "Mieke K.", Position: "AA", Leistung: "1", Geschlecht: "F", Spiele: 0, Punkte: 0 },
+  { Name: "Nelly A.", Position: "MB", Leistung: "1", Geschlecht: "F", Spiele: 0, Punkte: 0 },
+  { Name: "Nicklas K.", Position: "MB", Leistung: "1", Geschlecht: "M", Spiele: 0, Punkte: 0 },
+  { Name: "Nikita S.", Position: "AA", Leistung: "3", Geschlecht: "M", Spiele: 0, Punkte: 0 },
+  { Name: "Patrick S.", Position: "AA", Leistung: "1", Geschlecht: "M", Spiele: 0, Punkte: 0 },
+  { Name: "Philipp K.", Position: "Z", Leistung: "3", Geschlecht: "M", Spiele: 0, Punkte: 0 },
+  { Name: "Pius M.", Position: "Z", Leistung: "1", Geschlecht: "M", Spiele: 0, Punkte: 0 },
+  { Name: "Robin W.", Position: "Z", Leistung: "3", Geschlecht: "M", Spiele: 0, Punkte: 0 },
+  { Name: "Ronja B.", Position: "AA", Leistung: "1", Geschlecht: "F", Spiele: 0, Punkte: 0 },
+  { Name: "Rune D.", Position: "Z", Leistung: "1", Geschlecht: "M", Spiele: 0, Punkte: 0 },
+  { Name: "Sara T.", Position: "Z", Leistung: "1", Geschlecht: "F", Spiele: 0, Punkte: 0 },
+  { Name: "Niko K.", Position: "AA", Leistung: "1", Geschlecht: "M", Spiele: 0, Punkte: 0 },
+  { Name: "Ludo N.", Position: "AA", Leistung: "1", Geschlecht: "M", Spiele: 0, Punkte: 0 },
+  { Name: "Sebastian M.", Position: "AA", Leistung: "3", Geschlecht: "M", Spiele: 0, Punkte: 0 },
+  { Name: "Steffi G.", Position: "Z", Leistung: "1", Geschlecht: "F", Spiele: 0, Punkte: 0 },
+  { Name: "Tom W.", Position: "AA", Leistung: "1", Geschlecht: "M", Spiele: 0, Punkte: 0 },
+  { Name: "Vica M.", Position: "Z", Leistung: "2", Geschlecht: "F", Spiele: 0, Punkte: 0 }
+];
+
+let youthPlayers = [
+  { Name: "Noah E.", Leistung: "2", Geschlecht: "M", Spiele: 0, Punkte: 0 },
+  { Name: "Frieda M.", Leistung: "2", Geschlecht: "F", Spiele: 0, Punkte: 0 },
+  { Name: "Julia E.", Leistung: "2", Geschlecht: "F", Spiele: 0, Punkte: 0 },
+  { Name: "Elena C.", Leistung: "3", Geschlecht: "F", Spiele: 0, Punkte: 0 },
+  { Name: "Noemi R.", Leistung: "2", Geschlecht: "F", Spiele: 0, Punkte: 0 },
+  { Name: "Mirjam K.", Leistung: "2", Geschlecht: "F", Spiele: 0, Punkte: 0 },
+  { Name: "Jakob K.", Leistung: "3", Geschlecht: "M", Spiele: 0, Punkte: 0 },
+  { Name: "Bennett G.", Leistung: "2", Geschlecht: "M", Spiele: 0, Punkte: 0 },
+  { Name: "Annelie M.", Leistung: "3", Geschlecht: "F", Spiele: 0, Punkte: 0 },
+  { Name: "Alex Z.", Leistung: "2", Geschlecht: "M", Spiele: 0, Punkte: 0 },
+  { Name: "Laurenz J.", Leistung: "2", Geschlecht: "M", Spiele: 0, Punkte: 0 },
+  { Name: "David S.", Leistung: "1", Geschlecht: "M", Spiele: 0, Punkte: 0 },
+  { Name: "Elya M.", Leistung: "3", Geschlecht: "F", Spiele: 0, Punkte: 0 },
+  { Name: "Emilia Hauf.", Leistung: "2", Geschlecht: "F", Spiele: 0, Punkte: 0 },
+  { Name: "Leila O.", Leistung: "2", Geschlecht: "F", Spiele: 0, Punkte: 0 }
+ ]; 
+
+// TEAMS (Preview + Finale)
+let previewAdultTeams=[];
+let previewMixedTeams=[];
+let adultTeams=[];
+let mixedTeams=[];
+
+// Für ein einziges Match-Rückgängig
+let matchHistoryStack=[];
+
+// Sortier-Richtungen
+let sortDirections={
+  name:'asc', position:'asc', leistung:'asc', geschlecht:'asc',
+  spiele:'asc', punkte:'asc'
+};
+
+/* ========================================
+   2) DOM ELEMENTS
+======================================== */
+const toggleDetails= document.getElementById('toggleDetails');
+const addPlayerForm= document.getElementById('addPlayerForm');
+const playerMessageDiv= document.getElementById('playerMessage');
+const playerTableBody= document.getElementById('playerTableBody');
+
+const numberOfTeamsInput    = document.getElementById('numberOfTeams');
+const adultTeamSizeInput    = document.getElementById('adultTeamSize');
+const adultPerMixedTeamInput= document.getElementById('adultPerMixedTeam');
+const youthPerMixedTeamInput= document.getElementById('youthPerMixedTeam');
+
+const previewButton      = document.getElementById('previewButton');
+const applyPreviewButton = document.getElementById('applyPreviewButton');
+const exportButton       = document.getElementById('exportButton');
+const undoLastMatchButton= document.getElementById('undoLastMatchButton');
+
+const resultsSection     = document.getElementById('resultsSection');
+const adultTeamsListDiv  = document.getElementById('adultTeamsList');
+const mixedTeamsListDiv  = document.getElementById('mixedTeamsList');
+const adultMatchesDiv    = document.getElementById('adultMatches');
+const mixedMatchesDiv    = document.getElementById('mixedMatches');
+
+const unassignedPlayersSection= document.getElementById('unassignedPlayersSection');
+const unassignedAdultsDiv     = document.getElementById('unassignedAdults');
+const unassignedYouthDiv      = document.getElementById('unassignedYouth');
+
+const feedbackModal     = document.getElementById('feedbackModal');
+const feedbackContent   = document.getElementById('feedbackContent');
+const feedbackCloseSpan = document.getElementsByClassName('close')[0];
+
+/* ========================================
+   3) ONLOAD
+======================================== */
+window.onload= function(){
+  // Nach dem Laden gleich eindeutige ShortNames erstellen
+  generateUniqueShortNames();
+  renderPlayerTable();
+  initSortingHeaders();
+};
+
+/* ========================================
+   4) TOGGLE DETAILS
+======================================== */
+toggleDetails.addEventListener('change', ()=>{
+  renderPlayerTable();
+  toggleDetailColumns(); 
+});
+
+// => Spalten ein/ausblenden
+function toggleDetailColumns(){
+  const show= toggleDetails.checked;
+  document.querySelectorAll('.pos-col').forEach(el=> el.style.display   = show? '':'none');
+  document.querySelectorAll('.leist-col').forEach(el=> el.style.display = show? '':'none');
+  document.querySelectorAll('.gesch-col').forEach(el=> el.style.display = show? '':'none');
+}
+
+/* ========================================
+   5) GEMEINSAME SPIELER-TABELLE
+======================================== */
+function renderPlayerTable(){
+  playerTableBody.innerHTML='';
+  const showDetails= toggleDetails.checked;
+
+  // 1) Erwachsene
+  adultPlayers.forEach((p, idx)=>{
+    const tr= createPlayerRow(p, 'adult', idx, showDetails);
+    tr.classList.add('adult-player');
+    playerTableBody.appendChild(tr);
+  });
+  // 2) Jugend
+  youthPlayers.forEach((p, idx)=>{
+    const tr= createPlayerRow(p, 'youth', idx, showDetails);
+    tr.classList.add('youth-player');
+    playerTableBody.appendChild(tr);
+  });
+
+  toggleDetailColumns();
+}
+
+function createPlayerRow(playerObj, type, idx, showDetails){
+  const tr= document.createElement('tr');
+
+  // Wenn Details an => voller Name, sonst => ShortName (eindeutig)
+  let displayName = showDetails ? playerObj.Name : (playerObj.ShortName || playerObj.Name);
+
+  const pos   = (type==='adult')? (playerObj.Position||'') : '';
+  const lei   = playerObj.Leistung || '';
+  const gesch = playerObj.Geschlecht || '';
+
+  tr.innerHTML= `
+    <td>${displayName}</td>
+    <td class="pos-col">${pos}</td>
+    <td class="leist-col">${lei}</td>
+    <td class="gesch-col">${gesch}</td>
+    <td>${playerObj.Spiele}</td>
+    <td>${playerObj.Punkte}</td>
+    <td>
+      <button class="adjust-button" onclick="adjustPoints('${type}', ${idx}, 1)">+Punkt</button>
+      <button class="adjust-button" onclick="adjustPoints('${type}', ${idx}, -1)">-Punkt</button>
+      <button class="adjust-button" onclick="adjustGames('${type}', ${idx}, 1)">+Spiel</button>
+      <button class="adjust-button" onclick="adjustGames('${type}', ${idx}, -1)">-Spiel</button>
+      <button class="adjust-button" onclick="editPlayer('${type}', ${idx})">Bearbeiten</button>
+      <button class="adjust-button" onclick="deletePlayer('${type}', ${idx})">Löschen</button>
+    </td>
+  `;
+  return tr;
+}
+
+/* ========================================
+   6) SPIELER HINZUFÜGEN
+======================================== */
+addPlayerForm.addEventListener('submit',(e)=>{
+  e.preventDefault();
+  const name= document.getElementById('playerName').value.trim();
+  const type= document.getElementById('playerType').value;
+  const position= document.getElementById('playerPosition').value;
+  const leistung= document.getElementById('playerLeistung').value;
+  const geschlecht= document.getElementById('playerGeschlecht').value;
+
+  if(!name || !type || !leistung || !geschlecht){
+    playerMessageDiv.textContent="Bitte alle Felder ausfüllen!";
+    playerMessageDiv.className='message error';
+    return;
+  }
+  if(type==='adult'){
+    if(adultPlayers.some(a=>a.Name.toLowerCase()=== name.toLowerCase())){
+      playerMessageDiv.textContent="Name existiert schon (Erw).";
+      playerMessageDiv.className='message error';
+      return;
+    }
+    adultPlayers.push({
+      Name:name, Position:(position||''), Leistung:leistung, Geschlecht:geschlecht,
+      Spiele:0, Punkte:0
+    });
+  } else {
+    if(youthPlayers.some(y=>y.Name.toLowerCase()=== name.toLowerCase())){
+      playerMessageDiv.textContent="Name existiert schon (Jugend).";
+      playerMessageDiv.className='message error';
+      return;
+    }
+    youthPlayers.push({
+      Name:name, Leistung:leistung, Geschlecht:geschlecht,
+      Spiele:0, Punkte:0
+    });
+  }
+  // Nach Hinzufügen => neue ShortNames generieren
+  generateUniqueShortNames();
+
+  playerMessageDiv.textContent=`${name} (Typ:${type}) hinzugefügt.`;
+  playerMessageDiv.className='message success';
+  addPlayerForm.reset();
+  renderPlayerTable();
+});
+
+/* EDIT / DELETE */
+window.editPlayer=function(type, idx){
+  let arr= (type==='adult')? adultPlayers : youthPlayers;
+  const p= arr[idx];
+  const newName= prompt("Neuen Namen eingeben:", p.Name);
+  if(newName && newName.trim()!==''){
+    p.Name= newName.trim();
+    // Nach Bearbeiten => neue ShortNames generieren
+    generateUniqueShortNames();
+    renderPlayerTable();
+  }
+};
+window.deletePlayer=function(type, idx){
+  let arr= (type==='adult')? adultPlayers : youthPlayers;
+  if(!confirm(`Wirklich ${arr[idx].Name} löschen?`)) return;
+  arr.splice(idx,1);
+  // Nach Löschen => neue ShortNames
+  generateUniqueShortNames();
+  renderPlayerTable();
+};
+
+/* PUNKTE / SPIELE */
+window.adjustPoints=function(type, idx, delta){
+  let arr= (type==='adult')? adultPlayers : youthPlayers;
+  if(delta<0 && arr[idx].Punkte<=0){
+    alert("Punkte können nicht negativ werden!");
+    return;
+  }
+  arr[idx].Punkte+= delta;
+  renderPlayerTable();
+};
+window.adjustGames=function(type, idx, delta){
+  let arr= (type==='adult')? adultPlayers : youthPlayers;
+  if(delta<0 && arr[idx].Spiele<=0){
+    alert("Spiele können nicht negativ werden!");
+    return;
+  }
+  arr[idx].Spiele+= delta;
+  renderPlayerTable();
+};
+
+/* ========================================
+   7) SORTIERUNG (TH-Klick)
+======================================== */
+function initSortingHeaders(){
+  document.querySelectorAll('#playerTable thead th[data-sort]').forEach(th=>{
+    th.addEventListener('click', ()=>{
+      const criterion= th.getAttribute('data-sort');
+      const currentDir= sortDirections[criterion];
+      const newDir= (currentDir==='asc')? 'desc' : 'asc';
+      sortDirections[criterion]= newDir;
+      sortPlayers(criterion,newDir);
+    });
+  });
+}
+
+function sortPlayers(crit, dir){
+  const mul= (dir==='asc')? 1 : -1;
+  adultPlayers.sort((a,b)=> compareByCrit(a,b,crit)*mul);
+  youthPlayers.sort((a,b)=> compareByCrit(a,b,crit)*mul);
+  renderPlayerTable();
+}
+
+function compareByCrit(a, b, crit) {
+  let aVal, bVal;
+
+  if (crit === 'name') {
+    // Deine Arrays haben Name (groß)
+    aVal = a.Name || '';
+    bVal = b.Name || '';
+    return aVal.localeCompare(bVal);
+
+  } else if (crit === 'position') {
+    aVal = a.Position || '';
+    bVal = b.Position || '';
+    return aVal.localeCompare(bVal);
+
+  } else if (crit === 'geschlecht') {
+    aVal = a.Geschlecht || '';
+    bVal = b.Geschlecht || '';
+    return aVal.localeCompare(bVal);
+
+  } else if (crit === 'leistung') {
+    // du nutzt "Leistung" (großes L) in deinen Arrays
+    return parseInt(a.Leistung || 0) - parseInt(b.Leistung || 0);
+    // Achtung Tippfehler: Du musst prüfen, ob du irgendwo "Leitung" statt "Leistung" hast!
+
+  } else if (crit === 'spiele') {
+    return parseInt(a.Spiele || 0) - parseInt(b.Spiele || 0);
+
+  } else if (crit === 'punkte') {
+    return parseInt(a.Punkte || 0) - parseInt(b.Punkte || 0);
+  }
+
+  return 0;
+}
+
+/* ========================================
+   8) LOSEN: VORSCHAU + ANWENDEN
+======================================== */
+previewButton.addEventListener('click',()=>{
+  const numTeams= parseInt(numberOfTeamsInput.value);
+  const sizeAdult= parseInt(adultTeamSizeInput.value);
+  const adultMix=  parseInt(adultPerMixedTeamInput.value);
+  const youthMix=  parseInt(youthPerMixedTeamInput.value);
+
+  // 1) "Balanced" => Sort adult first by Spiele, dann Leistung, dann Random
+  let sortedAdults=[...adultPlayers];
+  sortedAdults.sort((a,b)=>{
+    if(a.Spiele!== b.Spiele) return a.Spiele - b.Spiele;
+    if(a.Leistung!== b.Leistung) return (parseInt(a.Leistung) - parseInt(b.Leistung));
+    return Math.random()-0.5;
+  });
+
+  // 2) sort youth
+  let sortedYouth=[...youthPlayers];
+  sortedYouth.sort((a,b)=>{
+    if(a.Spiele!==b.Spiele) return a.Spiele - b.Spiele;
+    if(a.Leistung!== b.Leistung) return (parseInt(a.Leistung)- parseInt(b.Leistung));
+    return Math.random()-0.5;
+  });
+
+  const neededAdults= (numTeams*sizeAdult)+(numTeams*adultMix);
+  const neededYouth= (numTeams*youthMix);
+
+  if(sortedAdults.length< neededAdults){
+    alert(`Nicht genug Erwachsene (${neededAdults} benötigt)!`);
+    return;
+  }
+  if(sortedYouth.length< neededYouth){
+    alert(`Nicht genug Jugend (${neededYouth} benötigt)!`);
+    return;
+  }
+
+  let adultTeamSlice   = sortedAdults.slice(0, numTeams*sizeAdult);
+  let adultMixedSlice  = sortedAdults.slice(numTeams*sizeAdult, numTeams*sizeAdult+(numTeams*adultMix));
+  let youthMixedSlice  = sortedYouth.slice(0, numTeams*youthMix);
+
+  previewAdultTeams=[];
+  for(let i=0;i<numTeams;i++){
+    previewAdultTeams.push(
+      adultTeamSlice.slice(i*sizeAdult,(i+1)*sizeAdult)
+    );
+  }
+  previewMixedTeams=[];
+  for(let i=0;i<numTeams;i++){
+    let am= adultMixedSlice.slice(i*adultMix,(i+1)*adultMix);
+    let ym= youthMixedSlice.slice(i*youthMix,(i+1)*youthMix);
+    previewMixedTeams.push([...am, ...ym]);
+  }
+
+  showFeedbackModal(previewAdultTeams, previewMixedTeams);
+  applyPreviewButton.disabled= false;
+
+  // => unassigned
+  let usedAdultNames= adultTeamSlice.map(a=>a.Name).concat(adultMixedSlice.map(a=>a.Name));
+  let unassignedA= adultPlayers.filter(a=> !usedAdultNames.includes(a.Name));
+  let usedYouthNames= youthMixedSlice.map(a=>a.Name);
+  let unassignedY= youthPlayers.filter(y=> !usedYouthNames.includes(y.Name));
+
+  if(unassignedA.length>0){
+    unassignedAdultsDiv.innerHTML='';
+    unassignedA.forEach(u=>{
+      const d=document.createElement('div');
+      d.className='player-item';
+      // Falls Details aus => ShortName, sonst Name
+      let disp = toggleDetails.checked ? u.Name : (u.ShortName || u.Name);
+      d.textContent= `${disp}`;
+      unassignedAdultsDiv.appendChild(d);
+    });
+  } else {
+    unassignedAdultsDiv.innerHTML='<p>Keine nicht zugeteilten Erwachsenen.</p>';
+  }
+  if(unassignedY.length>0){
+    unassignedYouthDiv.innerHTML='';
+    unassignedY.forEach(u=>{
+      const d=document.createElement('div');
+      d.className='player-item';
+      let disp = toggleDetails.checked ? u.Name : (u.ShortName || u.Name);
+      d.textContent= `${disp}`;
+      unassignedYouthDiv.appendChild(d);
+    });
+  } else {
+    unassignedYouthDiv.innerHTML='<p>Keine nicht zugeteilten Jugendspieler.</p>';
+  }
+  unassignedPlayersSection.style.display= (unassignedA.length>0 || unassignedY.length>0)? '' : 'none';
+});
+
+applyPreviewButton.addEventListener('click', ()=>{
+  adultTeams= JSON.parse(JSON.stringify(previewAdultTeams));
+  mixedTeams= JSON.parse(JSON.stringify(previewMixedTeams));
+  matchHistoryStack = [];
+  displayResults(adultTeams, mixedTeams);
+  applyPreviewButton.disabled= true;
+});
+
+/* ========================================
+   9) ERGEBNISSE + MATCHES
+======================================== */
+function displayResults(aTeams, mTeams){
+  resultsSection.style.display='';
+  adultTeamsListDiv.innerHTML='';
+  mixedTeamsListDiv.innerHTML='';
+
+  aTeams.forEach((team,i)=>{
+    const names= team.map(p=>p.Name).join(', ');
+    let div= document.createElement('div');
+    div.className='adult-team';
+    div.innerHTML=`<strong>Erwachsenenteam ${i+1}:</strong> ${names}`;
+    adultTeamsListDiv.appendChild(div);
+  });
+  mTeams.forEach((team,i)=>{
+    const names= team.map(p=>p.Name).join(', ');
+    let div= document.createElement('div');
+    div.className='mixed-team';
+    div.innerHTML=`<strong>Team Jugend ${i+1}:</strong> ${names}`;
+    mixedTeamsListDiv.appendChild(div);
+  });
+
+  createMatches(aTeams,mTeams);
+  renderPlayerTable();
+}
+
+function createMatches(aTeams, mTeams){
+  adultMatchesDiv.innerHTML = '';
+  mixedMatchesDiv.innerHTML = '';
+
+  // ERWACHSENEN-SPIELE erstellen
+  for(let i=0; i<aTeams.length; i+=2){
+    if(i+1 < aTeams.length){
+      const matchDiv = document.createElement('div');
+      matchDiv.className = 'match-item';
+      
+      // "matchIndex" ist hier Math.floor(i/2) => welche Paarung
+      const matchIndex = Math.floor(i/2);
+
+      matchDiv.innerHTML = `
+        <strong>Feld ${matchIndex + 1}:</strong>
+        Erwachsenenteam ${i+1} vs. Erwachsenenteam ${i+2}
+        <button class="button" 
+                data-match-type="adult" 
+                data-match-index="${matchIndex}" 
+                data-winning-team="${i}">
+          Gewinner: Team ${i+1}
+        </button>
+        <button class="button" 
+                data-match-type="adult" 
+                data-match-index="${matchIndex}" 
+                data-winning-team="${i+1}">
+          Gewinner: Team ${i+2}
+        </button>
+      `;
+      adultMatchesDiv.appendChild(matchDiv);
+    }
+  }
+
+  // MIXED-SPIELE erstellen
+  for(let i=0; i<mTeams.length; i+=2){
+    if(i+1 < mTeams.length){
+      const matchDiv = document.createElement('div');
+      matchDiv.className='match-item';
+
+      const matchIndex = Math.floor(i/2);
+
+      matchDiv.innerHTML = `
+        <strong>Gemischtes Feld ${matchIndex + 1}:</strong>
+        Team Jugend ${i+1} vs. Team Jugend ${i+2}
+        <button class="button" 
+                data-match-type="mixed" 
+                data-match-index="${matchIndex}" 
+                data-winning-team="${i}">
+          Gewinner: Team ${i+1}
+        </button>
+        <button class="button" 
+                data-match-type="mixed" 
+                data-match-index="${matchIndex}" 
+                data-winning-team="${i+1}">
+          Gewinner: Team ${i+2}
+        </button>
+      `;
+      mixedMatchesDiv.appendChild(matchDiv);
+    }
+  }
+
+  // Buttons das Event geben
+  document.querySelectorAll('.match-item .button').forEach(btn => {
+    btn.addEventListener('click', function(){
+      const matchType = this.getAttribute('data-match-type');
+      const winIdx = parseInt(this.getAttribute('data-winning-team'));
+      // Wenn man hier losingTeamIdx braucht, müsste man es selbst berechnen (winIdx +/- 1).
+      // recordMatchResult übernimmt das aber bereits => also reicht data-winning-team.
+      recordMatchResult(matchType, winIdx);
+      // Beide Buttons in diesem Match disablen
+      this.parentNode.querySelectorAll('button').forEach(b => b.disabled = true);
+    });
+  });
+
+  // Nach dem Erstellen der Buttons => schon gespielte Matches disablen
+  disablePlayedMatches();
+}
+function disablePlayedMatches(){
+  matchHistoryStack.forEach(match => {
+    const { matchType, winningTeamIndex, losingTeamIndex } = match;
+    
+    // Alle Buttons dieses Typs raussuchen
+    const buttons = document.querySelectorAll(`.match-item .button[data-match-type="${matchType}"]`);
+    buttons.forEach(btn => {
+      const btnWinIdx = parseInt(btn.getAttribute('data-winning-team'));
+      
+      // Wenn unser Button zu diesem Match gehört, disablen wir den Button
+      // => Wir wissen: winningTeamIndex oder losingTeamIndex matcht btnWinIdx
+      if(btnWinIdx === winningTeamIndex || btnWinIdx === losingTeamIndex){
+        btn.disabled = true;
+      }
+    });
+  });
+}
+
+function recordMatchResult(matchType, winningTeamIndex){
+  let winningTeam=[], losingTeam=[];
+  let losingTeamIndex=-1;
+
+  if(matchType==='adult'){
+    winningTeam= adultTeams[winningTeamIndex];
+    let opp= (winningTeamIndex%2===0)? winningTeamIndex+1: winningTeamIndex-1;
+    losingTeam= adultTeams[opp];
+    losingTeamIndex= opp;
+  } else {
+    winningTeam= mixedTeams[winningTeamIndex];
+    let opp= (winningTeamIndex%2===0)? winningTeamIndex+1: winningTeamIndex-1;
+    losingTeam= mixedTeams[opp];
+    losingTeamIndex= opp;
+  }
+
+  // Stats updaten
+  winningTeam.forEach(p=>{
+    let real= findPlayerByName(p.Name);
+    if(real){
+      real.Punkte++;
+      real.Spiele++;
+    }
+  });
+  losingTeam.forEach(p=>{
+    let real= findPlayerByName(p.Name);
+    if(real){
+      real.Spiele++;
+    }
+  });
+
+  matchHistoryStack.push({
+    matchType: matchType,
+    winningTeamIndex: winningTeamIndex,
+    losingTeamIndex: losingTeamIndex
+  });
+  alert(`Team ${winningTeamIndex+1} hat gewonnen!`);
+  renderPlayerTable();
+}
+
+/* MATCH RÜCKGÄNGIG */
+undoLastMatchButton.addEventListener('click', undoLastMatch);
+function undoLastMatch(){
+  if(matchHistoryStack.length === 0){
+    alert("Kein Match zum Rückgängig machen!");
+    return;
+  }
+  // Nur das letzte Match aus dem Stack entfernen
+  const lastMatch = matchHistoryStack.pop();
+  const { matchType, winningTeamIndex, losingTeamIndex } = lastMatch;
+
+  let wTeam, lTeam;
+  if(matchType === 'adult'){
+    wTeam = adultTeams[winningTeamIndex];
+    lTeam = adultTeams[losingTeamIndex];
+  } else {
+    wTeam = mixedTeams[winningTeamIndex];
+    lTeam = mixedTeams[losingTeamIndex];
+  }
+
+  // Punkte/Spiele wieder abziehen
+  wTeam.forEach(p => {
+    let real = findPlayerByName(p.Name);
+    if(real){
+      if(real.Punkte > 0) real.Punkte--;
+      if(real.Spiele > 0) real.Spiele--;
+    }
+  });
+  lTeam.forEach(p => {
+    let real = findPlayerByName(p.Name);
+    if(real && real.Spiele > 0) real.Spiele--;
+  });
+
+  alert("Letztes Match rückgängig gemacht!");
+  // Tabelle neu rendern
+  renderPlayerTable();
+  // Matches neu aufbauen => bereits gespielte Matches disablen
+  createMatches(adultTeams, mixedTeams);
+}
+
+/* ========================================
+   10) CSV EXPORT
+======================================== */
+exportButton.addEventListener('click', ()=>{
+  let csv= generateCSV();
+  downloadCSV(csv,'spielergebnisse.csv');
+});
+function generateCSV(){
+  let csv='Name,Position,Leistung,Geschlecht,Spiele,Punkte\n';
+  adultPlayers.forEach(p=>{
+    csv+= `"${p.Name}",${p.Position||''},${p.Leistung||''},${p.Geschlecht||''},${p.Spiele},${p.Punkte}\n`;
+  });
+  youthPlayers.forEach(p=>{
+    csv+= `"${p.Name}",,${p.Leistung||''},${p.Geschlecht||''},${p.Spiele},${p.Punkte}\n`;
+  });
+  return csv;
+}
+function downloadCSV(csvContent, filename){
+  const blob= new Blob([csvContent],{type:'text/csv;charset=utf-8;'});
+  if(navigator.msSaveBlob){
+    navigator.msSaveBlob(blob, filename);
+  } else {
+    const link= document.createElement('a');
+    if(link.download!==undefined){
+      const url= URL.createObjectURL(blob);
+      link.setAttribute('href', url);
+      link.setAttribute('download', filename);
+      link.style.visibility='hidden';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+  }
+}
+
+/* ========================================
+   11) HILFSFUNKTION
+======================================== */
+function findPlayerByName(name){
+  let p= adultPlayers.find(a=>a.Name=== name);
+  if(p) return p;
+  return youthPlayers.find(y=>y.Name=== name);
+}
+
+/* MODAL VORSCHAU */
+function showFeedbackModal(aTeams,mTeams){
+  const modal= feedbackModal;
+  const span= feedbackCloseSpan;
+  let html=`<h3>Erwachsenenteams (Vorschau):</h3>`;
+  aTeams.forEach((t,i)=>{
+    const names= t.map(p=>p.Name).join(', ');
+    html+= `<p><strong>Team ${i+1}:</strong> ${names}</p>`;
+  });
+  html+= `<h3>Gemischte Teams (Vorschau):</h3>`;
+  mTeams.forEach((t,i)=>{
+    const names= t.map(p=>p.Name).join(', ');
+    html+= `<p><strong>Team ${i+1}:</strong> ${names}</p>`;
+  });
+  feedbackContent.innerHTML= html;
+  modal.style.display='block';
+  span.onclick= ()=> modal.style.display='none';
+  window.onclick=(e)=>{
+    if(e.target=== modal){
+      modal.style.display='none';
+    }
+  };
+}
+</script>
+</body>
+</html>
