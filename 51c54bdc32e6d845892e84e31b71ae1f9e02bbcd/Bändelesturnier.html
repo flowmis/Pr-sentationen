@@ -3,141 +3,182 @@
 <head>
   <meta charset="UTF-8">
   <title>TSV Ellwangen Volleyball: Bändeles-Turnier</title>
-  <style>
-    /* === GRUNDLAGEN === */
-    body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
-      background-color: #F5F5DC;
-    }
-    h1, h2, h3, h4 {
-      margin-top: 40px;
-      color: #333;
-    }
-    .section {
-      margin-bottom: 40px;
-      background-color: #E5E5CC;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-    .button, .adjust-button {
-      padding: 6px 12px;
-      background-color: #8B7355;
-      border: none;
-      color: black;
-      cursor: pointer;
-      font-size: 14px;
-      border-radius: 4px;
-      margin-left: 5px;
-      transition: background-color 0.3s;
-    }
-    .button:hover, .adjust-button:hover {
-      background-color: #FFD39B;
-    }
-    .button:disabled, .adjust-button:disabled {
-      background-color:#838B83;
-      cursor: not-allowed;
-    }
-    .message {
-      margin-top: 10px;
-      padding:10px;
-      border-radius:5px;
-    }
-    .error {
-      background-color: #f8d7da;
-      color:#721c24;
-    }
-    .success {
-      background-color:#d4edda;
-      color:#155724;
-    }
+<style>
+  /* === FARBVARIABLEN DEFINIEREN === */
+  :root {
+    --body-bg-color: #fff;
+    --heading-color: #333333;
+    --section-bg-color: #E5E5CC;
+    --section-box-shadow: rgba(0, 0, 0, 0.1);
+    --button-bg-color: #8B7355;
+    --button-hover-bg-color: #FFD39B;
+    --button-disabled-bg-color: #838B83;
+    --button-text-color: black;
+    --message-error-bg: #f8d7da;
+    --message-error-color: #721c24;
+    --message-success-bg: #d4edda;
+    --message-success-color: #155724;
+    --player-list-bg: #ffffff;
+    --player-list-border: #aaaaaa;
+    --adult-player-bg: #CDAF95;
+    --youth-player-bg: #EED5B7;
+    --adult-team-bg: #CDAF95;
+    --mixed-team-bg: #EED5B7;
+    --table-bg: #ffffff;
+    --table-border: #aaaaaa;
+    --table-header-bg: #7B3513;
+    --table-header-color: #ffffff;
+    --modal-bg: rgba(0, 0, 0, 0.4);
+    --modal-content-bg: #fefefe;
+    --modal-content-border: #888888;
+    --close-color: #aaaaaa;
+    --close-hover-color: #000000;
+    --text-color: #000000;
+    --white-color: #ffffff;
+    --black-color: #000000;
+    --undo-button-bg-color: #6c757d;
+  }
 
-    /* PLAYER-LIST / TEAM-LIST */
-    .player-list, .team-list, .matches-list {
-      max-height:300px;
-      overflow-y:auto;
-      border:1px solid #aaa;
-      padding:10px;
-      margin-top:10px;
-      background-color:#fff;
-    }
+  /* === GRUNDLAGEN === */
+  body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    background-color: var(--body-bg-color);
+  }
+  h1, h2, h3, h4 {
+    margin-top: 40px;
+    color: var(--heading-color);
+  }
+  .section {
+    margin-bottom: 40px;
+    background-color: var(--section-bg-color);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px var(--section-box-shadow);
+  }
+  .button, .adjust-button {
+    padding: 6px 12px;
+    background-color: var(--button-bg-color);
+    border: none;
+    color: var(--button-text-color);
+    cursor: pointer;
+    font-size: 14px;
+    border-radius: 4px;
+    margin-left: 5px;
+    transition: background-color 0.3s;
+  }
+  .button:hover, .adjust-button:hover {
+    background-color: var(--button-hover-bg-color);
+  }
+  .button:disabled, .adjust-button:disabled {
+    background-color: var(--button-disabled-bg-color);
+    cursor: not-allowed;
+  }
+  .message {
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 5px;
+  }
+  .error {
+    background-color: var(--message-error-bg);
+    color: var(--message-error-color);
+  }
+  .success {
+    background-color: var(--message-success-bg);
+    color: var(--message-success-color);
+  }
 
-    /* FARBKENNUNG */
-    .adult-player {
-      background-color:#CDAF95; 
-    }
-    .youth-player {
-      background-color:#EED5B7; 
-    }
-    .adult-team {
-      background-color:#CDAF95;
-      margin-bottom:5px;
-      padding:5px;
-      border-radius:4px;
-    }
-    .mixed-team {
-      background-color:#EED5B7;
-      margin-bottom:5px;
-      padding:5px;
-      border-radius:4px;
-    }
+  /* PLAYER-LIST / TEAM-LIST */
+  .player-list, .team-list, .matches-list {
+    max-height: 300px;
+    overflow-y: auto;
+    border: 1px solid var(--player-list-border);
+    padding: 10px;
+    margin-top: 10px;
+    background-color: var(--player-list-bg);
+  }
 
-    /* TABELLEN */
-    table {
-      width:100%;
-      border-collapse:collapse;
-      margin-top:10px;
-      background-color:#fff;
-    }
-    th, td {
-      border:1px solid #aaa;
-      padding:8px;
-      text-align:left;
-    }
-    th {
-      background-color:#8B4513;
-      color:white;
-      cursor:pointer; /* Sortierung */
-    }
+  /* FARBKENNUNG */
+  .adult-player {
+    background-color: var(--adult-player-bg);
+  }
+  .youth-player {
+    background-color: var(--youth-player-bg);
+  }
+  .adult-team {
+    background-color: var(--adult-team-bg);
+    margin-bottom: 5px;
+    padding: 5px;
+    border-radius: 4px;
+  }
+  .mixed-team {
+    background-color: var(--mixed-team-bg);
+    margin-bottom: 5px;
+    padding: 5px;
+    border-radius: 4px;
+  }
 
-    /* DETAILS-SPALTEN */
-    .pos-col, .leist-col, .gesch-col {
-      /* => per JS .style.display=none */
-    }
+  /* TABELLEN */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    background-color: var(--table-bg);
+  }
+  th, td {
+    border: 1px solid var(--table-border);
+    padding: 8px;
+    text-align: left;
+  }
+  th {
+    background-color: var(--table-header-bg);
+    color: var(--table-header-color);
+    cursor: pointer; /* Sortierung */
+  }
 
-    /* MODAL */
-    .modal {
-      display:none;
-      position:fixed;
-      z-index:999;
-      padding-top:100px;
-      left:0; top:0;
-      width:100%;
-      height:100%;
-      overflow:auto;
-      background-color:rgba(0,0,0,0.4);
-    }
-    .modal-content {
-      background-color:#fefefe;
-      margin:auto;
-      padding:20px;
-      border:1px solid #888;
-      width:80%;
-      border-radius:8px;
-    }
-    .close {
-      color:#aaa;
-      float:right;
-      font-size:24px;
-      font-weight:bold;
-      cursor:pointer;
-      margin-bottom:10px;
-    }
-    .close:hover, .close:focus {
-      color:black;
-    }
-  </style>
+  /* DETAILS-SPALTEN */
+  .pos-col, .leist-col, .gesch-col {
+    /* => per JS .style.display=none */
+  }
+
+  /* MODAL */
+  .modal {
+    display: none;
+    position: fixed;
+    z-index: 999;
+    padding-top: 100px;
+    left: 0; top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: var(--modal-bg);
+  }
+  .modal-content {
+    background-color: var(--modal-content-bg);
+    margin: auto;
+    padding: 20px;
+    border: 1px solid var(--modal-content-border);
+    width: 80%;
+    border-radius: 8px;
+  }
+  .close {
+    color: var(--close-color);
+    float: right;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-bottom: 10px;
+  }
+  .close:hover, .close:focus {
+    color: var(--close-hover-color);
+  }
+
+  /* Spezifische Klassen für zusätzliche Stile */
+  .undo-button {
+    background-color: var(--undo-button-bg-color);
+    margin-top: 10px;
+  }
+</style>
 </head>
 <body>
 
@@ -248,9 +289,10 @@
     <h4>Gemischte Matches</h4>
     <div id="mixedMatches"></div>
 
-    <button id="undoLastMatchButton" class="button" style="background-color:#6c757d; margin-top:10px;">
-      Letztes Match rückgängig
-    </button>
+<button id="undoLastMatchButton" class="button undo-button">
+  Letztes Match rückgängig
+</button>
+
   </div>
 </div>
 
@@ -922,13 +964,6 @@ function downloadCSV(csvContent, filename){
       document.body.removeChild(link);
     }
   }
-}
-
-function splitName(fullName) {
-  const parts = fullName.trim().split(/\s+/);
-  const vorname = parts[0];
-  const nachname = parts.slice(1).join(' ') || '';
-  return { vorname, nachname };
 }
 
 /* ========================================
