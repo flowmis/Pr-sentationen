@@ -1,1247 +1,1219 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8">
-  <title>Volleyball Turnier Losgenerator (Erweitert)</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 20px;
-      background-color: #f4f4f4;
-    }
-    h1, h2, h3, h4 {
-      margin-top: 40px;
-      color: #333;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 10px;
-      margin-bottom: 20px;
-      background-color: #fff;
-    }
-    th, td {
-      border: 1px solid #aaa;
-      padding: 8px;
-      text-align: left;
-    }
-    th {
-      background-color: #4CAF50;
-      color: white;
-      cursor: pointer; /* Damit man sieht, dass man klicken kann, wenn man sortieren will */
-    }
-    .player-list, .team-list, .matches-list {
-      max-height: 300px;
-      overflow-y: auto;
-      border: 1px solid #aaa;
-      padding: 10px;
-      margin-top: 10px;
-      background-color: #fff;
-    }
-    .player-item, .team-item, .match-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 5px;
-      padding: 5px;
-      border-bottom: 1px solid #ddd;
-    }
-    .add-player-form input, .add-player-form select, .add-player-form button {
-      margin-right: 10px;
-      padding: 5px;
-      font-size: 14px;
-    }
-    .section {
-      margin-bottom: 40px;
-      background-color: #fff;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
-    .button {
-      padding: 8px 16px;
-      background-color: #28a745;
-      border: none;
-      color: white;
-      cursor: pointer;
-      font-size: 14px;
-      border-radius: 4px;
-      margin-left: 5px;
-      transition: background-color 0.3s;
-    }
-    .button:hover {
-      background-color: #218838;
-    }
-    .message {
-      margin-top: 10px;
-      padding: 10px;
-      border-radius: 5px;
-    }
-    .error {
-      background-color: #f8d7da;
-      color: #721c24;
-    }
-    .success {
-      background-color: #d4edda;
-      color: #155724;
-    }
-    .adjust-button {
-      padding: 4px 8px;
-      background-color: #007bff;
-      border: none;
-      color: white;
-      cursor: pointer;
-      font-size: 12px;
-      border-radius: 4px;
-      margin-left: 5px;
-      transition: background-color 0.3s;
-    }
-    .adjust-button:hover {
-      background-color: #0069d9;
-    }
-    .button:disabled, .adjust-button:disabled {
-      background-color: #6c757d;
-      cursor: not-allowed;
-    }
-    .modal {
-      display: none; 
-      position: fixed; 
-      z-index: 999; 
-      padding-top: 100px; 
-      left: 0;
-      top: 0;
-      width: 100%; 
-      height: 100%; 
-      overflow: auto; 
-      background-color: rgba(0,0,0,0.4);
-    }
-    .modal-content {
-      background-color: #fefefe;
-      margin: auto;
-      padding: 20px;
-      border: 1px solid #888;
-      width: 80%;
-      border-radius: 8px;
-    }
-    .close {
-      color: #aaa;
-      float: right;
-      font-size: 24px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    .close:hover,
-    .close:focus {
-      color: black;
-    }
-    .export-button {
-      background-color: #17a2b8;
-    }
-    .export-button:hover {
-      background-color: #138496;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Volleyball-Turnierplan</title>
+    <!-- Google Fonts Beispiel -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+            background: linear-gradient(135deg, #f9f9f9, #efefef);
+            color: #333;
+        }
+        h1, h2, h3 {
+            text-align: center;
+            color: #333;
+            font-weight: 500;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            margin-bottom: 30px;
+        }
+        .field {
+            margin: 10px;
+            flex: 1;
+            min-width: 300px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .field h3 {
+            background: #4a90e2;
+            color: #fff;
+            margin: 0;
+            padding: 10px;
+            font-size: 1.1em;
+            text-align: center;
+        }
+        /* Tabellen werden bei kleiner Breite scrollbar */
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 0px;
+            background-color: #fff;
+            font-size: 0.95em;
+        }
+        th, td {
+            border-bottom: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+            white-space: nowrap;
+        }
+        th {
+            background-color: #f7f7f7;
+            font-weight: 500;
+        }
+        tr:hover {
+            background: #f0f8ff;
+        }
+        p, label {
+            color: #555;
+        }
+        @media (max-width: 768px) {
+            body {
+                margin: 10px;
+            }
+            table {
+                font-size: 0.9em;
+            }
+            .search-input {
+                width: 150px;
+            }
+            .score-input, input[type="text"] {
+                font-size: 0.9em;
+            }
+        }
+        @media (max-width: 600px) {
+            table {
+                font-size: 0.85em;
+            }
+            h1, h2, h3 {
+                font-size: 1em;
+            }
+        }
+        .past {
+            background-color: #ffe5e5 !important;
+        }
+        .current {
+            background-color: #e5ffe5 !important;
+        }
+        .next {
+            background-color: #fffce5 !important;
+        }
+        .team-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex: 1;
+        }
+        .score-container {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 10px;
+        }
+        .score-input {
+            width: 50px;
+            padding: 7px;
+            margin: 0 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 0.95em;
+        }
+        .score-input.invalid {
+            border: 2px solid red;
+        }
+        .team-name, input[type="text"] {
+            flex-grow: 1;
+            text-align: left;
+            border: none;
+            background: #fafafa;
+            padding: 6px;
+            border-radius: 4px;
+            transition: background 0.2s;
+            font-size: 0.95em;
+        }
+        .team-name:hover, input[type="text"]:hover {
+            background: #f0f0f0;
+        }
+        .match {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .button-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+        button {
+            background: #4a90e2;
+            color: #fff;
+            border: none;
+            padding: 12px 25px;
+            font-size: 1em;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s, box-shadow 0.2s;
+        }
+        button:hover {
+            background: #3b7bc0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .result-container {
+            margin: 40px 0;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            padding: 20px;
+        }
+        .result-table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #fff;
+            overflow-x: auto;
+        }
+        .result-table th, .result-table td {
+            border-bottom: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+            white-space: nowrap;
+        }
+        .result-table th {
+            background-color: #f7f7f7;
+            font-weight: 500;
+        }
+        .warning {
+            color: #d00;
+            font-weight: bold;
+            text-align: center;
+            margin: 10px 0;
+        }
+        .leader-row {
+            background-color: #e0ffe0;
+        }
+        .search-container {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .search-input {
+            padding: 5px;
+            width: 200px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        #finale-container {
+            text-align: center;
+            margin-top: 40px;
+        }
+        #finale-container .final-match {
+            display: inline-block;
+            margin: 20px;
+            background: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+        #Gesamt-Übersicht {
+            margin-top: 40px;
+        }
+        input[type="text"][data-user-override="true"] {
+            font-weight: 700;
+            background: #fffde0;
+        }
+.hinweis-box {
+    border: 2px solid #cc0000;
+    background: #ffe5e5;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+  }
 
-    /* Größere Darstellung für Teams */
-    .team-item {
-      font-size: 1.2rem;
-    }
+  .hinweis-box h2 {
+    text-align: center;
+    color: #cc0000;
+    margin-bottom: 15px;
+    font-weight: 600;
+  }
 
-    /* Farbliche Kennzeichnung (optional) */
-    /* Hellrot für Erwachsene, Hellblau für Jugend */
-    .adult-player {
-      background-color: #ffe8e8;
-    }
-    .youth-player {
-      background-color: #e8f7ff;
-    }
-  </style>
+  .hinweis-box ul {
+    list-style-type: disc;
+    margin-left: 20px;
+    color: #333;
+  }
+
+  .hinweis-box ul li {
+    margin-bottom: 8px;
+  }
+    </style>
 </head>
 <body>
+    <h1>Weihnachtsvolleyballturnier Technische Schule Aalen</h1>
+<div class="hinweis-box">
+  <h2>Hinweis zu den Regeln:</h2>
+  <ul>
+    <li>Eine Netzberührung führt zu einem Punkt für das gegnerische Team.</li>
+    <li>Ein Übertritt der Mittellinie oder Aufschlaglinie führt zu einem Punkt für das gegnerische Team.</li>
+    <li>Der Aufschlag darf nicht direkt oberhalb der Netzkante zurückgespielt werden. Ein Verstoß führt zu einem Punkt für das gegnerische Team.</li>
+    <li>Auffälliges Zeitspiel sowie unnötige Diskussionsversuche führen zu einem Punkt für das gegnerische Team.</li>
+    <li>Wird der Anpfiff zum Aufschlag nicht abgewartet, kann dies zu einem Punkt für das gegnerische Team führen.</li>
+    <li>Die Rotationsfolge ist einzuhalten und kann bei Nichteinhaltung auch zur Aberkennung mehrerer Punkte führen!</li>
+    <li>Übermäßiges Führen oder Halten des Balls führt zu einem Punkt für das gegnerische Team.</li>
+    <li>Nach Ablauf der offiziellen Spielzeit wird der aktuelle Ballwechsel zu Ende gespielt und gewertet.</li>
+    <li>Bei Gleichstand gibt es einen Entscheidungsball (im Anschluss das Feld zügig verlassen).</li>
+    <li>Teams müssen pünktlich zum Anpfiff auf dem Spielfeld sein und dieses unmittelbar nach dem Spiel verlassen. Bei Verspätung erfolgt Punkteabzug entsprechend der Dauer der Verzögerung.</li>
+  </ul>
+</div>
+    <h2>Gruppenphase (08:20 - 10:50 Uhr)</h2>
+    <div class="container" id="gruppen-container"></div>
+    <div class="button-container">
+      <button id="gruppenphase-auswertung-button">Auswertung Gruppenphase</button>
+    </div>
+    
+    <h2>Platzierungsspiele (10:50 - 11:50 Uhr)</h2>
+    <div class="container" id="platzierungsspiele-container">
+      <div class="field">
+        <h3>Feld 1</h3>
+        <div class="table-responsive">
+          <table>
+            <tr>
+              <th>Zeit</th>
+              <th>Spiel</th>
+            </tr>
+          <tr data-time="10:50"><td>10:50</td><td><input type="text" placeholder="3. Gruppe A" data-user-override="false"/> vs <input type="text" placeholder="3. Gruppe B" data-user-override="false"/></td></tr>
+          <tr data-time="10:50"><td>11:00</td><td><input type="text" placeholder="4. Gruppe A" data-user-override="false"/> vs <input type="text" placeholder="4. Gruppe B" data-user-override="false"/></td></tr>
+          <tr data-time="10:50"><td>11:10</td><td><input type="text" placeholder="3. Gruppe A" data-user-override="false"/> vs <input type="text" placeholder="3. Gruppe C" data-user-override="false"/></td></tr>
+          <tr data-time="10:50"><td>11:20</td><td><input type="text" placeholder="4. Gruppe A" data-user-override="false"/> vs <input type="text" placeholder="4. Gruppe C" data-user-override="false"/></td></tr>
+          <tr data-time="10:50"><td>11:30</td><td><input type="text" placeholder="4. Gruppe C" data-user-override="false"/> vs <input type="text" placeholder="4. Gruppe B" data-user-override="false"/></td></tr>
+          <tr data-time="10:50"><td>11:40</td><td><input type="text" placeholder="3. Gruppe C" data-user-override="false"/> vs <input type="text" placeholder="3. Gruppe B" data-user-override="false"/></td></tr>
+          </table>
+        </div>
+      </div>
+      <div class="field">
+        <h3>Feld 2</h3>
+        <div class="table-responsive">
+          <table>
+            <tr>
+              <th>Zeit</th>
+              <th>Spiel</th>
+            </tr>
+            <tr data-time="10:50"><td>10:50</td><td><input type="text" placeholder="1. Gruppe A" data-user-override="false" /> vs <input type="text" placeholder="1. Gruppe B" data-user-override="false"/></td></tr>
+            <tr data-time="10:50"><td>11:00</td><td><input type="text" placeholder="2. Gruppe A" data-user-override="false"/> vs <input type="text" placeholder="2. Gruppe B" data-user-override="false"/></td></tr>
+	    <tr data-time="10:50"><td>11:10</td><td><input type="text" placeholder="1. Gruppe A" data-user-override="false"/> vs <input type="text" placeholder="1. Gruppe C" data-user-override="false"/></td></tr>
+            <tr data-time="10:50"><td>11:20</td><td><input type="text" placeholder="2. Gruppe A" data-user-override="false"/> vs <input type="text" placeholder="2. Gruppe C" data-user-override="false"/></td></tr>
+            <tr data-time="10:50"><td>11:30</td><td><input type="text" placeholder="2. Gruppe C" data-user-override="false"/> vs <input type="text" placeholder="2. Gruppe B" data-user-override="false"/></td></tr>
+            <tr data-time="10:50"><td>11:40</td><td><input type="text" placeholder="1. Gruppe C" data-user-override="false"/> vs <input type="text" placeholder="1. Gruppe B" data-user-override="false"/></td></tr>
+          </table>
+        </div>
+      </div>
 
-<h1>Volleyball Turnier Losgenerator (Erweitert)</h1>
+      <div class="field">
+        <h3>Feld 3</h3>
+        <div class="table-responsive">
+          <table>
+            <tr>
+              <th>Zeit</th>
+              <th>Spiel</th>
+            </tr>
+          <tr data-time="10:50"><td>10:50</td><td><input type="text" placeholder="5. Gruppe A" data-user-override="false"/> vs <input type="text" placeholder="5. Gruppe B" data-user-override="false"/></td></tr>
+          <tr data-time="10:50"><td>11:00</td><td><input type="text" placeholder="6. Gruppe A" data-user-override="false"/> vs <input type="text" placeholder="6. Gruppe B" data-user-override="false"/></td></tr>
+          <tr data-time="10:50"><td>11:10</td><td><input type="text" placeholder="5. Gruppe A" data-user-override="false"/> vs <input type="text" placeholder="5. Gruppe C" data-user-override="false"/></td></tr>
+          <tr data-time="10:50"><td>11:20</td><td><input type="text" placeholder="6. Gruppe A" data-user-override="false"/> vs <input type="text" placeholder="6. Gruppe C" data-user-override="false"/></td></tr>
+          <tr data-time="10:50"><td>11:30</td><td><input type="text" placeholder="6. Gruppe C" data-user-override="false"/> vs <input type="text" placeholder="6. Gruppe B" data-user-override="false"/></td></tr>
+          <tr data-time="10:50"><td>11:40</td><td><input type="text" placeholder="5. Gruppe C" data-user-override="false"/> vs <input type="text" placeholder="5. Gruppe B" data-user-override="false"/></td></tr>
+        </table>
+      </div>
+    </div>
+    </div>
+    <div class="button-container">
+      <button id="platzierungsspiele-auswertung-button">Auswertung Platzierungsspiele</button>
+    </div>
 
-<button id="undoButton" class="button" style="background-color:#6c757d;">Rückgängig</button>
+    <div id="finale-container">
+      <h2>Finale (12:20 - 12:50 Uhr)</h2>
+      <p>Auf dem Centercourt spielen:</p>
+      <div class="final-match">
+        <span id="final-team1">Turniersieger</span> 
+        vs 
+        <span id="final-team2">Lehrerteam</span>
+        <div class="score-container">
+          <input class="score-input" id="final-score1" type="number" min="0" value="0" />
+          <span>:</span>
+          <input class="score-input" id="final-score2" type="number" min="0" value="0" />
+        </div>
+      </div>
+    </div>
+    <div class="button-container">
+      <button id="finale-auswertung-button">Auswertung Finale</button>
+    </div>
 
-<div class="section">
-  <h2>Spieler</h2>
-  <div id="playerList" class="player-list"></div>
+    <script>
+
+  const team = {
+        a: "Pritsch Perfect",
+        b: "Juventus Urin",
+        c: "Hört man mich überhaupt?",
+        d: "VABO2",
+        e: "Knockout",
+        f: "SV Wacker Durchschlagen",
+        g: "Snooze",
+        h: "Gladiators",
+        i: "Passt scho",
+        j: "Die AufReißer",
+        k: "5 gegen Tom",
+        l: "Iceböörg",
+        m: "The Underdog",
+        n: "Rohmilch",
+        o: "TG11I",
+        p: "Blockbuster",
+        q: "Fc Asylheim",
+        r: "Soooo isch"
+      };
+const scheduleA = [
+  { time: "8:20",  match: [team.a, team.f], score: [9, 21] },
+  { time: "8:30",  match: [team.b, team.e], score: [13, 8] },
+  { time: "8:40",  match: [team.c, team.d], score: [10, 20] },
+  { time: "8:50",  match: [team.a, team.e], score: [14, 17] },
+  { time: "9:00",  match: [team.b, team.c], score: [18, 16] },
+  { time: "9:10",  match: [team.d, team.f], score: [16, 13] },
+  { time: "9:20",  match: [team.a, team.d], score: [8, 16] },
+  { time: "9:30",  match: [team.b, team.f], score: [18, 15] },
+  { time: "9:40",  match: [team.c, team.e], score: [17, 10] },
+  { time: "9:50",  match: [team.a, team.c], score: [14, 24] },
+  { time: "10:00", match: [team.b, team.d], score: [15, 18] },
+  { time: "10:10", match: [team.e, team.f], score: [21, 9] },
+  { time: "10:20", match: [team.a, team.b], score: [12, 23] },
+  { time: "10:30", match: [team.c, team.f], score: [21, 11] },
+  { time: "10:40", match: [team.d, team.e], score: [13, 11] },
+];
+const scheduleB = [
+  { time: "8:20",  match: [team.g, team.l], score: [19, 5] },
+  { time: "8:30",  match: [team.h, team.i], score: [17, 7] },
+  { time: "8:40",  match: [team.j, team.k], score: [13, 15] },
+  { time: "8:50",  match: [team.g, team.h], score: [15, 8] },
+  { time: "9:00",  match: [team.i, team.j], score: [13, 14] },
+  { time: "9:10",  match: [team.k, team.l], score: [18, 12] },
+  { time: "9:20",  match: [team.g, team.i], score: [20, 5] },
+  { time: "9:30",  match: [team.h, team.k], score: [14, 17] },
+  { time: "9:40",  match: [team.j, team.l], score: [15, 17] },
+  { time: "9:50",  match: [team.g, team.j], score: [19, 8] },
+  { time: "10:00", match: [team.h, team.l], score: [17, 15] },
+  { time: "10:10", match: [team.i, team.k], score: [13, 17] },
+  { time: "10:20", match: [team.g, team.k], score: [9, 13] },
+  { time: "10:30", match: [team.h, team.j], score: [13, 15] },
+  { time: "10:40", match: [team.i, team.l], score: [14, 19] },
+];
+const scheduleC = [
+  { time: "8:20",  match: [team.m, team.r], score: [19, 14] },
+  { time: "8:30",  match: [team.n, team.o], score: [18, 10] },
+  { time: "8:40",  match: [team.p, team.q], score: [11, 20] },
+  { time: "8:50",  match: [team.m, team.n], score: [15, 16] },
+  { time: "9:00",  match: [team.o, team.p], score: [24, 14] },
+  { time: "9:10",  match: [team.q, team.r], score: [19, 17] },
+  { time: "9:20",  match: [team.m, team.o], score: [22, 12] },
+  { time: "9:30",  match: [team.n, team.q], score: [15, 13] },
+  { time: "9:40",  match: [team.p, team.r], score: [13, 18] },
+  { time: "9:50",  match: [team.m, team.p], score: [25, 0] },
+  { time: "10:00", match: [team.n, team.r], score: [22, 16] },
+  { time: "10:10", match: [team.o, team.r], score: [21, 16] },
+  { time: "10:20", match: [team.m, team.q], score: [18, 15] },
+  { time: "10:30", match: [team.n, team.p], score: [24, 8] },
+  { time: "10:40", match: [team.o, team.q], score: [16, 15] },
+];
+
+      const groups = {
+        "Feld 1: Gruppe A": scheduleA,
+        "Feld 2: Gruppe B": scheduleB,
+        "Feld 3: Gruppe C": scheduleC
+      };
+
+      const groupNameMap = {
+        "Gruppe A": "Feld 1: Gruppe A",
+        "Gruppe B": "Feld 2: Gruppe B",
+        "Gruppe C": "Feld 3: Gruppe C"
+      };
+
+      let placements = {}; 
+      let placementResultsGlobal = [];
+      let finalWinner = null;
+      let finalLoser = null;
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const gruppenContainer = document.getElementById("gruppen-container");
+        gruppenContainer.appendChild(generateTable(scheduleA, "Feld 1: Gruppe A"));
+        gruppenContainer.appendChild(generateTable(scheduleB, "Feld 2: Gruppe B"));
+        gruppenContainer.appendChild(generateTable(scheduleC, "Feld 3: Gruppe C"));
+        loadScoresFromLocalStorage();
+        updateColors();
+        setInterval(updateColors, 600);
+
+        const allInputs = document.querySelectorAll('.score-input');
+        allInputs.forEach(input => {
+          input.addEventListener('input', handleScoreInputChange);
+        });
+
+        // Event-Listener für manuelle Overrides in Platzierungsteams
+        document.querySelectorAll('#platzierungsspiele-container input[type="text"]').forEach(inp => {
+          inp.addEventListener('input', (e) => {
+            e.target.setAttribute('data-user-override', 'true');
+            saveScoresToLocalStorage();
+          });
+        });
+
+        document.getElementById('gruppenphase-auswertung-button').addEventListener('click', evaluateGroupPhase);
+        document.getElementById('platzierungsspiele-auswertung-button').addEventListener('click', evaluatePlacementPhase);
+        document.getElementById('finale-auswertung-button').addEventListener('click', evaluateFinalPhase);
+      });
+
+function generateTable(schedule, groupName) {
+  const fieldDiv = document.createElement("div");
+  fieldDiv.className = "field";
+
+  const heading = document.createElement("h3");
+  heading.innerText = groupName;  
+  fieldDiv.appendChild(heading);
+
+  const tableResponsive = document.createElement("div");
+  tableResponsive.className = "table-responsive";
+  fieldDiv.appendChild(tableResponsive);
+
+  const table = document.createElement("table");
+  table.innerHTML = `
+    <tr>
+      <th>Zeit</th>
+      <th>Spiel</th>
+    </tr>
+  `;
+  schedule.forEach(({ time, match, score }, index) => {
+    const row = document.createElement("tr");
+    row.dataset.time = time;
+    row.innerHTML = `
+      <td>${time}</td>
+      <td class="match">
+        <div class="team-container">
+          <span class="team-name">${match[0]}</span>
+        </div>
+        :
+        <div class="team-container">
+          <span class="team-name">${match[1]}</span>
+        </div>
+        <div class="score-container">
+          <input class="score-input" type="number" min="0" value="${score[0]}" data-team="${match[0]}" data-group="${groupName}" data-match-index="${index}" />
+          <span>:</span>
+          <input class="score-input" type="number" min="0" value="${score[1]}" data-team="${match[1]}" data-group="${groupName}" data-match-index="${index}" />
+        </div>
+      </td>
+    `;
+    table.appendChild(row);
+  });
+
+  tableResponsive.appendChild(table);
+  return fieldDiv;
+}
+
+
+      function handleScoreInputChange(e) {
+        let val = e.target.value;
+        if (isNaN(val) || val < 0) {
+          e.target.classList.add("invalid");
+          e.target.value = 0;
+        } else {
+          e.target.classList.remove("invalid");
+        }
+        saveScoresToLocalStorage();
+      }
+
+function getFinalScores() {
+  const score1 = parseInt(document.getElementById('final-score1').value,10) || 0;
+  const score2 = parseInt(document.getElementById('final-score2').value,10) || 0;
+  return { score1, score2 };
+}
+
+      function saveScoresToLocalStorage() {
+        const data = { groups: {}, placement: [], final: {} };
+        // Gruppen
+        const groupInputs = document.querySelectorAll('.score-input[data-group]');
+        groupInputs.forEach(input => {
+          const group = input.dataset.group;
+          const matchIndex = input.dataset.matchIndex;
+          if (!data.groups[group]) data.groups[group] = {};
+          if (!data.groups[group][matchIndex]) data.groups[group][matchIndex] = [];
+          data.groups[group][matchIndex].push(parseInt(input.value, 10) || 0);
+        });
+
+        // Platzierungsspiele
+        const placementMatches = getPlacementMatchData();
+        data.placement = placementMatches.map(m => {
+          return {teams: m.teams, scores: m.scores};
+        });
+
+        // Finale
+        const finalData = getFinalScores();
+        data.final = finalData;
+
+        localStorage.setItem('scores', JSON.stringify(data));
+      }
+
+      function loadScoresFromLocalStorage() {
+        const data = JSON.parse(localStorage.getItem('scores') || '{}');
+        if (data.groups) {
+          for (const groupName in data.groups) {
+            for (const matchIndex in data.groups[groupName]) {
+              const values = data.groups[groupName][matchIndex];
+              const inputs = document.querySelectorAll(`.score-input[data-group="${groupName}"][data-match-index="${matchIndex}"]`);
+              if (inputs.length === 2) {
+                inputs[0].value = values[0] || 0;
+                inputs[1].value = values[1] || 0;
+              }
+            }
+          }
+        }
+
+        if (data.placement && data.placement.length > 0) {
+          applyPlacementData(data.placement);
+        }
+
+        if (data.final) {
+          document.getElementById('final-score1').value = data.final.score1 || 0;
+          document.getElementById('final-score2').value = data.final.score2 || 0;
+        }
+      }
+	      
+function updateColors() {
+  const now = new Date();
+  const currentTime = now.getHours() * 60 + now.getMinutes();
+
+  // Ab 13:00 Uhr alle Farben zurücksetzen
+  if (currentTime >= 13 * 60) {
+    document.querySelectorAll("table tr[data-time]").forEach(row => {
+      row.classList.remove("past", "current", "next");
+    });
+    return;
+  }
+
+  document.querySelectorAll("table tr[data-time]").forEach(row => {
+    const [hours, minutes] = row.dataset.time.split(":").map(Number);
+    const rowTime = hours * 60 + minutes;
+    const endTime = rowTime + 10;
+
+    row.classList.remove("past", "current", "next");
+
+    if (rowTime + 10 < currentTime) {
+      row.classList.add("past");
+    } else if (rowTime <= currentTime && endTime >= currentTime) {
+      row.classList.add("current");
+    } else if (rowTime - currentTime < 11) {
+      row.classList.add("next");
+    }
+  });
+}
+
+      function evaluateGroupPhase() {
+        let allResults = [];
+        let incompleteDataFound = false;
+        placements = {};
+
+        const groupNames = Object.keys(groups);
+        groupNames.forEach(g => {
+          const {results, incompleteData} = evaluateScoresForGroup(g);
+          if (incompleteData) incompleteDataFound = true;
+          allResults = allResults.concat(results);
+          placements[g] = results; 
+        });
+
+        displayPhaseResults(allResults, incompleteDataFound, "Gruppenphase-Ergebnisse", true, "gruppen-container");
+        fillPlacementMatches();
+        saveScoresToLocalStorage();
+      }
+
+      function evaluatePlacementPhase() {
+        const placementResults = evaluatePlacementMatches();
+        placementResultsGlobal = placementResults.results; 
+        displayPhaseResults(placementResults.results, placementResults.incompleteData, "Platzierungsspiele-Ergebnisse", false, "platzierungsspiele-container");
+
+        if (placementResults.results.length > 0) {
+          const topTeam = placementResults.results[0].team;
+          document.getElementById('final-team1').textContent = topTeam;
+        } else {
+          document.getElementById('final-team1').textContent = "Noch kein Sieger";
+        }
+
+        saveScoresToLocalStorage();
+      }
+
+function evaluateFinal() {
+  const team1 = document.getElementById('final-team1').textContent;
+  const team2 = document.getElementById('final-team2').textContent;
+
+  const val1 = parseInt(document.getElementById('final-score1').value,10);
+  const val2 = parseInt(document.getElementById('final-score2').value,10);
+
+  const score1 = isNaN(val1)?0:val1;
+  const score2 = isNaN(val2)?0:val2;
+
+  const incompleteData = (isNaN(val1) || isNaN(val2));
+
+  let winner = null;
+  if (score1 > score2) {
+    winner = team1;
+  } else if (score2 > score1) {
+    winner = team2;
+  }
+
+  return {team1, team2, score1, score2, winner, incompleteData};
+}
+function evaluateFinalPhase() {
+  const finalResult = evaluateFinal();
+  if (finalResult) {
+    finalWinner = finalResult.winner;
+    finalLoser = (finalResult.winner === finalResult.team1) ? finalResult.team2 : finalResult.team1;
+    displayFinalSummary(finalResult); 
+  }
+  saveScoresToLocalStorage();
+}
+
+      function evaluateScoresForGroup(groupName) {
+        const results = {};
+        let incompleteData = false;
+
+        let parentTable;
+        const allHeadings = document.querySelectorAll("h3");
+        allHeadings.forEach(h3 => {
+          if (h3.innerText === groupName) {
+            parentTable = h3.parentNode.querySelector("table");
+          }
+        });
+
+        if (!parentTable) return {results: [], incompleteData: false};
+
+        const rows = parentTable.querySelectorAll("tr[data-time]");
+        rows.forEach((row, index) => {
+          const inputs = row.querySelectorAll(".score-input");
+          if (inputs.length === 2) {
+            const val1 = parseInt(inputs[0].value, 10);
+            const val2 = parseInt(inputs[1].value, 10);
+
+            if (isNaN(val1) || isNaN(val2)) {
+              incompleteData = true;
+            }
+
+            const score1 = isNaN(val1) ? 0 : val1;
+            const score2 = isNaN(val2) ? 0 : val2;
+
+            const team1 = inputs[0].dataset.team;
+            const team2 = inputs[1].dataset.team;
+
+            if (!results[team1]) results[team1] = { wins: 0, scored: 0, allowed: 0 };
+            if (!results[team2]) results[team2] = { wins: 0, scored: 0, allowed: 0 };
+
+            results[team1].scored += score1;
+            results[team1].allowed += score2;
+            results[team2].scored += score2;
+            results[team2].allowed += score1;
+
+            if (score1 > score2) {
+              results[team1].wins += 1;
+            } else if (score2 > score1) {
+              results[team2].wins += 1;
+            }
+          }
+        });
+
+        const sortedResults = Object.keys(results).map(teamName => {
+          return {
+            group: groupName,
+            team: teamName,
+            wins: results[teamName].wins,
+            diff: results[teamName].scored - results[teamName].allowed,
+            scored: results[teamName].scored
+          };
+        }).sort((a, b) => {
+          if (b.wins !== a.wins) return b.wins - a.wins;
+          if (b.diff !== a.diff) return b.diff - a.diff;
+          if (b.scored !== a.scored) return b.scored - a.scored;
+          return a.team.localeCompare(b.team);
+        });
+
+        return {results: sortedResults, incompleteData};
+      }
+
+      function displayPhaseResults(results, incompleteData, phaseTitle, isGroupPhase, containerId) {
+        const oldResults = document.getElementById(phaseTitle);
+        if (oldResults) oldResults.remove();
+
+        const resultContainer = document.createElement("div");
+        resultContainer.id = phaseTitle;
+        resultContainer.className = "result-container";
+
+        const heading = document.createElement("h3");
+        heading.innerText = phaseTitle;
+        resultContainer.appendChild(heading);
+
+        const searchContainer = document.createElement("div");
+        searchContainer.className = "search-container";
+        const searchInput = document.createElement("input");
+        searchInput.type = "text";
+        searchInput.className = "search-input";
+        searchInput.placeholder = "Team suchen...";
+        searchInput.addEventListener('input', () => filterResults(phaseTitle, searchInput.value, isGroupPhase));
+        searchContainer.appendChild(searchInput);
+        resultContainer.appendChild(searchContainer);
+
+        if (incompleteData) {
+          const warningEl = document.createElement('p');
+          warningEl.className = 'warning';
+          warningEl.innerText = "Einige Spiele hatten unvollständige Punktedaten. Es wurden 0 Punkte angenommen.";
+          resultContainer.appendChild(warningEl);
+        }
+
+        const table = document.createElement("table");
+        table.className = "result-table";
+
+        table.innerHTML = isGroupPhase ? `
+          <thead>
+            <tr>
+              <th>Gruppe</th>
+              <th>Platz</th>
+              <th>Team</th>
+              <th>Siege</th>
+              <th>Punktedifferenz</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        ` : `
+          <thead>
+            <tr>
+              <th>Platz</th>
+              <th>Team</th>
+              <th>Siege</th>
+              <th>Punktedifferenz</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        `;
+
+        const tbody = table.querySelector("tbody");
+
+        if (isGroupPhase) {
+          const groupedResults = {};
+          results.forEach(res => {
+            if (!groupedResults[res.group]) groupedResults[res.group] = [];
+            groupedResults[res.group].push(res);
+          });
+
+          for (const g in groupedResults) {
+            const groupArray = groupedResults[g];
+            groupArray.forEach((res, index) => {
+              const tr = document.createElement("tr");
+              if (index === 0) tr.classList.add("leader-row");
+              tr.innerHTML = `
+                <td>${g}</td>
+                <td>${index + 1}</td>
+                <td>${res.team}</td>
+                <td>${res.wins}</td>
+                <td>${res.diff}</td>
+              `;
+              tbody.appendChild(tr);
+            });
+          }
+        } else {
+          results.forEach((res, index) => {
+            const tr = document.createElement("tr");
+            if (index === 0) tr.classList.add("leader-row");
+            tr.innerHTML = `
+              <td>${index + 1}</td>
+              <td>${res.team}</td>
+              <td>${res.wins}</td>
+              <td>${res.diff}</td>
+            `;
+            tbody.appendChild(tr);
+          });
+        }
+
+        resultContainer.appendChild(table);
+
+        const container = document.getElementById(containerId);
+        container.parentNode.insertBefore(resultContainer, container.nextSibling);
+      }
+
+      function filterResults(resultTableId, query, isGroupPhase) {
+        const resultContainer = document.getElementById(resultTableId);
+        if (!resultContainer) return;
+        const rows = resultContainer.querySelectorAll("tbody tr");
+        query = query.toLowerCase();
+        let teamCol = isGroupPhase ? 3 : 2;
+        rows.forEach(row => {
+          const teamCell = row.querySelector(`td:nth-child(${teamCol})`);
+          const teamName = teamCell ? teamCell.innerText.toLowerCase() : "";
+          row.style.display = teamName.includes(query) ? "" : "none";
+        });
+      }
+
+function getBracketFromPlaceholder(placeholder) {
+  const match = placeholder.match(/^(\d+)\. Gruppe ([ABC])$/);
+  if (!match) return null;
+  const rank = parseInt(match[1], 10);
+  return rank; // Rank entspricht dem Bracket: 1 = Plätze 1-3, 2 = Plätze 4-6, ...
+}
+
+// Erweitere setTeamNameFromPlaceholder, um den Teams zusätzlich ein data-bracket zu geben
+function setTeamNameFromPlaceholder(input) {
+  const placeholder = input.getAttribute('placeholder');
+  if (input.getAttribute('data-user-override') === 'true') return;
+
+  const bracket = getBracketFromPlaceholder(placeholder);
+  if (bracket) {
+    input.setAttribute('data-bracket', bracket);
+  }
+
+  const match = placeholder.match(/^(\d+)\. Gruppe ([ABC])$/);
+  if (match) {
+    const rank = parseInt(match[1], 10);
+    const groupLetter = match[2];
+    const fullGroupName = groupNameMap["Gruppe " + groupLetter];
+    if (placements[fullGroupName] && placements[fullGroupName][rank - 1]) {
+      const teamName = placements[fullGroupName][rank - 1].team;
+      input.value = teamName;
+      input.readOnly = false; 
+    } else {
+      input.value = "N/A";
+      input.readOnly = false; 
+    }
+  }
+}
+function convertPlacementInputsToMatches() {
+  const placementRows = document.querySelectorAll('#platzierungsspiele-container .field table tr[data-time]');
+  placementRows.forEach(row => {
+    const cell = row.querySelector('td:nth-child(2)');
+    const txtInputs = cell.querySelectorAll('input[type="text"]');
+    if (txtInputs.length === 2) {
+      const team1 = txtInputs[0].value;
+      const team2 = txtInputs[1].value;
+
+      const override1 = txtInputs[0].getAttribute('data-user-override');
+      const override2 = txtInputs[1].getAttribute('data-user-override');
+
+      // Bracket-Infos übernehmen
+      const bracket1 = txtInputs[0].getAttribute('data-bracket') || "";
+      const bracket2 = txtInputs[1].getAttribute('data-bracket') || "";
+
+      cell.innerHTML = `
+        <div class="match">
+          <div class="team-container">
+            <input type="text" value="${team1}" data-user-override="${override1}" data-bracket="${bracket1}" />
+          </div>
+          :
+          <div class="team-container">
+            <input type="text" value="${team2}" data-user-override="${override2}" data-bracket="${bracket2}" />
+          </div>
+          <div class="score-container">
+            <input class="score-input placement-score" type="number" min="0" value="0" data-team="${team1}" data-bracket="${bracket1}"/>
+            <span>:</span>
+            <input class="score-input placement-score" type="number" min="0" value="0" data-team="${team2}" data-bracket="${bracket2}"/>
+          </div>
+        </div>
+      `;
+
+      const newInputs = cell.querySelectorAll('input[type="text"]');
+      newInputs.forEach(inp => {
+        inp.addEventListener('input', (e) => {
+          e.target.setAttribute('data-user-override', 'true');
+          saveScoresToLocalStorage();
+        });
+      });
+    }
+  });
+}
+      function fillPlacementMatches() {
+        const placementRows = document.querySelectorAll('#platzierungsspiele-container .field table tr[data-time]');
+        placementRows.forEach(row => {
+          const inputs = row.querySelectorAll('input[placeholder]');
+          inputs.forEach(input => {
+            setTeamNameFromPlaceholder(input);
+          });
+        });
+
+        convertPlacementInputsToMatches();
+        const placementScoreInputs = document.querySelectorAll('.placement-score');
+        placementScoreInputs.forEach(input => {
+          input.addEventListener('input', handleScoreInputChange);
+        });
+      }
+
+      function getPlacementMatchData() {
+        const placementRows = document.querySelectorAll('#platzierungsspiele-container .field table tr[data-time]');
+        const matches = [];
+        placementRows.forEach(row => {
+          const matchObj = {teams:[],scores:[]};
+          const matchContainer = row.querySelector('.match');
+          if (matchContainer) {
+            const teamInputs = matchContainer.querySelectorAll('input[type="text"]');
+            const scoreInputs = matchContainer.querySelectorAll('.placement-score');
+            teamInputs.forEach(tn => matchObj.teams.push(tn.value));
+            scoreInputs.forEach(si => matchObj.scores.push(parseInt(si.value,10)||0));
+            matches.push(matchObj);
+          } else {
+            const inputs = row.querySelectorAll('input[type="text"]');
+            if (inputs.length === 2) {
+              matchObj.teams.push(inputs[0].value);
+              matchObj.teams.push(inputs[1].value);
+              matchObj.scores = [0,0];
+              matches.push(matchObj);
+            }
+          }
+        });
+        return matches;
+      }
+
+      function applyPlacementData(placementData) {
+        // Lade Daten ins UI
+        const placementRows = document.querySelectorAll('#platzierungsspiele-container .field table tr[data-time]');
+        placementRows.forEach((row, index) => {
+          const match = placementData[index];
+          if (match && match.teams.length === 2) {
+            const cell = row.querySelector('td:nth-child(2)');
+            if (cell.querySelector('.match')) {
+              const teamInputs = cell.querySelectorAll('.match input[type="text"]');
+              const scoreInputs = cell.querySelectorAll('.placement-score');
+
+              if (teamInputs.length === 2) {
+                // Teams beibehalten, da manuell änderbar
+                teamInputs[0].value = match.teams[0];
+                teamInputs[1].value = match.teams[1];
+              }
+              if (scoreInputs.length === 2) {
+                scoreInputs[0].value = match.scores[0] || 0;
+                scoreInputs[1].value = match.scores[1] || 0;
+              }
+            } else {
+              // Noch nicht konvertiert
+              cell.innerHTML = `
+                <div class="match">
+                  <div class="team-container">
+                    <input type="text" value="${match.teams[0]}" data-user-override="false"/>
+                  </div>
+                  :
+                  <div class="team-container">
+                    <input type="text" value="${match.teams[1]}" data-user-override="false"/>
+                  </div>
+                  <div class="score-container">
+                    <input class="score-input placement-score" type="number" min="0" value="${match.scores[0]||0}" data-team="${match.teams[0]}"/>
+                    <span>:</span>
+                    <input class="score-input placement-score" type="number" min="0" value="${match.scores[1]||0}" data-team="${match.teams[1]}"/>
+                  </div>
+                </div>
+              `;
+
+              cell.querySelectorAll('input[type="text"]').forEach(inp => {
+                inp.addEventListener('input', (e) => {
+                  e.target.setAttribute('data-user-override', 'true');
+                  saveScoresToLocalStorage();
+                });
+              });
+
+              cell.querySelectorAll('.placement-score').forEach(inp => {
+                inp.addEventListener('input', handleScoreInputChange);
+              });
+            }
+          }
+        });
+      }
+function evaluatePlacementMatches() {
+  const rows = document.querySelectorAll('#platzierungsspiele-container .field table tr[data-time]');
+  const results = [];
+  const teamData = {};
+  let incompleteData = false;
+
+  rows.forEach(row => {
+    const scoreInputs = row.querySelectorAll('.placement-score');
+    if (scoreInputs.length === 2) {
+      const team1 = scoreInputs[0].dataset.team;
+      const team2 = scoreInputs[1].dataset.team;
+      const bracket1 = parseInt(scoreInputs[0].dataset.bracket, 10) || null;
+      const bracket2 = parseInt(scoreInputs[1].dataset.bracket, 10) || null;
+
+      const val1 = parseInt(scoreInputs[0].value,10);
+      const val2 = parseInt(scoreInputs[1].value,10);
+
+      if (isNaN(val1) || isNaN(val2)) {
+        incompleteData = true;
+      }
+
+      const score1 = isNaN(val1)?0:val1;
+      const score2 = isNaN(val2)?0:val2;
+
+      // Falls keine Teams gesetzt sind, überspringen
+      if (!team1 || !team2) {
+        return;
+      }
+
+      // Team-Daten initialisieren falls nötig
+      if (!teamData[team1]) teamData[team1] = { wins: 0, scored: 0, allowed: 0, bracket: bracket1 };
+      if (!teamData[team2]) teamData[team2] = { wins: 0, scored: 0, allowed: 0, bracket: bracket2 };
+
+      teamData[team1].scored += score1;
+      teamData[team1].allowed += score2;
+      teamData[team2].scored += score2;
+      teamData[team2].allowed += score1;
+
+      if (score1 > score2) {
+        teamData[team1].wins += 1;
+      } else if (score2 > score1) {
+        teamData[team2].wins += 1;
+      }
+    }
+  });
+
+  // Nach Brackets gruppieren
+  const bracketGroups = {};
+  for (const t in teamData) {
+    const bd = teamData[t];
+    if (!bd.bracket) continue; // Falls aus irgendeinem Grund kein Bracket vorhanden ist
+    if (!bracketGroups[bd.bracket]) bracketGroups[bd.bracket] = [];
+    bracketGroups[bd.bracket].push({
+      team: t,
+      wins: bd.wins,
+      diff: bd.scored - bd.allowed,
+      scored: bd.scored
+    });
+  }
+
+  // Jedes Bracket intern sortieren
+  for (const br in bracketGroups) {
+    bracketGroups[br].sort((a, b) => {
+      if (b.wins !== a.wins) return b.wins - a.wins;
+      if (b.diff !== a.diff) return b.diff - a.diff;
+      if (b.scored !== a.scored) return b.scored - a.scored;
+      return a.team.localeCompare(b.team);
+    });
+  }
+
+  // Jetzt die Brackets in der korrekten Reihenfolge platzieren:
+  // Bracket 1: Plätze 1-3
+  // Bracket 2: Plätze 4-6
+  // Bracket 3: Plätze 7-9
+  // usw.
+  // Wir setzen voraus, dass jedes Bracket genau 3 Teams hat.
+  // Falls weniger, muss man entsprechend anpassen.
+  const sortedBrackets = Object.keys(bracketGroups).map(b => parseInt(b)).sort((a,b)=>a-b);
   
-  <h3>Spieler hinzufügen</h3>
-  <form id="addPlayerForm" class="add-player-form">
-    <input type="text" id="playerName" placeholder="Name" required>
-    <select id="playerType" required>
-      <option value="" disabled selected>Erwachsen/Jugend</option>
-      <option value="adult">Erwachsene/r</option>
-      <option value="youth">Jugend</option>
-    </select>
-    <select id="playerPosition">
-      <option value="" disabled selected>Position (nur Erwachsene)</option>
-      <option value="MB">MB</option>
-      <option value="AA">AA</option>
-      <option value="Z">Z</option>
-    </select>
-    <select id="playerLeistung" required>
-      <option value="" disabled selected>Leistung</option>
-      <option value="1">1 - Sehr gut</option>
-      <option value="2">2 - Gut</option>
-      <option value="3">3 - Weniger gut</option>
-    </select>
-    <select id="playerGeschlecht" required>
-      <option value="" disabled selected>Geschlecht</option>
-      <option value="M">Männlich</option>
-      <option value="F">Weiblich</option>
-    </select>
-    <button type="submit" class="button">Hinzufügen</button>
-  </form>
-  <div id="playerMessage" class="message"></div>
-</div>
+  let currentStartPlace = 1;
+  sortedBrackets.forEach(br => {
+    const group = bracketGroups[br];
+    group.forEach((res, idx) => {
+      results.push({
+        team: res.team,
+        wins: res.wins,
+        diff: res.diff,
+        scored: res.scored,
+        finalPlace: currentStartPlace + idx
+      });
+    });
+    currentStartPlace += group.length; // normal 3 Teams pro Bracket
+  });
 
-<!-- Teams Losen -->
-<div class="section">
-  <h2>Teams Losen</h2>
+  // finalPlace ist nun die endgültige Platzierung. Wir sortieren results nach finalPlace:
+  results.sort((a,b) => a.finalPlace - b.finalPlace);
 
-  <!-- Checkboxen -->
-  <div>
-    <label><input type="checkbox" id="useLeistung" checked>Nach Leistung berücksichtigen?</label>
-    <label style="margin-left:20px;"><input type="checkbox" id="useGeschlecht" checked>Nach Geschlecht berücksichtigen?</label>
-    <label style="margin-left:20px;"><input type="checkbox" id="usePosition" checked>Nach Position berücksichtigen?</label>
-  </div>
+  return {results, incompleteData};
+}
 
-  <div style="margin-top:20px;">
-    <label>Anzahl der Erwachsenenfelder:</label>
-    <input type="number" id="adultFields" value="3" style="width: 50px;">
-    <label style="margin-left:20px;">Anzahl der Jugendfelder:</label>
-    <input type="number" id="youthFields" value="3" style="width: 50px;">
-  </div>
+function displayFinalSummary(finalRes) {
+  const oldFinal = document.getElementById("Final-Ergebnis");
+  if (oldFinal) oldFinal.remove();
+  const oldOverview = document.getElementById("Gesamt-Übersicht");
+  if (oldOverview) oldOverview.remove();
 
-  <div style="margin-top:20px;">
-    <label>Erwachsene pro Erwachsenen-Team:</label>
-    <input type="number" id="adultTeamSize" value="6" min="1" style="width: 50px;">
-  </div>
-  <div style="margin-top:20px;">
-    <label>Erwachsene pro Team Jugend:</label>
-    <input type="number" id="adultPerMixedTeam" value="1" min="1" style="width: 50px;">
-  </div>
-  <div style="margin-top:20px;">
-    <label>Jugendspieler pro Team Jugend:</label>
-    <input type="number" id="youthPerMixedTeam" value="2" min="1" style="width: 50px;">
-  </div>
+  // Container für Zusammenfassung
+  const summaryContainer = document.createElement("div");
+  summaryContainer.id = "Final-Übersicht";
+  summaryContainer.className = "result-container";
 
-  <button id="previewButton" class="button" style="margin-top:20px;">Vorschau Losen</button>
-  <button id="applyPreviewButton" class="button" disabled>Anwenden</button>
-  <button id="exportButton" class="button export-button">Ergebnisse Exportieren</button>
+  const heading = document.createElement("h3");
+  heading.innerText = "Finale und Gesamtübersicht";
+  summaryContainer.appendChild(heading);
 
-  <div id="unassignedPlayersSection" class="section" style="display:none;">
-    <h3>Nicht zugeteilte Spieler</h3>
-    <div id="unassignedAdults" class="player-list"><h4>Erwachsene</h4></div>
-    <div id="unassignedYouth" class="player-list"><h4>Jugendspieler</h4></div>
-  </div>
-</div>
+  // Hinweis bei unvollständigen Daten
+  if (finalRes.incompleteData) {
+    const warningEl = document.createElement('p');
+    warningEl.className = 'warning';
+    warningEl.innerText = "Finale hatte unvollständige Punktedaten. Es wurden 0 Punkte angenommen.";
+    summaryContainer.appendChild(warningEl);
+  }
 
-<!-- Ergebnisse -->
-<div class="section" id="resultsSection" style="display:none;">
-  <h2>Ergebnisse</h2>
-
-  <!-- Sortierhinweis: Klick auf Spaltenüberschriften -->
-  <p><strong>Tipp:</strong> Klicke auf <em>Name</em>, <em>Spiele</em> oder <em>Punkte</em>, um danach zu sortieren.</p>
-
-  <h3>Erwachsenenteams</h3>
-  <div id="adultTeamsList" class="team-list"></div>
-  <h3>Gemischte Teams</h3>
-  <div id="mixedTeamsList" class="team-list"></div>
-
-  <h3>Paarungen</h3>
-  <div id="matchesList" class="team-list">
-    <h4>Erwachsenen Matches</h4>
-    <div id="adultMatches"></div>
-    <h4>Gemischte Matches</h4>
-    <div id="mixedMatches"></div>
-  </div>
-
-  <h3>Spielergebnisse und Punkte</h3>
-  <!-- data-sort="..." für Klick-Sortierung -->
-  <table id="pointsTable">
+  // Tabelle mit Finalergebnis
+  const finalTable = document.createElement("table");
+  finalTable.className = "result-table";
+  finalTable.innerHTML = `
     <thead>
       <tr>
-        <th data-sort="name">Name</th>
-        <th data-sort="spiele">Spiele</th>
-        <th data-sort="punkte">Punkte</th>
-        <th>Aktionen</th>
+        <th>Team 1</th>
+        <th>Team 2</th>
+        <th>Ergebnis</th>
+        <th>Sieger</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>${finalRes.team1}</td>
+        <td>${finalRes.team2}</td>
+        <td>${finalRes.score1} : ${finalRes.score2}</td>
+        <td>${finalRes.winner ? finalRes.winner : "Unentschieden"}</td>
+      </tr>
+    </tbody>
+  `;
+  summaryContainer.appendChild(finalTable);
+
+  // Gesamtübersicht aller Teams
+  const allTeamsRanked = [];
+  if (finalWinner) {
+    allTeamsRanked.push({team: finalWinner, place: 1});
+  }
+  if (finalLoser && finalLoser !== finalWinner) {
+    allTeamsRanked.push({team: finalLoser, place: 2});
+  }
+
+  let startPlace = allTeamsRanked.length + 1;
+  placementResultsGlobal.forEach((res, i) => {
+    const thisPlace = startPlace + i;
+    if (res.team !== finalWinner && res.team !== finalLoser) {
+      allTeamsRanked.push({team: res.team, place: thisPlace});
+    }
+  });
+
+  const overviewHeading = document.createElement("h4");
+  overviewHeading.innerText = "Endgültige Platzierungen aller Teams:";
+  overviewHeading.style.marginTop = "30px";
+  summaryContainer.appendChild(overviewHeading);
+
+  const overviewTable = document.createElement("table");
+  overviewTable.className = "result-table";
+  overviewTable.innerHTML = `
+    <thead>
+      <tr>
+        <th>Platz</th>
+        <th>Team</th>
       </tr>
     </thead>
     <tbody></tbody>
-  </table>
-</div>
-
-<!-- Feedback Modal -->
-<div id="feedbackModal" class="modal">
-  <div class="modal-content">
-    <span class="close">&times;</span>
-    <h2>Vorschau der Teams</h2>
-    <div id="feedbackContent"></div>
-  </div>
-</div>
-
-<script>
-/* ---------------------------------------------
-   1) Globale Variablen
---------------------------------------------- */
-let adultPlayers = [
-  { Name: "Alex K.", Position: "MB", Leistung: "3", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Leon K.", Position: "MB", Leistung: "1", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Franzi K.", Position: "AA", Leistung: "1", Geschlecht: "F", Spiele: 0, Punkte: 0 },
-  { Name: "Monja B.", Position: "MB", Leistung: "2", Geschlecht: "F", Spiele: 0, Punkte: 0 },
-  { Name: "Ali K.", Position: "Z", Leistung: "1", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Anna R.", Position: "AA", Leistung: "2", Geschlecht: "F", Spiele: 0, Punkte: 0 },
-  { Name: "Ben B.", Position: "MB", Leistung: "1", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Caro S.", Position: "MB", Leistung: "1", Geschlecht: "F", Spiele: 0, Punkte: 0 },
-  { Name: "Daniel E.", Position: "AA", Leistung: "2", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Daria A.", Position: "AA", Leistung: "1", Geschlecht: "F", Spiele: 0, Punkte: 0 },
-  { Name: "Elias K.", Position: "AA", Leistung: "1", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Elias S.", Position: "AA", Leistung: "1", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Emily K.", Position: "AA", Leistung: "1", Geschlecht: "F", Spiele: 0, Punkte: 0 },
-  { Name: "Fabian D.", Position: "MB", Leistung: "1", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Felina S.", Position: "AA", Leistung: "1", Geschlecht: "F", Spiele: 0, Punkte: 0 },
-  { Name: "Felix K.", Position: "AA", Leistung: "3", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Karrrrle", Position: "AA", Leistung: "1", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Florian B.", Position: "AA", Leistung: "1", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Helene M.", Position: "AA", Leistung: "3", Geschlecht: "F", Spiele: 0, Punkte: 0 },
-  { Name: "Helene Maneth", Position: "AA", Leistung: "3", Geschlecht: "F", Spiele: 0, Punkte: 0 },
-  { Name: "Ida B.", Position: "MB", Leistung: "2", Geschlecht: "F", Spiele: 0, Punkte: 0 },
-  { Name: "Jan K.", Position: "MB", Leistung: "2", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Jannis E.", Position: "AA", Leistung: "1", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Jannis H.", Position: "AA", Leistung: "1", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Jannis W.", Position: "MB", Leistung: "2", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Joel D.", Position: "AA", Leistung: "2", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Johanna S.", Position: "MB", Leistung: "1", Geschlecht: "F", Spiele: 0, Punkte: 0 },
-  { Name: "Flo R.", Position: "AA", Leistung: "1", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Chris K.", Position: "AA", Leistung: "1", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Lauresa O.", Position: "AA", Leistung: "1", Geschlecht: "F", Spiele: 0, Punkte: 0 },
-  { Name: "Hannah B.", Position: "AA", Leistung: "2", Geschlecht: "F", Spiele: 0, Punkte: 0 },
-
-  { Name: "Jonas Labisch", Position: "Z", Leistung: "1", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Paul L.", Position: "Z", Leistung: "1", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Jonas Lingel.", Position: "Z", Leistung: "1", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Julian S.", Position: "AA", Leistung: "3", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Katharina B.", Position: "AA", Leistung: "2", Geschlecht: "F", Spiele: 0, Punkte: 0 },
-  { Name: "Katja H.", Position: "Z", Leistung: "2", Geschlecht: "F", Spiele: 0, Punkte: 0 },
-  { Name: "Lara K.", Position: "MB", Leistung: "1", Geschlecht: "F", Spiele: 0, Punkte: 0 },
-  { Name: "Leah B.", Position: "AA", Leistung: "3", Geschlecht: "F", Spiele: 0, Punkte: 0 },
-  { Name: "Marus H.", Position: "AA", Leistung: "1", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Lenard S.", Position: "Z", Leistung: "1", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Leni J.", Position: "AA", Leistung: "2", Geschlecht: "F", Spiele: 0, Punkte: 0 },
-  { Name: "Leo B.", Position: "AA", Leistung: "3", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Lina M.", Position: "AA", Leistung: "2", Geschlecht: "F", Spiele: 0, Punkte: 0 },
-  { Name: "Linus W.", Position: "AA", Leistung: "1", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Lucie N.", Position: "AA", Leistung: "3", Geschlecht: "F", Spiele: 0, Punkte: 0 },
-  { Name: "Martin U.", Position: "Z", Leistung: "2", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Max D.", Position: "AA", Leistung: "3", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Michi H.", Position: "AA", Leistung: "1", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Mieke K.", Position: "AA", Leistung: "1", Geschlecht: "F", Spiele: 0, Punkte: 0 },
-  { Name: "Nelly A.", Position: "MB", Leistung: "1", Geschlecht: "F", Spiele: 0, Punkte: 0 },
-  { Name: "Nicklas K.", Position: "MB", Leistung: "1", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Nikita S.", Position: "AA", Leistung: "3", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Patrick S.", Position: "AA", Leistung: "1", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Philipp K.", Position: "Z", Leistung: "3", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Pius M.", Position: "Z", Leistung: "1", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Robin W.", Position: "Z", Leistung: "3", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Ronja B.", Position: "AA", Leistung: "1", Geschlecht: "F", Spiele: 0, Punkte: 0 },
-  { Name: "Rune D.", Position: "Z", Leistung: "1", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Sara T.", Position: "Z", Leistung: "1", Geschlecht: "F", Spiele: 0, Punkte: 0 },
-  { Name: "Niko K.", Position: "AA", Leistung: "1", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Ludo N.", Position: "AA", Leistung: "1", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Sebastian M.", Position: "AA", Leistung: "3", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Steffi G.", Position: "Z", Leistung: "1", Geschlecht: "F", Spiele: 0, Punkte: 0 },
-  { Name: "Tom W.", Position: "AA", Leistung: "1", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Vica M.", Position: "Z", Leistung: "2", Geschlecht: "F", Spiele: 0, Punkte: 0 }
-];
-
-let youthPlayers = [
-  { Name: "Noah E.", Leistung: "2", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Frieda M.", Leistung: "2", Geschlecht: "F", Spiele: 0, Punkte: 0 },
-  { Name: "Julia E.", Leistung: "2", Geschlecht: "F", Spiele: 0, Punkte: 0 },
-  { Name: "Elena C.", Leistung: "3", Geschlecht: "F", Spiele: 0, Punkte: 0 },
-  { Name: "Noemi R.", Leistung: "2", Geschlecht: "F", Spiele: 0, Punkte: 0 },
-  { Name: "Mirjam K.", Leistung: "2", Geschlecht: "F", Spiele: 0, Punkte: 0 },
-  { Name: "Jakob K.", Leistung: "3", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Bennett G.", Leistung: "2", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Annelie M.", Leistung: "3", Geschlecht: "F", Spiele: 0, Punkte: 0 },
-  { Name: "Alex Z.", Leistung: "2", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Laurenz J.", Leistung: "2", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "David S.", Leistung: "1", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Elya M.", Leistung: "3", Geschlecht: "F", Spiele: 0, Punkte: 0 },
-  { Name: "Emilia Hauf.", Leistung: "2", Geschlecht: "F", Spiele: 0, Punkte: 0 },
-  { Name: "Leila O.", Leistung: "2", Geschlecht: "F", Spiele: 0, Punkte: 0 }
-];
-
-// Arrays für unassigned
-let unassignedAdultsGlobal = [];
-let unassignedYouthGlobal = [];
-
-// Teams
-let adultTeams = [];
-let mixedTeams = [];
-
-// Preview
-let previewAdultTeams = [];
-let previewMixedTeams = [];
-
-// Undo
-let historyStack = [];
-
-/* ---------------------------------------------
-   2) DOM-Referenzen
---------------------------------------------- */
-const playerListDiv = document.getElementById('playerList');
-const addPlayerForm = document.getElementById('addPlayerForm');
-const playerMessageDiv = document.getElementById('playerMessage');
-
-const unassignedPlayersSection = document.getElementById('unassignedPlayersSection');
-const unassignedAdultsDiv = document.getElementById('unassignedAdults');
-const unassignedYouthDiv = document.getElementById('unassignedYouth');
-
-const resultsSection = document.getElementById('resultsSection');
-const adultTeamsListDiv = document.getElementById('adultTeamsList');
-const mixedTeamsListDiv = document.getElementById('mixedTeamsList');
-const adultMatchesDiv = document.getElementById('adultMatches');
-const mixedMatchesDiv = document.getElementById('mixedMatches');
-const pointsTableBody = document.querySelector('#pointsTable tbody');
-
-const undoButton = document.getElementById('undoButton');
-const previewButton = document.getElementById('previewButton');
-const applyPreviewButton = document.getElementById('applyPreviewButton');
-const exportButton = document.getElementById('exportButton');
-
-const adultFieldsInput = document.getElementById('adultFields');
-const youthFieldsInput = document.getElementById('youthFields');
-const adultTeamSizeInput = document.getElementById('adultTeamSize');
-const adultPerMixedTeamInput = document.getElementById('adultPerMixedTeam');
-const youthPerMixedTeamInput = document.getElementById('youthPerMixedTeam');
-
-/* ---------------------------------------------
-   3) Daten Laden / Speichern
---------------------------------------------- */
-function loadData() {
-  const savedAdults = localStorage.getItem('adultPlayers');
-  const savedYouth = localStorage.getItem('youthPlayers');
-  const savedAdultTeams = localStorage.getItem('adultTeams');
-  const savedMixedTeams = localStorage.getItem('mixedTeams');
-  const savedPoints = localStorage.getItem('points');
-  const savedUnassignedAdults = localStorage.getItem('unassignedAdultsGlobal');
-  const savedUnassignedYouth = localStorage.getItem('unassignedYouthGlobal');
-
-  if (savedAdults) adultPlayers = JSON.parse(savedAdults);
-  if (savedYouth) youthPlayers = JSON.parse(savedYouth);
-  if (savedAdultTeams) adultTeams = JSON.parse(savedAdultTeams);
-  if (savedMixedTeams) mixedTeams = JSON.parse(savedMixedTeams);
-
-  if (savedPoints) {
-    const pointsData = JSON.parse(savedPoints);
-    adultPlayers.forEach((p, i) => {
-      if (pointsData.adultPlayers[i]) {
-        p.Spiele = pointsData.adultPlayers[i].Spiele;
-        p.Punkte = pointsData.adultPlayers[i].Punkte;
-      }
-    });
-    youthPlayers.forEach((p, i) => {
-      if (pointsData.youthPlayers[i]) {
-        p.Spiele = pointsData.youthPlayers[i].Spiele;
-        p.Punkte = pointsData.youthPlayers[i].Punkte;
-      }
-    });
-  }
-
-  if (savedUnassignedAdults) unassignedAdultsGlobal = JSON.parse(savedUnassignedAdults);
-  if (savedUnassignedYouth) unassignedYouthGlobal = JSON.parse(savedUnassignedYouth);
-}
-
-function saveData() {
-  localStorage.setItem('adultPlayers', JSON.stringify(adultPlayers));
-  localStorage.setItem('youthPlayers', JSON.stringify(youthPlayers));
-  localStorage.setItem('adultTeams', JSON.stringify(adultTeams));
-  localStorage.setItem('mixedTeams', JSON.stringify(mixedTeams));
-
-  const pointsData = {
-    adultPlayers: adultPlayers.map(p => ({ Spiele: p.Spiele, Punkte: p.Punkte })),
-    youthPlayers: youthPlayers.map(p => ({ Spiele: p.Spiele, Punkte: p.Punkte }))
-  };
-  localStorage.setItem('points', JSON.stringify(pointsData));
-
-  localStorage.setItem('unassignedAdultsGlobal', JSON.stringify(unassignedAdultsGlobal));
-  localStorage.setItem('unassignedYouthGlobal', JSON.stringify(unassignedYouthGlobal));
-}
-
-/* ---------------------------------------------
-   4) Undo-Funktion
---------------------------------------------- */
-function saveHistory() {
-  historyStack.push({
-    adultPlayers: JSON.parse(JSON.stringify(adultPlayers)),
-    youthPlayers: JSON.parse(JSON.stringify(youthPlayers))
-  });
-}
-
-function undoLastChange() {
-  if (historyStack.length > 0) {
-    const lastState = historyStack.pop();
-    adultPlayers = lastState.adultPlayers;
-    youthPlayers = lastState.youthPlayers;
-    saveData();
-    renderPlayerList();
-    updatePointsTable();
-  } else {
-    alert("Keine Änderung zum Rückgängig machen.");
-  }
-}
-undoButton.addEventListener('click', undoLastChange);
-
-/* ---------------------------------------------
-   5) Spieler-Listen Rendering
---------------------------------------------- */
-function renderPlayerList() {
-  playerListDiv.innerHTML = '';
-
-  // Erwachsene
-  adultPlayers.forEach((player, index) => {
-    const div = document.createElement('div');
-    div.className = 'player-item adult-player'; // farbliche Hervorhebung
-    div.innerHTML = `
-      <span>[Erw.] ${player.Name} (Pos: ${player.Position || "n/a"}, L: ${player.Leitung}, G: ${player.Geschlecht})</span>
-      <div>
-        <button class="button" onclick="editAdultPlayer(${index})">Bearbeiten</button>
-        <button class="button" onclick="deleteAdultPlayer(${index})">Löschen</button>
-      </div>
+  `;
+  const tbody = overviewTable.querySelector("tbody");
+  allTeamsRanked.forEach(r => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${r.place}</td>
+      <td>${r.team}</td>
     `;
-    playerListDiv.appendChild(div);
+    tbody.appendChild(tr);
   });
+  summaryContainer.appendChild(overviewTable);
 
-  // Jugend
-  youthPlayers.forEach((player, index) => {
-    const div = document.createElement('div');
-    div.className = 'player-item youth-player'; // farbliche Hervorhebung
-    div.innerHTML = `
-      <span>[Jug.] ${player.Name} (L: ${player.Leitung}, G: ${player.Geschlecht})</span>
-      <div>
-        <button class="button" onclick="editYouthPlayer(${index})">Bearbeiten</button>
-        <button class="button" onclick="deleteYouthPlayer(${index})">Löschen</button>
-      </div>
-    `;
-    playerListDiv.appendChild(div);
-  });
+  document.body.appendChild(summaryContainer);
 }
-
-/* Edit-Funktionen */
-window.editAdultPlayer = function(index) {
-  const player = adultPlayers[index];
-  const newName = prompt("Neuen Namen eingeben:", player.Name);
-  if (newName && newName.trim() !== "") {
-    saveHistory();
-    player.Name = newName.trim();
-    saveData();
-    renderPlayerList();
-    updatePointsTable();
-  }
-};
-
-window.editYouthPlayer = function(index) {
-  const player = youthPlayers[index];
-  const newName = prompt("Neuen Namen eingeben:", player.Name);
-  if (newName && newName.trim() !== "") {
-    saveHistory();
-    player.Name = newName.trim();
-    saveData();
-    renderPlayerList();
-    updatePointsTable();
-  }
-};
-
-/* Delete-Funktionen */
-window.deleteAdultPlayer = function(index) {
-  if(confirm(`Möchten Sie ${adultPlayers[index].Name} wirklich löschen?`)){
-    saveHistory();
-    adultPlayers.splice(index, 1);
-    saveData();
-    renderPlayerList();
-    updatePointsTable();
-  }
-};
-
-window.deleteYouthPlayer = function(index) {
-  if(confirm(`Möchten Sie ${youthPlayers[index].Name} wirklich löschen?`)){
-    saveHistory();
-    youthPlayers.splice(index, 1);
-    saveData();
-    renderPlayerList();
-    updatePointsTable();
-  }
-};
-
-/* ---------------------------------------------
-   6) Spieler Hinzufügen
---------------------------------------------- */
-addPlayerForm.addEventListener('submit', function(e) {
-  e.preventDefault();
-  const name = document.getElementById('playerName').value.trim();
-  const type = document.getElementById('playerType').value;
-  const position = document.getElementById('playerPosition').value;
-  const leistung = document.getElementById('playerLeistung').value;
-  const geschlecht = document.getElementById('playerGeschlecht').value;
-
-  if(!name || !type || !leistung || !geschlecht){
-    playerMessageDiv.textContent = "Bitte alle Felder ausfüllen!";
-    playerMessageDiv.className = 'message error';
-    return;
-  }
-
-  // Duplikatscheck
-  if(adultPlayers.some(p => p.Name.toLowerCase() === name.toLowerCase()) ||
-     youthPlayers.some(p => p.Name.toLowerCase() === name.toLowerCase())) {
-    playerMessageDiv.textContent = "Ein Spieler mit diesem Namen existiert bereits.";
-    playerMessageDiv.className = 'message error';
-    return;
-  }
-
-  saveHistory();
-  if(type === 'adult') {
-    adultPlayers.push({
-      Name: name,
-      Position: position || "",
-      Leistung: leistung,
-      Geschlecht: geschlecht,
-      Spiele: 0,
-      Punkte: 0
-    });
-  } else {
-    youthPlayers.push({
-      Name: name,
-      Leistung: leistung,
-      Geschlecht: geschlecht,
-      Spiele: 0,
-      Punkte: 0
-    });
-  }
-
-  addPlayerForm.reset();
-  playerMessageDiv.textContent = `${name} erfolgreich hinzugefügt.`;
-  playerMessageDiv.className = 'message success';
-
-  saveData();
-  renderPlayerList();
-  updatePointsTable();
-});
-
-/* ---------------------------------------------
-   7) Sort-Funktionen (per Klick auf <th>)
---------------------------------------------- */
-document.querySelectorAll('#pointsTable thead th[data-sort]').forEach(th => {
-  th.addEventListener('click', function() {
-    const criterion = th.getAttribute('data-sort'); // "name", "spiele" oder "punkte"
-    sortPlayers(criterion);
-  });
-});
-
-function sortPlayers(criterion) {
-  if (criterion === 'name') {
-    adultPlayers.sort((a,b) => a.Name.localeCompare(b.Name));
-    youthPlayers.sort((a,b) => a.Name.localeCompare(b.Name));
-  } else if (criterion === 'spiele') {
-    adultPlayers.sort((a,b) => a.Spiele - b.Spiele);
-    youthPlayers.sort((a,b) => a.Spiele - b.Spiele);
-  } else if (criterion === 'punkte') {
-    adultPlayers.sort((a,b) => a.Punkte - b.Punkte);
-    youthPlayers.sort((a,b) => a.Punkte - b.Punkte);
-  }
-  updatePointsTable();
-}
-
-/* ---------------------------------------------
-   8) Zuweisungs-Logik
---------------------------------------------- */
-function getAllPlayersForRound() {
-  // Unassigned zuerst
-  const filteredAdults = adultPlayers.filter(
-    p => !unassignedAdultsGlobal.some(u => u.Name === p.Name)
-  );
-  const allAdultPlayers = [...unassignedAdultsGlobal, ...filteredAdults];
-
-  const filteredYouth = youthPlayers.filter(
-    p => !unassignedYouthGlobal.some(u => u.Name === p.Name)
-  );
-  const allYouthPlayers = [...unassignedYouthGlobal, ...filteredYouth];
-
-  // Sortieren nach "Spiele" aufsteigend (Priorität: weniger Spiele)
-  allAdultPlayers.sort((a,b) => a.Spiele - b.Spiele);
-  allYouthPlayers.sort((a,b) => a.Spiele - b.Spiele);
-
-  return { allAdultPlayers, allYouthPlayers };
-}
-
-function isAlreadyUsed(player, usedNamesSet) {
-  return usedNamesSet.has(player.Name);
-}
-
-// Zuteilung ohne Geschlechts-/Positions-/Leistungs-Kriterien
-function assignWithoutCriteria(players, numberOfTeams, teamSize, usedNames) {
-  const assignedPlayers = [];
-  for(let i=0; i<players.length; i++){
-    if(assignedPlayers.length >= numberOfTeams*teamSize) {
-      break;
-    }
-    const p = players[i];
-    if(!isAlreadyUsed(p, usedNames)) {
-      assignedPlayers.push(p);
-      usedNames.add(p.Name);
-    }
-  }
-  return assignedPlayers;
-}
-
-// Zuteilung mit möglichen Kriterien
-function assignWithCriteria(players, useGeschlecht, usePosition, useLeistung,
-                            numberOfTeams, teamSize, usedNames) {
-  let sorted = [...players];
-
-  let group1 = [];
-  let group2 = [];
-
-  if(useGeschlecht) {
-    group1 = sorted.filter(p => p.Geschlecht === 'M');
-    group2 = sorted.filter(p => p.Geschlecht === 'F');
-  } else {
-    group1 = sorted;
-  }
-
-  // Falls du Position oder Leistung noch genauer aufsplitten möchtest,
-  // kannst du hier mehr Logik ergänzen.
-
-  const assigned = [];
-  for(let i=0; i< numberOfTeams; i++){
-    for(let j=0; j<teamSize; j++){
-      let candidate = null;
-      if(j%2===0 && group1.length>0) {
-        candidate = group1.find(p => !usedNames.has(p.Name));
-        if(candidate) {
-          assigned.push(candidate);
-          usedNames.add(candidate.Name);
-          group1.splice(group1.indexOf(candidate),1);
-        }
-      } else if(group2.length>0) {
-        candidate = group2.find(p => !usedNames.has(p.Name));
-        if(candidate){
-          assigned.push(candidate);
-          usedNames.add(candidate.Name);
-          group2.splice(group2.indexOf(candidate),1);
-        }
-      }
-    }
-  }
-
-  return assigned;
-}
-
-/* ---------------------------------------------
-   9) Vorschau-Losen
---------------------------------------------- */
-previewButton.addEventListener('click', function() {
-  const adultFields = parseInt(adultFieldsInput.value);
-  const youthFields = parseInt(youthFieldsInput.value);
-  const numberOfAdultTeams = adultFields * 2;
-  const numberOfMixedTeams = youthFields * 2;
-
-  const adultTeamSize = parseInt(adultTeamSizeInput.value);
-  const adultPerMixedTeam = parseInt(adultPerMixedTeamInput.value);
-  const youthPerMixedTeam = parseInt(youthPerMixedTeamInput.value);
-
-  if(isNaN(adultFields) || adultFields<1 ||
-     isNaN(youthFields) || youthFields<1 ||
-     isNaN(adultTeamSize) || adultTeamSize<1 ||
-     isNaN(adultPerMixedTeam) || adultPerMixedTeam<1 ||
-     isNaN(youthPerMixedTeam) || youthPerMixedTeam<1)
-  {
-    alert("Bitte gültige Werte eingeben!");
-    return;
-  }
-
-  const neededAdults = numberOfAdultTeams*adultTeamSize + numberOfMixedTeams*adultPerMixedTeam;
-  const neededYouth = numberOfMixedTeams*youthPerMixedTeam;
-
-  const allAvailableAdults = adultPlayers.length + unassignedAdultsGlobal.length;
-  const allAvailableYouth = youthPlayers.length + unassignedYouthGlobal.length;
-
-  if(allAvailableAdults < neededAdults) {
-    alert(`Es werden ${neededAdults} Erwachsene benötigt!`);
-    return;
-  }
-  if(allAvailableYouth < neededYouth) {
-    alert(`Es werden ${neededYouth} Jugendspieler benötigt!`);
-    return;
-  }
-
-  const useLeistung = document.getElementById('useLeistung').checked;
-  const useGeschlecht = document.getElementById('useGeschlecht').checked;
-  const usePosition = document.getElementById('usePosition').checked;
-
-  const { allAdultPlayers, allYouthPlayers } = getAllPlayersForRound();
-  const usedNames = new Set();
-
-  // Erwachsene in Erwachsenenteams
-  let adultTeamPool = [];
-  if(!useLeistung && !useGeschlecht && !usePosition) {
-    shuffle(allAdultPlayers);
-    adultTeamPool = assignWithoutCriteria(allAdultPlayers, numberOfAdultTeams, adultTeamSize, usedNames);
-  } else {
-    adultTeamPool = assignWithCriteria(
-      allAdultPlayers, useGeschlecht, usePosition, useLeistung,
-      numberOfAdultTeams, adultTeamSize, usedNames
-    );
-  }
-
-  // Erwachsene in Mixed
-  let adultsForMixed = [];
-  if(!useLeistung && !useGeschlecht && !usePosition) {
-    shuffle(allAdultPlayers);
-    adultsForMixed = assignWithoutCriteria(allAdultPlayers, numberOfMixedTeams, adultPerMixedTeam, usedNames);
-  } else {
-    adultsForMixed = assignWithCriteria(
-      allAdultPlayers, useGeschlecht, usePosition, useLeistung,
-      numberOfMixedTeams, adultPerMixedTeam, usedNames
-    );
-  }
-
-  // Jugend
-  let youthForMixed = [];
-  if(!useLeistung && !useGeschlecht) {
-    shuffle(allYouthPlayers);
-    youthForMixed = assignWithoutCriteria(allYouthPlayers, numberOfMixedTeams, youthPerMixedTeam, usedNames);
-  } else {
-    if(useGeschlecht) {
-      const males = allYouthPlayers.filter(p => p.Geschlecht==='M' && !usedNames.has(p.Name));
-      const females = allYouthPlayers.filter(p => p.Geschlecht==='F' && !usedNames.has(p.Name));
-      youthForMixed = [];
-      for(let i=0; i<numberOfMixedTeams; i++){
-        for(let j=0; j<youthPerMixedTeam; j++){
-          let candidate = null;
-          if(j%2===0 && males.length>0){
-            candidate = males.shift();
-          } else if(females.length>0){
-            candidate = females.shift();
-          }
-          if(candidate) {
-            youthForMixed.push(candidate);
-            usedNames.add(candidate.Name);
-          }
-        }
-      }
-    } else {
-      shuffle(allYouthPlayers);
-      youthForMixed = assignWithoutCriteria(allYouthPlayers, numberOfMixedTeams, youthPerMixedTeam, usedNames);
-    }
-  }
-
-  // preview-Teams zusammenbauen
-  previewAdultTeams = [];
-  for(let i=0; i<numberOfAdultTeams; i++){
-    const startIdx = i*adultTeamSize;
-    const endIdx   = (i+1)*adultTeamSize;
-    previewAdultTeams.push(adultTeamPool.slice(startIdx, endIdx));
-  }
-
-  previewMixedTeams = [];
-  for(let i=0; i<numberOfMixedTeams; i++){
-    const adultSlice = adultsForMixed.slice(i*adultPerMixedTeam, (i+1)*adultPerMixedTeam);
-    const youthSlice = youthForMixed.slice(i*youthPerMixedTeam, (i+1)*youthPerMixedTeam);
-    const combined = [...adultSlice, ...youthSlice];
-    previewMixedTeams.push(combined);
-  }
-
-  // unassigned
-  const assignedAdultNames = [...adultTeamPool, ...adultsForMixed].map(p => p.Name);
-  const assignedYouthNames = [...youthForMixed].map(p => p.Name);
-
-  const unassignedAdults = allAdultPlayers.filter(p => !assignedAdultNames.includes(p.Name));
-  const unassignedYouth = allYouthPlayers.filter(p => !assignedYouthNames.includes(p.Name));
-
-  unassignedAdultsGlobal = unassignedAdults;
-  unassignedYouthGlobal = unassignedYouth;
-
-  showFeedbackModal(previewAdultTeams, previewMixedTeams);
-  renderUnassignedPlayers(unassignedAdults, unassignedYouth);
-  if(unassignedAdults.length>0 || unassignedYouth.length>0){
-    unassignedPlayersSection.style.display = 'block';
-  } else {
-    unassignedPlayersSection.style.display = 'none';
-  }
-
-  applyPreviewButton.disabled = false;
-});
-
-function renderUnassignedPlayers(unassignedAdults, unassignedYouth){
-  unassignedAdultsDiv.innerHTML = '';
-  if(unassignedAdults.length>0){
-    unassignedAdults.forEach(p=>{
-      const div = document.createElement('div');
-      div.className='player-item adult-player';
-      div.textContent = `${p.Name} (${p.Spiele} Spiele)`;
-      unassignedAdultsDiv.appendChild(div);
-    });
-  } else {
-    unassignedAdultsDiv.innerHTML='<p>Keine nicht zugeteilten Erwachsenen.</p>';
-  }
-
-  unassignedYouthDiv.innerHTML = '';
-  if(unassignedYouth.length>0){
-    unassignedYouth.forEach(p=>{
-      const div = document.createElement('div');
-      div.className='player-item youth-player';
-      div.textContent=`${p.Name} (${p.Spiele} Spiele)`;
-      unassignedYouthDiv.appendChild(div);
-    });
-  } else {
-    unassignedYouthDiv.innerHTML='<p>Keine nicht zugeteilten Jugendspieler.</p>';
-  }
-}
-
-/* Anwenden der Vorschau */
-applyPreviewButton.addEventListener('click', function() {
-  adultTeams = JSON.parse(JSON.stringify(previewAdultTeams));
-  mixedTeams = JSON.parse(JSON.stringify(previewMixedTeams));
-  saveData();
-  displayResults(adultTeams, mixedTeams);
-  this.disabled = true;
-});
-
-/* ---------------------------------------------
-   10) Ergebnisse anzeigen
---------------------------------------------- */
-function displayResults(adultTeams, mixedTeams){
-  resultsSection.style.display = 'block';
-
-  adultTeamsListDiv.innerHTML = '';
-  mixedTeamsListDiv.innerHTML = '';
-
-  // Erwachsene Teams
-  adultTeams.forEach((team, i)=>{
-    const div = document.createElement('div');
-    div.className='team-item';
-    // Jeder Spieler wird farblich anhand isAdult / isYouth gekennzeichnet
-    const names = team.map(p => wrapColoredPlayerName(p)).join(', ');
-    div.innerHTML=`<strong>Erwachsenenteam ${i+1}:</strong> ${names}`;
-    adultTeamsListDiv.appendChild(div);
-  });
-
-  // Mixed Teams
-  mixedTeams.forEach((team, i)=>{
-    const div = document.createElement('div');
-    div.className='team-item';
-    const names = team.map(p => wrapColoredPlayerName(p)).join(', ');
-    div.innerHTML=`<strong>Team Jugend ${i+1}:</strong> ${names}`;
-    mixedTeamsListDiv.appendChild(div);
-  });
-
-  createMatches(adultTeams, mixedTeams);
-  updatePointsTable();
-}
-
-// Hilfsfunktion: Erzeugt <span class="adult-player">Name</span> oder <span class="youth-player">Name</span>
-function wrapColoredPlayerName(player) {
-  // Entscheiden, ob player zu adultPlayers oder youthPlayers gehört
-  const isAdultPlayer = adultPlayers.some(ap => ap.Name === player.Name);
-  const cssClass = isAdultPlayer ? 'adult-player' : 'youth-player';
-
-  // Ggf. mehr Infos
-  const displayName = formatPlayerForDisplay(player, /*detailed*/true, /*fullName*/true);
-  return `<span class="${cssClass}">${displayName}</span>`;
-}
-
-// Name formatieren (für Team-Anzeige)
-function formatPlayerForDisplay(player, showDetailed, showFullName){
-  // showDetailed, showFullName sind hier auf "true" gesetzt in wrapColoredPlayerName,
-  // du kannst sie anpassen, wenn du wieder Splits brauchst
-  let displayName = player.Name;
-  if(!showFullName){
-    const parts = player.Name.split(' ');
-    if(parts.length>1){
-      displayName = parts[0]+' '+parts[1].charAt(0)+'.';
-    } else {
-      displayName = parts[0];
-    }
-  }
-  if(showDetailed){
-    // Falls Position bei Jugend leer ist, etc.
-    const pos = player.Position ? `Pos: ${player.Position}, ` : '';
-    const g = player.Geschlecht ? `G: ${player.Geschlecht}, ` : '';
-    const l = player.Leitung ? `L: ${player.Leitung}` : '';
-    return `${displayName} (${pos}${g}${l})`;
-  } else {
-    return displayName;
-  }
-}
-
-/* ---------------------------------------------
-   11) Matches
---------------------------------------------- */
-function createMatches(adultTeams, mixedTeams){
-  adultMatchesDiv.innerHTML='';
-  mixedMatchesDiv.innerHTML='';
-
-  // Erwachsene
-  for(let i=0; i<adultTeams.length; i+=2){
-    if(i+1<adultTeams.length){
-      const matchDiv = document.createElement('div');
-      matchDiv.className='match-item';
-      matchDiv.innerHTML=`
-        <strong>Feld ${Math.floor(i/2)+1}:</strong> 
-        Erwachsenenteam ${i+1} gegen Erwachsenenteam ${i+2}
-        <button class="button" data-match-type="adult" data-winning-team="${i}">
-          Gewinner: Team ${i+1}
-        </button>
-        <button class="button" data-match-type="adult" data-winning-team="${i+1}">
-          Gewinner: Team ${i+2}
-        </button>
-      `;
-      adultMatchesDiv.appendChild(matchDiv);
-    }
-  }
-
-  // Mixed
-  for(let i=0; i<mixedTeams.length; i+=2){
-    if(i+1<mixedTeams.length){
-      const matchDiv = document.createElement('div');
-      matchDiv.className='match-item';
-      matchDiv.innerHTML=`
-        <strong>Gemischtes Feld ${Math.floor(i/2)+1}:</strong> 
-        Team Jugend ${i+1} gegen Team Jugend ${i+2}
-        <button class="button" data-match-type="mixed" data-winning-team="${i}">
-          Gewinner: Team ${i+1}
-        </button>
-        <button class="button" data-match-type="mixed" data-winning-team="${i+1}">
-          Gewinner: Team ${i+2}
-        </button>
-      `;
-      mixedMatchesDiv.appendChild(matchDiv);
-    }
-  }
-
-  const buttons = document.querySelectorAll('.match-item .button');
-  buttons.forEach(btn => {
-    btn.addEventListener('click', function(){
-      const matchType = this.getAttribute('data-match-type');
-      const winningTeamIndex = parseInt(this.getAttribute('data-winning-team'));
-      recordMatchResult(matchType, winningTeamIndex);
-      this.parentNode.querySelectorAll('.button').forEach(b=>b.disabled=true);
-    });
-  });
-}
-
-function recordMatchResult(matchType, winningTeamIndex){
-  let winningTeam=[], losingTeam=[];
-  if(matchType==='adult'){
-    winningTeam = adultTeams[winningTeamIndex];
-    const oppIndex = (winningTeamIndex%2===0) ? winningTeamIndex+1 : winningTeamIndex-1;
-    losingTeam = adultTeams[oppIndex];
-  } else if(matchType==='mixed'){
-    winningTeam = mixedTeams[winningTeamIndex];
-    const oppIndex = (winningTeamIndex%2===0) ? winningTeamIndex+1 : winningTeamIndex-1;
-    losingTeam = mixedTeams[oppIndex];
-  } else {
-    alert("Unbekannter Match-Typ");
-    return;
-  }
-
-  // Punkte+Spiele
-  winningTeam.forEach(p => {
-    const pl = findPlayerByName(p.Name);
-    if(pl){
-      pl.Punkte+=1;
-      pl.Spiele+=1;
-    }
-  });
-  losingTeam.forEach(p=>{
-    const pl = findPlayerByName(p.Name);
-    if(pl){
-      pl.Spiele+=1;
-    }
-  });
-
-  alert(`${formatTeamName(matchType, winningTeamIndex)} hat gewonnen!`);
-  updatePointsTable();
-  saveData();
-}
-
-function formatTeamName(matchType, index){
-  if(matchType==='adult'){
-    return `Erwachsenenteam ${index+1}`;
-  }
-  return `Team Jugend ${index+1}`;
-}
-
-function findPlayerByName(name){
-  let pl = adultPlayers.find(p=>p.Name===name);
-  if(pl) return pl;
-  pl = youthPlayers.find(p=>p.Name===name);
-  return pl;
-}
-
-/* ---------------------------------------------
-   12) Punkte-Tabelle + Farbliche Kennzeichnung
---------------------------------------------- */
-function updatePointsTable(){
-  pointsTableBody.innerHTML='';
-
-  // Erwachsene
-  adultPlayers.forEach((p, i)=>{
-    const tr = document.createElement('tr');
-    // Hintergrund adult-player
-    tr.classList.add('adult-player');
-
-    tr.innerHTML=`
-      <td>${p.Name}</td>
-      <td>${p.Spiele}</td>
-      <td>${p.Punkte}</td>
-      <td>
-        <button class="adjust-button" onclick="adjustPoints('adult', ${i}, 1)">+Punkt</button>
-        <button class="adjust-button" onclick="adjustPoints('adult', ${i}, -1)">-Punkt</button>
-        <button class="adjust-button" onclick="adjustGames('adult', ${i}, 1)">+Spiel</button>
-        <button class="adjust-button" onclick="adjustGames('adult', ${i}, -1)">-Spiel</button>
-      </td>
-    `;
-    pointsTableBody.appendChild(tr);
-  });
-
-  // Jugend
-  youthPlayers.forEach((p, i)=>{
-    const tr = document.createElement('tr');
-    // Hintergrund youth-player
-    tr.classList.add('youth-player');
-
-    tr.innerHTML=`
-      <td>${p.Name}</td>
-      <td>${p.Spiele}</td>
-      <td>${p.Punkte}</td>
-      <td>
-        <button class="adjust-button" onclick="adjustPoints('youth', ${i}, 1)">+Punkt</button>
-        <button class="adjust-button" onclick="adjustPoints('youth', ${i}, -1)">-Punkt</button>
-        <button class="adjust-button" onclick="adjustGames('youth', ${i}, 1)">+Spiel</button>
-        <button class="adjust-button" onclick="adjustGames('youth', ${i}, -1)">-Spiel</button>
-      </td>
-    `;
-    pointsTableBody.appendChild(tr);
-  });
-}
-
-window.adjustPoints = function(type, index, delta){
-  if(type==='adult'){
-    const p=adultPlayers[index];
-    if(delta<0 && p.Punkte<=0){
-      alert("Punkte können nicht negativ werden!");
-      return;
-    }
-    p.Punkte+=delta;
-  } else {
-    const p=youthPlayers[index];
-    if(delta<0 && p.Punkte<=0){
-      alert("Punkte können nicht negativ werden!");
-      return;
-    }
-    p.Punkte+=delta;
-  }
-  updatePointsTable();
-  saveData();
-};
-
-window.adjustGames = function(type, index, delta){
-  if(type==='adult'){
-    const p=adultPlayers[index];
-    if(delta<0 && p.Spiele<=0){
-      alert("Spiele können nicht negativ werden!");
-      return;
-    }
-    p.Spiele+=delta;
-  } else {
-    const p=youthPlayers[index];
-    if(delta<0 && p.Spiele<=0){
-      alert("Spiele können nicht negativ werden!");
-      return;
-    }
-    p.Spiele+=delta;
-  }
-  updatePointsTable();
-  saveData();
-};
-
-/* ---------------------------------------------
-   13) Modal / CSV
---------------------------------------------- */
-function showFeedbackModal(aTeams, mTeams){
-  const modal = document.getElementById('feedbackModal');
-  const span = document.getElementsByClassName('close')[0];
-  const feedbackContent = document.getElementById('feedbackContent');
-
-  let html = `<h3>Erwachsenenteams (Vorschau):</h3>`;
-  aTeams.forEach((team, idx)=>{
-    const names=team.map(p=>p.Name).join(', ');
-    html+=`<p><strong>Team ${idx+1}:</strong> ${names}</p>`;
-  });
-  html+=`<h3>Gemischte Teams (Vorschau):</h3>`;
-  mTeams.forEach((team, idx)=>{
-    const names=team.map(p=>p.Name).join(', ');
-    html+=`<p><strong>Team Jugend ${idx+1}:</strong> ${names}</p>`;
-  });
-
-  feedbackContent.innerHTML=html;
-  modal.style.display='block';
-
-  span.onclick=()=>modal.style.display='none';
-  window.onclick=(e)=>{
-    if(e.target===modal) modal.style.display='none';
-  };
-}
-
-exportButton.addEventListener('click', ()=>{
-  const csvContent = generateCSV();
-  downloadCSV(csvContent, 'spielergebnisse.csv');
-});
-
-function generateCSV(){
-  let csv='Name,Spiele,Punkte\n';
-  adultPlayers.forEach(p=>{
-    csv+=`"${p.Name}",${p.Spiele},${p.Punkte}\n`;
-  });
-  youthPlayers.forEach(p=>{
-    csv+=`"${p.Name}",${p.Spiele},${p.Punkte}\n`;
-  });
-  return csv;
-}
-function downloadCSV(csvContent, filename){
-  const blob=new Blob([csvContent], {type:'text/csv;charset=utf-8;'});
-  if(navigator.msSaveBlob){
-    navigator.msSaveBlob(blob, filename);
-  } else {
-    const link=document.createElement('a');
-    if(link.download!==undefined){
-      const url=URL.createObjectURL(blob);
-      link.setAttribute('href', url);
-      link.setAttribute('download', filename);
-      link.style.visibility='hidden';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    }
-  }
-}
-
-/* ---------------------------------------------
-   14) onload
---------------------------------------------- */
-window.onload=function(){
-  loadData();
-  renderPlayerList();
-  updatePointsTable();
-  if(adultTeams.length>0||mixedTeams.length>0){
-    displayResults(adultTeams,mixedTeams);
-  }
-};
-</script>
-
+    </script>
 </body>
 </html>
