@@ -183,6 +183,14 @@
     </select>
     <button type="submit" class="button">Hinzufügen</button>
   </form>
+<div class="section">
+  <h2>CSV-Datei hochladen</h2>
+  <p>Format wie folgt in Spalten: Vorname,Nachname,Geschlecht(M oder F),Jugend(j oder n),Position(AA,MB oder Z),Leistungsniveau(1,2 oder 3 - 1 = sehr gut)</p>
+  <input type="file" id="csvFileInput" accept=".csv" />
+  <button id="uploadCSVButton" class="button">CSV importieren</button>
+  <div id="uploadMessage" class="message"></div>
+</div>
+
   <div id="playerMessage" class="message"></div>
 </div>
 
@@ -259,31 +267,23 @@
     <div id="feedbackContent"></div>
   </div>
 </div>
+
 <script>
 /* ========== NEU HINZUGEFÜGT ========== 
-   => Erzeugt eindeutige Kurz-Namen (ShortName) 
+   => Eindeutige Kurz-Namen und LocalStorage
 ======================================= */
 function generateUniqueShortNames() {
-  // 1) Alle Spieler in ein gemeinsames Array packen
   const allPlayers = [...adultPlayers, ...youthPlayers];
-
-  // 2) Set für bereits vergebene Abkürzungen
   const usedShortNames = new Set();
-
-  // 3) Durch alle Spieler gehen und ShortName berechnen
   allPlayers.forEach(player => {
     player.ShortName = createShortName(player.Name, usedShortNames);
   });
 }
 
 function createShortName(fullName, usedSet) {
-  // Name in Teile zerlegen
   const parts = fullName.trim().split(/\s+/);
-  // Vorname ist das erste Wort, Nachname das letzte Wort (vereinfacht)
   const firstName = parts[0];
   const lastName  = parts[parts.length - 1];
-
-  // Wir starten mit 2 Buchstaben vom Nachnamen
   let shortName = '';
   for (let i = 2; i <= lastName.length; i++) {
     const snippet = lastName.substring(0, i);
@@ -293,111 +293,50 @@ function createShortName(fullName, usedSet) {
       return shortName;
     }
   }
-
-  // Fallback, wenn das obige nicht ausreicht
   shortName = firstName + ' ' + lastName + '.';
   usedSet.add(shortName);
   return shortName;
+}
+
+/* LOCAL STORAGE FUNKTIONEN */
+function saveToLocalStorage() {
+  localStorage.setItem('adultPlayers', JSON.stringify(adultPlayers));
+  localStorage.setItem('youthPlayers', JSON.stringify(youthPlayers));
+  localStorage.setItem('matchHistoryStack', JSON.stringify(matchHistoryStack));
+}
+function loadFromLocalStorage() {
+  const storedAdults = localStorage.getItem('adultPlayers');
+  const storedYouth = localStorage.getItem('youthPlayers');
+  const storedHistory = localStorage.getItem('matchHistoryStack');
+
+  if (storedAdults) {
+    adultPlayers = JSON.parse(storedAdults);
+  }
+  if (storedYouth) {
+    youthPlayers = JSON.parse(storedYouth);
+  }
+  if (storedHistory) {
+    matchHistoryStack = JSON.parse(storedHistory);
+  }
 }
 
 /* ========================================
    1) GLOBALE ARRAYS
 ======================================== */
 let adultPlayers = [
-  { Name: "Alex K.", Position: "MB", Leistung: "3", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Leon K.", Position: "MB", Leistung: "1", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Franzi K.", Position: "AA", Leistung: "1", Geschlecht: "F", Spiele: 0, Punkte: 0 },
-  { Name: "Monja B.", Position: "MB", Leistung: "2", Geschlecht: "F", Spiele: 0, Punkte: 0 },
-  { Name: "Ali K.", Position: "Z", Leistung: "1", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Anna R.", Position: "AA", Leistung: "2", Geschlecht: "F", Spiele: 0, Punkte: 0 },
-  { Name: "Ben B.", Position: "MB", Leistung: "1", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Caro S.", Position: "MB", Leistung: "1", Geschlecht: "F", Spiele: 0, Punkte: 0 },
-  { Name: "Daniel E.", Position: "AA", Leistung: "2", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Daria A.", Position: "AA", Leistung: "1", Geschlecht: "F", Spiele: 0, Punkte: 0 },
-  { Name: "Elias K.", Position: "AA", Leistung: "1", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Elias S.", Position: "AA", Leistung: "1", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Emily K.", Position: "AA", Leistung: "1", Geschlecht: "F", Spiele: 0, Punkte: 0 },
-  { Name: "Fabian D.", Position: "MB", Leistung: "1", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Felina S.", Position: "AA", Leistung: "1", Geschlecht: "F", Spiele: 0, Punkte: 0 },
-  { Name: "Felix K.", Position: "AA", Leistung: "3", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Karrrrle", Position: "AA", Leistung: "1", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Florian B.", Position: "AA", Leistung: "1", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Helene M.", Position: "AA", Leistung: "3", Geschlecht: "F", Spiele: 0, Punkte: 0 },
-  { Name: "Helene Maneth", Position: "AA", Leistung: "3", Geschlecht: "F", Spiele: 0, Punkte: 0 },
-  { Name: "Ida B.", Position: "MB", Leistung: "2", Geschlecht: "F", Spiele: 0, Punkte: 0 },
-  { Name: "Jan K.", Position: "MB", Leistung: "2", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Jannis E.", Position: "AA", Leistung: "1", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Jannis H.", Position: "AA", Leistung: "1", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Jannis W.", Position: "MB", Leistung: "2", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Joel D.", Position: "AA", Leistung: "2", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Johanna S.", Position: "MB", Leistung: "1", Geschlecht: "F", Spiele: 0, Punkte: 0 },
-  { Name: "Flo R.", Position: "AA", Leistung: "1", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Chris K.", Position: "AA", Leistung: "1", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Lauresa O.", Position: "AA", Leistung: "1", Geschlecht: "F", Spiele: 0, Punkte: 0 },
-  { Name: "Hannah B.", Position: "AA", Leistung: "2", Geschlecht: "F", Spiele: 0, Punkte: 0 },
-
-  { Name: "Jonas Labisch", Position: "Z", Leistung: "1", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Paul L.", Position: "Z", Leistung: "1", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Jonas Lingel.", Position: "Z", Leistung: "1", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Julian S.", Position: "AA", Leistung: "3", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Katharina B.", Position: "AA", Leistung: "2", Geschlecht: "F", Spiele: 0, Punkte: 0 },
-  { Name: "Katja H.", Position: "Z", Leistung: "2", Geschlecht: "F", Spiele: 0, Punkte: 0 },
-  { Name: "Lara K.", Position: "MB", Leistung: "1", Geschlecht: "F", Spiele: 0, Punkte: 0 },
-  { Name: "Leah B.", Position: "AA", Leistung: "3", Geschlecht: "F", Spiele: 0, Punkte: 0 },
-  { Name: "Marus H.", Position: "AA", Leistung: "1", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Lenard S.", Position: "Z", Leistung: "1", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Leni J.", Position: "AA", Leistung: "2", Geschlecht: "F", Spiele: 0, Punkte: 0 },
-  { Name: "Leo B.", Position: "AA", Leistung: "3", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Lina M.", Position: "AA", Leistung: "2", Geschlecht: "F", Spiele: 0, Punkte: 0 },
-  { Name: "Linus W.", Position: "AA", Leistung: "1", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Lucie N.", Position: "AA", Leistung: "3", Geschlecht: "F", Spiele: 0, Punkte: 0 },
-  { Name: "Martin U.", Position: "Z", Leistung: "2", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Max D.", Position: "AA", Leistung: "3", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Michi H.", Position: "AA", Leistung: "1", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Mieke K.", Position: "AA", Leistung: "1", Geschlecht: "F", Spiele: 0, Punkte: 0 },
-  { Name: "Nelly A.", Position: "MB", Leistung: "1", Geschlecht: "F", Spiele: 0, Punkte: 0 },
-  { Name: "Nicklas K.", Position: "MB", Leistung: "1", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Nikita S.", Position: "AA", Leistung: "3", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Patrick S.", Position: "AA", Leistung: "1", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Philipp K.", Position: "Z", Leistung: "3", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Pius M.", Position: "Z", Leistung: "1", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Robin W.", Position: "Z", Leistung: "3", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Ronja B.", Position: "AA", Leistung: "1", Geschlecht: "F", Spiele: 0, Punkte: 0 },
-  { Name: "Rune D.", Position: "Z", Leistung: "1", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Sara T.", Position: "Z", Leistung: "1", Geschlecht: "F", Spiele: 0, Punkte: 0 },
-  { Name: "Niko K.", Position: "AA", Leistung: "1", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Ludo N.", Position: "AA", Leistung: "1", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Sebastian M.", Position: "AA", Leistung: "3", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Steffi G.", Position: "Z", Leistung: "1", Geschlecht: "F", Spiele: 0, Punkte: 0 },
-  { Name: "Tom W.", Position: "AA", Leistung: "1", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Vica M.", Position: "Z", Leistung: "2", Geschlecht: "F", Spiele: 0, Punkte: 0 }
+  // { Name: "Leon K.", Position: "MB", Leistung: "1", Geschlecht: "M", Spiele: 0, Punkte: 0 },
+  // { Name: "Vica M.", Position: "Z", Leistung: "2", Geschlecht: "F", Spiele: 0, Punkte: 0 }
 ];
 
 let youthPlayers = [
-  { Name: "Noah E.", Leistung: "2", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Frieda M.", Leistung: "2", Geschlecht: "F", Spiele: 0, Punkte: 0 },
-  { Name: "Julia E.", Leistung: "2", Geschlecht: "F", Spiele: 0, Punkte: 0 },
-  { Name: "Elena C.", Leistung: "3", Geschlecht: "F", Spiele: 0, Punkte: 0 },
-  { Name: "Noemi R.", Leistung: "2", Geschlecht: "F", Spiele: 0, Punkte: 0 },
-  { Name: "Mirjam K.", Leistung: "2", Geschlecht: "F", Spiele: 0, Punkte: 0 },
-  { Name: "Jakob K.", Leistung: "3", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Bennett G.", Leistung: "2", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Annelie M.", Leistung: "3", Geschlecht: "F", Spiele: 0, Punkte: 0 },
-  { Name: "Alex Z.", Leistung: "2", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Laurenz J.", Leistung: "2", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "David S.", Leistung: "1", Geschlecht: "M", Spiele: 0, Punkte: 0 },
-  { Name: "Elya M.", Leistung: "3", Geschlecht: "F", Spiele: 0, Punkte: 0 },
-  { Name: "Emilia Hauf.", Leistung: "2", Geschlecht: "F", Spiele: 0, Punkte: 0 },
-  { Name: "Leila O.", Leistung: "2", Geschlecht: "F", Spiele: 0, Punkte: 0 }
+  // { Name: "Noah E.", Leistung: "2", Geschlecht: "M", Spiele: 0, Punkte: 0 },
+  // { Name: "Leila O.", Leistung: "2", Geschlecht: "F", Spiele: 0, Punkte: 0 }
  ]; 
 
-// TEAMS (Preview + Finale)
 let previewAdultTeams=[];
 let previewMixedTeams=[];
 let adultTeams=[];
 let mixedTeams=[];
-
-// Für ein einziges Match-Rückgängig
 let matchHistoryStack=[];
 
 // Sortier-Richtungen
@@ -442,7 +381,9 @@ const feedbackCloseSpan = document.getElementsByClassName('close')[0];
    3) ONLOAD
 ======================================== */
 window.onload= function(){
-  // Nach dem Laden gleich eindeutige ShortNames erstellen
+  // => Erst localStorage-Daten laden
+  loadFromLocalStorage();
+  // => Dann ShortNames generieren + Tabelle + Sortierung
   generateUniqueShortNames();
   renderPlayerTable();
   initSortingHeaders();
@@ -489,8 +430,6 @@ function renderPlayerTable(){
 
 function createPlayerRow(playerObj, type, idx, showDetails){
   const tr= document.createElement('tr');
-
-  // Wenn Details an => voller Name, sonst => ShortName (eindeutig)
   let displayName = showDetails ? playerObj.Name : (playerObj.ShortName || playerObj.Name);
 
   const pos   = (type==='adult')? (playerObj.Position||'') : '';
@@ -553,13 +492,14 @@ addPlayerForm.addEventListener('submit',(e)=>{
       Spiele:0, Punkte:0
     });
   }
-  // Nach Hinzufügen => neue ShortNames generieren
   generateUniqueShortNames();
-
   playerMessageDiv.textContent=`${name} (Typ:${type}) hinzugefügt.`;
   playerMessageDiv.className='message success';
   addPlayerForm.reset();
   renderPlayerTable();
+
+  // Hier speichern, damit Daten nach Reload erhalten bleiben:
+  saveToLocalStorage();
 });
 
 /* EDIT / DELETE */
@@ -569,18 +509,18 @@ window.editPlayer=function(type, idx){
   const newName= prompt("Neuen Namen eingeben:", p.Name);
   if(newName && newName.trim()!==''){
     p.Name= newName.trim();
-    // Nach Bearbeiten => neue ShortNames generieren
     generateUniqueShortNames();
     renderPlayerTable();
+    saveToLocalStorage();
   }
 };
 window.deletePlayer=function(type, idx){
   let arr= (type==='adult')? adultPlayers : youthPlayers;
   if(!confirm(`Wirklich ${arr[idx].Name} löschen?`)) return;
   arr.splice(idx,1);
-  // Nach Löschen => neue ShortNames
   generateUniqueShortNames();
   renderPlayerTable();
+  saveToLocalStorage();
 };
 
 /* PUNKTE / SPIELE */
@@ -592,6 +532,7 @@ window.adjustPoints=function(type, idx, delta){
   }
   arr[idx].Punkte+= delta;
   renderPlayerTable();
+  saveToLocalStorage();
 };
 window.adjustGames=function(type, idx, delta){
   let arr= (type==='adult')? adultPlayers : youthPlayers;
@@ -601,6 +542,7 @@ window.adjustGames=function(type, idx, delta){
   }
   arr[idx].Spiele+= delta;
   renderPlayerTable();
+  saveToLocalStorage();
 };
 
 /* ========================================
@@ -623,39 +565,30 @@ function sortPlayers(crit, dir){
   adultPlayers.sort((a,b)=> compareByCrit(a,b,crit)*mul);
   youthPlayers.sort((a,b)=> compareByCrit(a,b,crit)*mul);
   renderPlayerTable();
+  saveToLocalStorage(); // auch nach Sortierung, falls gewünscht
 }
 
 function compareByCrit(a, b, crit) {
   let aVal, bVal;
-
   if (crit === 'name') {
-    // Deine Arrays haben Name (groß)
     aVal = a.Name || '';
     bVal = b.Name || '';
     return aVal.localeCompare(bVal);
-
   } else if (crit === 'position') {
     aVal = a.Position || '';
     bVal = b.Position || '';
     return aVal.localeCompare(bVal);
-
   } else if (crit === 'geschlecht') {
     aVal = a.Geschlecht || '';
     bVal = b.Geschlecht || '';
     return aVal.localeCompare(bVal);
-
   } else if (crit === 'leistung') {
-    // du nutzt "Leistung" (großes L) in deinen Arrays
     return parseInt(a.Leistung || 0) - parseInt(b.Leistung || 0);
-    // Achtung Tippfehler: Du musst prüfen, ob du irgendwo "Leitung" statt "Leistung" hast!
-
   } else if (crit === 'spiele') {
     return parseInt(a.Spiele || 0) - parseInt(b.Spiele || 0);
-
   } else if (crit === 'punkte') {
     return parseInt(a.Punkte || 0) - parseInt(b.Punkte || 0);
   }
-
   return 0;
 }
 
@@ -668,15 +601,12 @@ previewButton.addEventListener('click',()=>{
   const adultMix=  parseInt(adultPerMixedTeamInput.value);
   const youthMix=  parseInt(youthPerMixedTeamInput.value);
 
-  // 1) "Balanced" => Sort adult first by Spiele, dann Leistung, dann Random
   let sortedAdults=[...adultPlayers];
   sortedAdults.sort((a,b)=>{
     if(a.Spiele!== b.Spiele) return a.Spiele - b.Spiele;
     if(a.Leistung!== b.Leistung) return (parseInt(a.Leistung) - parseInt(b.Leistung));
     return Math.random()-0.5;
   });
-
-  // 2) sort youth
   let sortedYouth=[...youthPlayers];
   sortedYouth.sort((a,b)=>{
     if(a.Spiele!==b.Spiele) return a.Spiele - b.Spiele;
@@ -716,7 +646,6 @@ previewButton.addEventListener('click',()=>{
   showFeedbackModal(previewAdultTeams, previewMixedTeams);
   applyPreviewButton.disabled= false;
 
-  // => unassigned
   let usedAdultNames= adultTeamSlice.map(a=>a.Name).concat(adultMixedSlice.map(a=>a.Name));
   let unassignedA= adultPlayers.filter(a=> !usedAdultNames.includes(a.Name));
   let usedYouthNames= youthMixedSlice.map(a=>a.Name);
@@ -727,7 +656,6 @@ previewButton.addEventListener('click',()=>{
     unassignedA.forEach(u=>{
       const d=document.createElement('div');
       d.className='player-item';
-      // Falls Details aus => ShortName, sonst Name
       let disp = toggleDetails.checked ? u.Name : (u.ShortName || u.Name);
       d.textContent= `${disp}`;
       unassignedAdultsDiv.appendChild(d);
@@ -756,6 +684,7 @@ applyPreviewButton.addEventListener('click', ()=>{
   matchHistoryStack = [];
   displayResults(adultTeams, mixedTeams);
   applyPreviewButton.disabled= true;
+  saveToLocalStorage(); // <= Speichern, wenn neue Teams offiziell angenommen wurden
 });
 
 /* ========================================
@@ -783,21 +712,18 @@ function displayResults(aTeams, mTeams){
 
   createMatches(aTeams,mTeams);
   renderPlayerTable();
+  saveToLocalStorage();
 }
 
 function createMatches(aTeams, mTeams){
   adultMatchesDiv.innerHTML = '';
   mixedMatchesDiv.innerHTML = '';
 
-  // ERWACHSENEN-SPIELE erstellen
   for(let i=0; i<aTeams.length; i+=2){
     if(i+1 < aTeams.length){
       const matchDiv = document.createElement('div');
       matchDiv.className = 'match-item';
-      
-      // "matchIndex" ist hier Math.floor(i/2) => welche Paarung
       const matchIndex = Math.floor(i/2);
-
       matchDiv.innerHTML = `
         <strong>Feld ${matchIndex + 1}:</strong>
         Erwachsenenteam ${i+1} vs. Erwachsenenteam ${i+2}
@@ -818,14 +744,11 @@ function createMatches(aTeams, mTeams){
     }
   }
 
-  // MIXED-SPIELE erstellen
   for(let i=0; i<mTeams.length; i+=2){
     if(i+1 < mTeams.length){
       const matchDiv = document.createElement('div');
       matchDiv.className='match-item';
-
       const matchIndex = Math.floor(i/2);
-
       matchDiv.innerHTML = `
         <strong>Gemischtes Feld ${matchIndex + 1}:</strong>
         Team Jugend ${i+1} vs. Team Jugend ${i+2}
@@ -846,33 +769,23 @@ function createMatches(aTeams, mTeams){
     }
   }
 
-  // Buttons das Event geben
   document.querySelectorAll('.match-item .button').forEach(btn => {
     btn.addEventListener('click', function(){
       const matchType = this.getAttribute('data-match-type');
       const winIdx = parseInt(this.getAttribute('data-winning-team'));
-      // Wenn man hier losingTeamIdx braucht, müsste man es selbst berechnen (winIdx +/- 1).
-      // recordMatchResult übernimmt das aber bereits => also reicht data-winning-team.
       recordMatchResult(matchType, winIdx);
-      // Beide Buttons in diesem Match disablen
       this.parentNode.querySelectorAll('button').forEach(b => b.disabled = true);
     });
   });
 
-  // Nach dem Erstellen der Buttons => schon gespielte Matches disablen
   disablePlayedMatches();
 }
 function disablePlayedMatches(){
   matchHistoryStack.forEach(match => {
     const { matchType, winningTeamIndex, losingTeamIndex } = match;
-    
-    // Alle Buttons dieses Typs raussuchen
     const buttons = document.querySelectorAll(`.match-item .button[data-match-type="${matchType}"]`);
     buttons.forEach(btn => {
       const btnWinIdx = parseInt(btn.getAttribute('data-winning-team'));
-      
-      // Wenn unser Button zu diesem Match gehört, disablen wir den Button
-      // => Wir wissen: winningTeamIndex oder losingTeamIndex matcht btnWinIdx
       if(btnWinIdx === winningTeamIndex || btnWinIdx === losingTeamIndex){
         btn.disabled = true;
       }
@@ -896,7 +809,6 @@ function recordMatchResult(matchType, winningTeamIndex){
     losingTeamIndex= opp;
   }
 
-  // Stats updaten
   winningTeam.forEach(p=>{
     let real= findPlayerByName(p.Name);
     if(real){
@@ -911,13 +823,10 @@ function recordMatchResult(matchType, winningTeamIndex){
     }
   });
 
-  matchHistoryStack.push({
-    matchType: matchType,
-    winningTeamIndex: winningTeamIndex,
-    losingTeamIndex: losingTeamIndex
-  });
+  matchHistoryStack.push({ matchType, winningTeamIndex, losingTeamIndex });
   alert(`Team ${winningTeamIndex+1} hat gewonnen!`);
   renderPlayerTable();
+  saveToLocalStorage();
 }
 
 /* MATCH RÜCKGÄNGIG */
@@ -927,7 +836,6 @@ function undoLastMatch(){
     alert("Kein Match zum Rückgängig machen!");
     return;
   }
-  // Nur das letzte Match aus dem Stack entfernen
   const lastMatch = matchHistoryStack.pop();
   const { matchType, winningTeamIndex, losingTeamIndex } = lastMatch;
 
@@ -940,43 +848,65 @@ function undoLastMatch(){
     lTeam = mixedTeams[losingTeamIndex];
   }
 
-  // Punkte/Spiele wieder abziehen
-  wTeam.forEach(p => {
-    let real = findPlayerByName(p.Name);
+  wTeam.forEach(p=>{
+    let real= findPlayerByName(p.Name);
     if(real){
       if(real.Punkte > 0) real.Punkte--;
       if(real.Spiele > 0) real.Spiele--;
     }
   });
-  lTeam.forEach(p => {
-    let real = findPlayerByName(p.Name);
+  lTeam.forEach(p=>{
+    let real= findPlayerByName(p.Name);
     if(real && real.Spiele > 0) real.Spiele--;
   });
 
   alert("Letztes Match rückgängig gemacht!");
-  // Tabelle neu rendern
   renderPlayerTable();
-  // Matches neu aufbauen => bereits gespielte Matches disablen
   createMatches(adultTeams, mixedTeams);
+  saveToLocalStorage();
 }
 
 /* ========================================
    10) CSV EXPORT
 ======================================== */
 exportButton.addEventListener('click', ()=>{
-  let csv= generateCSV();
+  let csv = generateCSV();
   downloadCSV(csv,'spielergebnisse.csv');
 });
+
 function generateCSV(){
-  let csv='Name,Position,Leistung,Geschlecht,Spiele,Punkte\n';
-  adultPlayers.forEach(p=>{
-    csv+= `"${p.Name}",${p.Position||''},${p.Leistung||''},${p.Geschlecht||''},${p.Spiele},${p.Punkte}\n`;
+  let csv = 'Vorname,Nachname,Geschlecht,Jugend,Position,Leistungsniveau\n';
+  
+  // Erwachsene Spieler
+  adultPlayers.forEach(p => {
+    const { vorname, nachname } = splitName(p.Name);
+    const geschlecht = p.Geschlecht || '';
+    const jugend = 'n'; // 'n' für Erwachsene
+    const position = p.Position || '';
+    const leistungsniveau = p.Leistung || '';
+    csv += `${vorname},${nachname},${geschlecht},${jugend},${position},${leistungsniveau}\n`;
   });
-  youthPlayers.forEach(p=>{
-    csv+= `"${p.Name}",,${p.Leistung||''},${p.Geschlecht||''},${p.Spiele},${p.Punkte}\n`;
+
+  // Jugend Spieler
+  youthPlayers.forEach(p => {
+    const { vorname, nachname } = splitName(p.Name);
+    const geschlecht = p.Geschlecht || '';
+    const jugend = 'j'; // 'j' für Jugend
+    const position = ''; // leer für Jugendspieler
+    const leistungsniveau = p.Leistung || '';
+    csv += `${vorname},${nachname},${geschlecht},${jugend},${position},${leistungsniveau}\n`;
   });
+
   return csv;
 }
+
+function splitName(fullName) {
+  const parts = fullName.trim().split(/\s+/);
+  const vorname = parts[0];
+  const nachname = parts.slice(1).join(' ') || '';
+  return { vorname, nachname };
+}
+
 function downloadCSV(csvContent, filename){
   const blob= new Blob([csvContent],{type:'text/csv;charset=utf-8;'});
   if(navigator.msSaveBlob){
@@ -993,6 +923,13 @@ function downloadCSV(csvContent, filename){
       document.body.removeChild(link);
     }
   }
+}
+
+function splitName(fullName) {
+  const parts = fullName.trim().split(/\s+/);
+  const vorname = parts[0];
+  const nachname = parts.slice(1).join(' ') || '';
+  return { vorname, nachname };
 }
 
 /* ========================================
@@ -1027,6 +964,109 @@ function showFeedbackModal(aTeams,mTeams){
     }
   };
 }
+document.getElementById('uploadCSVButton').addEventListener('click', handleCSVUpload);
+
+function handleCSVUpload() {
+  const fileInput = document.getElementById('csvFileInput');
+  const uploadMsg = document.getElementById('uploadMessage');
+
+  if(!fileInput.files || fileInput.files.length===0){
+    uploadMsg.textContent = "Keine Datei ausgewählt!";
+    uploadMsg.className = 'message error';
+    return;
+  }
+  const file = fileInput.files[0];
+  if(!file.name.toLowerCase().endsWith('.csv')){
+    uploadMsg.textContent = "Bitte eine CSV-Datei wählen!";
+    uploadMsg.className = 'message error';
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const csvText = e.target.result;
+    let msg = importPlayersFromCSV(csvText);
+    uploadMsg.textContent = msg;
+    uploadMsg.className = 'message success';
+
+    // optional: zurücksetzen
+    fileInput.value='';
+  };
+  reader.readAsText(file,'UTF-8');
+}
+
+function importPlayersFromCSV(csvText) {
+  // 1) Zeilen aufsplitten
+  const lines = csvText.trim().split('\n');
+  if (lines.length < 2) {
+    return "CSV enthält keine Datenzeilen!";
+  }
+
+  // 2) Wir gehen ab Zeile 2 (Index=1) durch, da Zeile 0 der Header ist
+  let countImported = 0;
+  for (let i = 1; i < lines.length; i++) {
+    const line = lines[i].trim();
+    if (!line) continue; // leere Zeile überspringen
+
+    // => Spalten aufsplitten
+    const parts = line.split(',');
+
+    // Wir erwarten 6 Spalten:
+    // (0) Vorname, (1) Nachname, (2) Geschlecht, (3) Jugend, (4) Position, (5) Leistungsniveau
+    if (parts.length < 6) {
+      console.warn("Unvollständige Zeile:", line);
+      continue;
+    }
+
+    let csvVorname         = parts[0].trim(); // z.B. "Frank Peter"
+    let csvNachname        = parts[1].trim(); // z.B. "Mechten"
+    let csvGeschlecht      = parts[2].trim(); // "M" oder "F"
+    let csvJugend          = parts[3].trim(); // "j" oder "n"
+    let csvPosition        = parts[4].trim(); // "MB", "AA", ... oder leer
+    let csvLeistungsniveau = parts[5].trim(); // "1", "2", "3"
+
+    // => Vorname + Nachname => Name
+    let fullName = csvVorname + " " + csvNachname;
+
+    // => Entscheiden: Jugend oder Erwachsene
+    // Falls csvJugend=="j" => youthPlayers, sonst adultPlayers
+    let isYouth = (csvJugend.toLowerCase() === 'j');
+
+    // => Je nach Typ in das passende Array
+    let arr = isYouth ? youthPlayers : adultPlayers;
+
+    // => Prüfung: existiert Name schon in diesem Array?
+    let alreadyExists = arr.some(
+      p => p.Name.toLowerCase() === fullName.toLowerCase()
+    );
+    if (alreadyExists) {
+      console.log("Überspringe, da Name schon existiert:", fullName);
+      continue;
+    }
+
+    // => Neues Spieler-Objekt
+    let newPlayer = {
+      Name: fullName,
+      Position: isYouth ? '' : (csvPosition || ''), // Nur bei Erwachsenen relevant
+      Leistung: csvLeistungsniveau,
+      Geschlecht: csvGeschlecht,
+      Spiele: 0,
+      Punkte: 0
+    };
+
+    // => Ins Array packen
+    arr.push(newPlayer);
+    countImported++;
+  }
+
+  // => ShortNames / Render / Speichern
+  generateUniqueShortNames();
+  renderPlayerTable();
+  saveToLocalStorage();
+
+  return `${countImported} Spieler aus CSV importiert.`;
+}
+
 </script>
 </body>
 </html>
