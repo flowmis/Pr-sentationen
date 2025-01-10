@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pyromane - Startseite</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+                   "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+      background: #fafafa;
+      color: #333;
+    }
+
+    header {
+      background-color: #e74c3c;
+      color: #fff;
+      padding: 1rem;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 1.8rem;
+      margin-bottom: 0.5rem;
+    }
+
+    header p {
+      font-size: 1rem;
+      opacity: 0.9;
+    }
+
+    nav {
+      background-color: #fff;
+      padding: 0.5rem 1rem;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    nav ul {
+      display: flex;
+      flex-wrap: wrap;
+      list-style: none;
+      justify-content: center;
+    }
+
+    nav li {
+      margin: 0.5rem;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: #e74c3c;
+      font-weight: 500;
+      border: 2px solid #e74c3c;
+      padding: 0.4rem 0.8rem;
+      border-radius: 4px;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    nav a:hover {
+      background-color: #e74c3c;
+      color: #fff;
+    }
+
+    main {
+      padding: 1rem;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    main h2 {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+      color: #e74c3c;
+    }
+
+    main p {
+      line-height: 1.6;
+      margin-bottom: 1rem;
+    }
+
+    footer {
+      background-color: #f4f4f4;
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.9rem;
+      color: #666;
+      margin-top: 2rem;
+    }
+
+    /* Responsive Breakpoints */
+    @media (max-width: 768px) {
+      nav ul {
+        flex-direction: column;
+        align-items: center;
+      }
+      nav li {
+        margin: 0.3rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <h1>Pyromane</h1>
+    <p>Die Kunst des Feuers</p>
+  </header>
+
+  <nav>
+    <ul id="navLinks">
+      <!-- Hier kannst du einfach weitere <li>-Einträge hinzufügen -->
+      <li><a href="seite1.html">Seite 1</a></li>
+      <li><a href="seite2.html">Seite 2</a></li>
+      <li><a href="seite3.html">Seite 3</a></li>
+    </ul>
+  </nav>
+
+  <main>
+    <h2>Willkommen auf meiner Homepage „Pyromane“</h2>
+    <p>
+      Hier dreht sich alles um Feuer, Flammen und spektakuläre Effekte.
+      Wenn du mehr über meine Projekte erfahren möchtest, schau dir
+      doch einfach die verlinkten Seiten an.
+    </p>
+    <p>
+      Du findest hier bald regelmäßig neue Artikel, Bilder und Tipps rund
+      um die Faszination Feuer.
+    </p>
+  </main>
+
+  <footer>
+    &copy; <span id="year"></span> Pyromane - Alle Rechte vorbehalten.
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+
+</body>
+</html>

@@ -171,7 +171,7 @@ function login(secret) {
         return;
     }
     var hash = sha1(secret);
-    var url = hash + "/Lesezeichen.html";
+    var url = hash + "/index.html";
     var request = new XMLHttpRequest();
     request.open('GET', url, true);
     request.onload = function () {
