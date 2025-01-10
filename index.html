@@ -8,8 +8,8 @@
 
         <style>
             *,
-            *:after,
-            *:before {
+            *::before,
+            *::after {
                 box-sizing: border-box;
             }
             body,
@@ -22,25 +22,16 @@
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                min-height: 100%;
+                min-height: 100vh;
+                margin: 0;
             }
 
             .protected {
                 background: #fff;
-                -webkit-box-shadow: 0 2px 3px 0 rgba(0,0,0,0.1);
-                box-shadow: 0 2px 3px 0 rgba(0,0,0,0.1);
+                box-shadow: 0 2px 3px rgba(0,0,0,0.1);
                 border-radius: 3px;
                 min-width: 500px;
-
-            }
-            .protected__content {
                 padding: 24px 28px;
-            }
-            .protected__content__heading {
-                font-size: 16px;
-                font-weight: 500;
-                margin: 0 0 12px;
-                line-height: 1;
             }
             .protected__alert {
                 display: none;
@@ -50,22 +41,30 @@
                 color: #a94442;
                 background-color: #f2dede;
                 border-color: #ebccd1;
+                margin-bottom: 12px;
+                text-align: center;
+            }
+            .protected__content__heading {
+                font-size: 16px;
+                font-weight: 500;
+                margin: 0 0 12px;
+                line-height: 1;
+                text-align: center;
             }
             .protected__content__input {
                 display: block;
                 border: solid 1px #ccc;
                 padding: 12px 14px;
-                -webkit-box-shadow: 0 2px 3px 0 rgba(0,0,0,0.1);
-                box-shadow: 0 2px 3px 0 rgba(0,0,0,0.1);
+                box-shadow: 0 2px 3px rgba(0,0,0,0.1);
                 font-size: 16px;
                 width: 100%;
                 border-radius: 3px;
-
                 margin-bottom: 12px;
             }
             .protected__content__input:focus {
                 outline: none;
                 border-color: #228843;
+                box-shadow: 0 0 5px rgba(34, 136, 67, 0.3);
             }
             .protected__content__btn {
                 background-color: #228843;
@@ -77,12 +76,12 @@
                 font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
                 font-weight: 500;
                 font-size: 16px;
-
+                width: 100%;
+                transition: background-color 0.3s;
             }
             .protected__content__btn:hover {
                 background-color: #1C6D36;
             }
-
         </style>
 
     </head>
@@ -98,49 +97,96 @@
             </div>
         </div>
 
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/js-sha1/0.6.0/sha1.min.js"></script>
+        <!-- Einbindung der Hash-Bibliothek SHA-256 -->
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/js-sha256/0.9.0/sha256.min.js"></script>
         <script type="text/javascript">
-            "use strict"
-            var button = document.querySelectorAll('[data-id="button"]')
-            var password = document.querySelectorAll('[data-id="password"]')
+            "use strict";
+            
+            // Elemente auswählen
+            var button = document.querySelector('[data-id="button"]');
+            var passwordInput = document.querySelector('[data-id="password"]');
+            var alertBox = document.querySelector('[data-id="alert"]');
+
+            // Anmeldeversuche begrenzen
+            var attempts = 0;
+            var maxAttempts = 5;
 
             function login(secret) {
-                var hash = sha1(secret)
-                var url = hash + "/Lesezeichen.html"
-                var alert = document.querySelectorAll('[data-id="alert"]')
+                // Zwei Hashes generieren mit angehängten Zahlen
+                var hash1 = sha256(secret + '1');
+                var hash2 = sha256(secret + '2');
 
-                var request = new XMLHttpRequest()
-                request.open('GET', url, true)
+                // Ziel-URLs für beide Hashes
+                var url1 = hash1 + "/rezepte.html";
+                var url2 = hash2 + "/Lesezeichen.html";
 
-                request.onload = function () {
-                    if (request.status >= 200 && request.status < 400) {
-                        window.location = url
+                // Funktion zum Überprüfen einer URL
+                function checkUrl(url) {
+                    return new Promise(function(resolve) {
+                        var request = new XMLHttpRequest();
+                        request.open('GET', url, true);
+                        request.onload = function () {
+                            if (request.status >= 200 && request.status < 400) {
+                                resolve(url);
+                            } else {
+                                resolve(null);
+                            }
+                        };
+                        request.onerror = function () {
+                            resolve(null);
+                        };
+                        request.send();
+                    });
+                }
+
+                // Beide URLs prüfen
+                Promise.all([checkUrl(url1), checkUrl(url2)]).then(function(results) {
+                    if (results[0]) {
+                        // Hash1 erfolgreich
+                        window.location = results[0];
+                    } else if (results[1]) {
+                        // Hash2 erfolgreich
+                        window.location = results[1];
                     } else {
-                        parent.location.hash = hash
-                        alert[0].style.display = 'block'
-                        password[0].setAttribute('placeholder', 'Incorrect password')
-                        password[0].value = ''
+                        // Beide Hashes fehlgeschlagen
+                        // Hashes zum URL-Fragment hinzufügen
+                        window.location.hash = hash1 + "/" + hash2;
+
+                        // Fehlermeldung anzeigen
+                        alertBox.style.display = 'block';
+                        passwordInput.setAttribute('placeholder', 'Incorrect password');
+                        passwordInput.value = '';
+
+                        // Anmeldeversuch erhöhen und überprüfen
+                        attempts++;
+                        if (attempts >= maxAttempts) {
+                            alertBox.textContent = 'Maximale Anzahl an Versuchen erreicht. Bitte versuchen Sie es später erneut.';
+                            button.disabled = true;
+                            passwordInput.disabled = true;
+                        } else {
+                            alertBox.textContent = 'You entered the wrong password. (' + (maxAttempts - attempts) + ' attempts left)';
+                        }
+                    }
+                });
+            }
+
+            // Event-Listener für den Button
+            button.addEventListener("click", function () {
+                var passwordValue = passwordInput.value.trim();
+                if (passwordValue) {
+                    login(passwordValue);
+                }
+            });
+
+            // Event-Listener für die Enter-Taste
+            document.addEventListener("keydown", function (e) {
+                if (e.key === 'Enter') {
+                    var passwordValue = passwordInput.value.trim();
+                    if (passwordValue) {
+                        login(passwordValue);
                     }
                 }
-                request.onerror = function () {
-                    parent.location.hash = hash
-                    alert[0].style.display = 'block'
-                    password[0].setAttribute('placeholder', 'Incorrect password')
-                    password[0].value = ''
-                }
-                request.send()
-            }
-
-            button[0].addEventListener("click", function () {
-                login(password[0].value)
-            })
-
-            document.onkeydown = function (e) {
-                e = e || window.event
-                if (e.keyCode == 13) {
-                    login(password[0].value)
-                }
-            }
+            });
         </script>
     </body>
 </html>
