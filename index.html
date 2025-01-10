@@ -1,192 +1,214 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
-    <head>
-        <title>Password Protected</title>
-
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="robots" content="noindex, nofollow">
-
-        <style>
-            *,
-            *::before,
-            *::after {
-                box-sizing: border-box;
-            }
-            body,
-            html {
-                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
-                font-weight: 300;
-                font-size: 16px;
-                background: #f2f2f2;
-                color: #2D3737;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                min-height: 100vh;
-                margin: 0;
-            }
-
-            .protected {
-                background: #fff;
-                box-shadow: 0 2px 3px rgba(0,0,0,0.1);
-                border-radius: 3px;
-                min-width: 500px;
-                padding: 24px 28px;
-            }
-            .protected__alert {
-                display: none;
-                border-bottom: 1px solid transparent;
-                border-radius: 3px 3px 0 0;
-                padding: 12px 14px;
-                color: #a94442;
-                background-color: #f2dede;
-                border-color: #ebccd1;
-                margin-bottom: 12px;
-                text-align: center;
-            }
-            .protected__content__heading {
-                font-size: 16px;
-                font-weight: 500;
-                margin: 0 0 12px;
-                line-height: 1;
-                text-align: center;
-            }
-            .protected__content__input {
-                display: block;
-                border: solid 1px #ccc;
-                padding: 12px 14px;
-                box-shadow: 0 2px 3px rgba(0,0,0,0.1);
-                font-size: 16px;
-                width: 100%;
-                border-radius: 3px;
-                margin-bottom: 12px;
-            }
-            .protected__content__input:focus {
-                outline: none;
-                border-color: #228843;
-                box-shadow: 0 0 5px rgba(34, 136, 67, 0.3);
-            }
-            .protected__content__btn {
-                background-color: #228843;
-                border-radius: 3px;
-                cursor: pointer;
-                border: none;
-                color: #fff;
-                padding: 12px 14px;
-                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
-                font-weight: 500;
-                font-size: 16px;
-                width: 100%;
-                transition: background-color 0.3s;
-            }
-            .protected__content__btn:hover {
-                background-color: #1C6D36;
-            }
-        </style>
-
-    </head>
-
-    <body>
-
-        <div class="protected">
-            <div class="protected__alert" data-id="alert">You entered the wrong password</div>
-            <div class="protected__content">
-                <h1 class="protected__content__heading">You need a password to continue</h1>
-                <input class="protected__content__input" data-id="password" type="password" placeholder="password"/>
-                <button data-id="button" type="button" class="protected__content__btn">Continue</button>
-            </div>
-        </div>
-
-        <!-- Einbindung der Hash-Bibliothek SHA-256 -->
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/js-sha256/0.9.0/sha256.min.js"></script>
-        <script type="text/javascript">
-            "use strict";
-            
-            // Elemente auswählen
-            var button = document.querySelector('[data-id="button"]');
-            var passwordInput = document.querySelector('[data-id="password"]');
-            var alertBox = document.querySelector('[data-id="alert"]');
-
-            // Anmeldeversuche begrenzen
-            var attempts = 0;
-            var maxAttempts = 5;
-
-            function login(secret) {
-                // Zwei Hashes generieren mit angehängten Zahlen
-                var hash1 = sha256(secret + '1');
-                var hash2 = sha256(secret + '2');
-
-                // Ziel-URLs für beide Hashes
-                var url1 = hash1 + "/rezepte.html";
-                var url2 = hash2 + "/Lesezeichen.html";
-
-                // Funktion zum Überprüfen einer URL
-                function checkUrl(url) {
-                    return new Promise(function(resolve) {
-                        var request = new XMLHttpRequest();
-                        request.open('GET', url, true);
-                        request.onload = function () {
-                            if (request.status >= 200 && request.status < 400) {
-                                resolve(url);
-                            } else {
-                                resolve(null);
-                            }
-                        };
-                        request.onerror = function () {
-                            resolve(null);
-                        };
-                        request.send();
-                    });
-                }
-
-                // Beide URLs prüfen
-                Promise.all([checkUrl(url1), checkUrl(url2)]).then(function(results) {
-                    if (results[0]) {
-                        // Hash1 erfolgreich
-                        window.location = results[0];
-                    } else if (results[1]) {
-                        // Hash2 erfolgreich
-                        window.location = results[1];
-                    } else {
-                        // Beide Hashes fehlgeschlagen
-                        // Hashes zum URL-Fragment hinzufügen
-                        window.location.hash = hash1 + "/" + hash2;
-
-                        // Fehlermeldung anzeigen
-                        alertBox.style.display = 'block';
-                        passwordInput.setAttribute('placeholder', 'Incorrect password');
-                        passwordInput.value = '';
-
-                        // Anmeldeversuch erhöhen und überprüfen
-                        attempts++;
-                        if (attempts >= maxAttempts) {
-                            alertBox.textContent = 'Maximale Anzahl an Versuchen erreicht. Bitte versuchen Sie es später erneut.';
-                            button.disabled = true;
-                            passwordInput.disabled = true;
-                        } else {
-                            alertBox.textContent = 'You entered the wrong password. (' + (maxAttempts - attempts) + ' attempts left)';
-                        }
-                    }
-                });
-            }
-
-            // Event-Listener für den Button
-            button.addEventListener("click", function () {
-                var passwordValue = passwordInput.value.trim();
-                if (passwordValue) {
-                    login(passwordValue);
-                }
-            });
-
-            // Event-Listener für die Enter-Taste
-            document.addEventListener("keydown", function (e) {
-                if (e.key === 'Enter') {
-                    var passwordValue = passwordInput.value.trim();
-                    if (passwordValue) {
-                        login(passwordValue);
-                    }
-                }
-            });
-        </script>
-    </body>
+<head>
+    <title>Password Protected</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <style>
+        *, *:after, *:before {
+            box-sizing: border-box;
+        }
+        body, html {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+                         "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+            font-weight: 300;
+            font-size: 16px;
+            background: #f2f2f2;
+            color: #2D3737;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        .protected {
+            background: #fff;
+            -webkit-box-shadow: 0 2px 3px 0 rgba(0,0,0,0.1);
+            box-shadow: 0 2px 3px 0 rgba(0,0,0,0.1);
+            border-radius: 3px;
+            min-width: 500px;
+        }
+        .protected__alert {
+            display: none;
+            border-bottom: 1px solid transparent;
+            border-radius: 3px 3px 0 0;
+            padding: 12px 14px;
+            color: #a94442;
+            background-color: #f2dede;
+            border-color: #ebccd1;
+        }
+        .protected__alert--block {
+            display: block !important;
+        }
+        .protected__content {
+            padding: 24px 28px;
+        }
+        .protected__content__heading {
+            font-size: 16px;
+            font-weight: 500;
+            margin: 0 0 12px;
+            line-height: 1;
+        }
+        .protected__content__input {
+            display: block;
+            border: solid 1px #ccc;
+            padding: 12px 14px;
+            -webkit-box-shadow: 0 2px 3px 0 rgba(0,0,0,0.1);
+            box-shadow: 0 2px 3px 0 rgba(0,0,0,0.1);
+            font-size: 16px;
+            width: 100%;
+            border-radius: 3px;
+            margin-bottom: 12px;
+        }
+        .protected__content__input:focus {
+            outline: none;
+            border-color: #228843;
+        }
+        .protected__content__btn {
+            background-color: #228843;
+            border-radius: 3px;
+            cursor: pointer;
+            border: none;
+            color: #fff;
+            padding: 12px 14px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+                          "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+            font-weight: 500;
+            font-size: 16px;
+        }
+        .protected__content__btn:hover {
+            background-color: #1C6D36;
+        }
+        .attemptsInfo {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+<div class="protected">
+    <div class="protected__alert" data-id="alert"></div>
+    <div class="protected__content">
+        <h1 class="protected__content__heading">You need a password to continue</h1>
+        <input class="protected__content__input" data-id="password" type="password" placeholder="password"/>
+        <button data-id="button" type="button" class="protected__content__btn">Continue</button>
+        <div data-id="attemptsInfo" class="attemptsInfo"></div>
+    </div>
+</div>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/js-sha1/0.6.0/sha1.min.js"></script>
+<script type="text/javascript">
+"use strict"
+var button = document.querySelector('[data-id="button"]');
+var password = document.querySelector('[data-id="password"]');
+var alertBox = document.querySelector('[data-id="alert"]');
+var attemptsInfo = document.querySelector('[data-id="attemptsInfo"]');
+let userIP = 'unknown';
+fetch('https://api.ipify.org?format=json')
+.then(function(response) { return response.json(); })
+.then(function(data) { userIP = data.ip; updateAttemptsInfo(); })
+.catch(function(error) {});
+var MAX_ATTEMPTS = 5;
+var BLOCK_TIME_MS = 10 * 60 * 1000;
+function getAttemptsForIP(ip) {
+    if (!ip) return [];
+    let attemptsString = localStorage.getItem("attempts_" + ip);
+    if (!attemptsString) return [];
+    try {
+        let arr = JSON.parse(attemptsString);
+        let now = Date.now();
+        arr = arr.filter(function(ts) {
+            return (now - ts) < BLOCK_TIME_MS;
+        });
+        return arr;
+    } catch(e) {
+        return [];
+    }
+}
+function saveAttemptsForIP(ip, attemptsArray) {
+    if (!ip) return;
+    localStorage.setItem("attempts_" + ip, JSON.stringify(attemptsArray));
+}
+function addAttempt(ip) {
+    let arr = getAttemptsForIP(ip);
+    arr.push(Date.now());
+    saveAttemptsForIP(ip, arr);
+}
+function isBlocked(ip) {
+    let arr = getAttemptsForIP(ip);
+    if (arr.length >= MAX_ATTEMPTS) return true;
+    return false;
+}
+function timeToUnblock(ip) {
+    let arr = getAttemptsForIP(ip);
+    if (arr.length < MAX_ATTEMPTS) return 0;
+    let oldest = arr[0];
+    let remaining = (oldest + BLOCK_TIME_MS) - Date.now();
+    return (remaining > 0) ? remaining : 0;
+}
+function updateAttemptsInfo() {
+    if (!userIP) {
+        attemptsInfo.innerHTML = "";
+        return;
+    }
+    let arr = getAttemptsForIP(userIP);
+    if (arr.length === 0) {
+        attemptsInfo.innerHTML = "No failed attempts yet.";
+    } else {
+        attemptsInfo.innerHTML =
+            "Failed attempts (last 10 min): " + arr.length + " / " + MAX_ATTEMPTS;
+    }
+}
+function login(secret) {
+    if (isBlocked(userIP)) {
+        let remainingMs = timeToUnblock(userIP);
+        let remainingSec = Math.ceil(remainingMs / 1000);
+        let remainingMin = Math.floor(remainingSec / 60);
+        let remainingSecInMin = remainingSec % 60;
+        let blockMsg = "Too many attempts! Please wait " + remainingMin + "m " + remainingSecInMin + "s before trying again.";
+        showAlert(blockMsg);
+        return;
+    }
+    var hash = sha1(secret);
+    var url = hash + "/Lesezeichen.html";
+    var request = new XMLHttpRequest();
+    request.open('GET', url, true);
+    request.onload = function () {
+        if (request.status >= 200 && request.status < 400) {
+            window.location = url;
+        } else {
+            addAttempt(userIP);
+            parent.location.hash = hash;
+            showAlert("You entered the wrong password");
+            password.setAttribute('placeholder', 'Incorrect password');
+            password.value = '';
+            updateAttemptsInfo();
+        }
+    };
+    request.onerror = function () {
+        addAttempt(userIP);
+        parent.location.hash = hash;
+        showAlert("You entered the wrong password");
+        password.setAttribute('placeholder', 'Incorrect password');
+        password.value = '';
+        updateAttemptsInfo();
+    };
+    request.send();
+}
+button.addEventListener("click", function () {
+    login(password.value);
+});
+document.onkeydown = function (e) {
+    e = e || window.event;
+    if (e.keyCode == 13) {
+        login(password.value);
+    }
+};
+function showAlert(msg) {
+    alertBox.textContent = msg;
+    alertBox.classList.add('protected__alert--block');
+}
+</script>
+</body>
 </html>
